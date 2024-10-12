@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import NavBar from "@/components/common/NavBar";
+import Footer from "@/components/common/Footer";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { QueryProvider } from "@/components/common/QueryProvider";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -23,6 +28,7 @@ export const metadata: Metadata = {
   description: "NBA를 좋아하는 사람들을 위한 커뮤니티",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,9 +37,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${pretendard} antialiased`}
+        className={`${pretendard.className} antialiased bg-color2 flex flex-col min-h-screen items-stretch`}
       >
-        {children}
+        <NavBar />
+        <div className="grow">
+          <QueryProvider>
+            <ErrorBoundary fallback={<div>Something went wrong</div>}>
+              <Suspense fallback={<div>Loading...</div>}>
+                {children}
+              </Suspense>
+            </ErrorBoundary>
+          </QueryProvider>
+        </div>
+        <Footer />
       </body>
     </html>
   );
