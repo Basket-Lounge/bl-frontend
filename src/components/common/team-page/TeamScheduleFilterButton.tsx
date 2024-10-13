@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/app/teams/[teamId]/page";
+import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
 import { useContext } from "react";
 import { useStore } from "zustand";
 

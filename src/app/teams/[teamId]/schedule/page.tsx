@@ -1,14 +1,17 @@
+'use client'
+
 import { useSuspenseQuery } from "@tanstack/react-query";
-import TeamGeneralInfoRecentGames from "./TeamGeneralInfoRecentGames";
+import TeamGeneralInfoRecentGames from "@/components/common/team-page/TeamGeneralInfoRecentGames";
 import { useParams } from "next/navigation";
 import { getLast4Games } from "@/api/team.api";
-import TeamScheduleFilter from "./TeamScheduleFilter";
+import TeamScheduleFilter from "@/components/common/team-page/TeamScheduleFilter";
 import { useContext } from "react";
 import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
 import { useStore } from "zustand";
 import { getGamesForTeam } from "@/api/game.api";
-import TeamScheduleGamesContainer from "./TeamScheduleGamesContainer";
+import TeamScheduleGamesContainer from "@/components/common/team-page/TeamScheduleGamesContainer";
 import { filterGamesByMonth } from "@/utils/game.utils";
+
 
 export default function TeamSchedule() {
   const { teamId } = useParams();

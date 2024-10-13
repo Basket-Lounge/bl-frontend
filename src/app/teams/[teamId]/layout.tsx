@@ -5,33 +5,36 @@ import { createStore } from 'zustand';
 
 import TeamHeader from "@/components/common/team-page/TeamHeader";
 import TeamSectionOptions from "@/components/common/team-page/TeamSectionOptions";
-import TeamPageSection from '@/components/common/team-page/TeamPageSection';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTeamGeneralInfo } from '@/api/team.api';
 
 
-export type TSection = "general" | "schedule" | "players" | "fan";
 interface ITeamStore {
-  section: TSection;
-  updateSection: (section: TSection) => void;
   currentScheduleFilterValue: string;
   updateCurrentScheduleFilterValue: (value: string) => void;
   playersFilterValue: string;
   updatePlayersFilterValue: (value: string) => void;
+  currentPlayerId: number | null;
+  updateCurrentPlayerId: (id: number | null) => void;
 }
 
+export type TSection = "general-info" | "players" | "schedule" | "posts";
+
 const TeamStore = createStore<ITeamStore>((set) => ({
-  section: "general",
-  updateSection: (section) => set({ section }),
   currentScheduleFilterValue: "0",
   updateCurrentScheduleFilterValue: (value) => set({ currentScheduleFilterValue: value }),
   playersFilterValue: "A",
   updatePlayersFilterValue: (value) => set({ playersFilterValue: value }),
+  currentPlayerId: null,
+  updateCurrentPlayerId: (id) => set({ currentPlayerId: id }),
 }));
 
 export const TeamStoreContext = createContext(TeamStore);
 
-export default function TeamsPage({ params }: { params: { teamId: string } }) {
+export default function TeamsPage({ params, children }: { 
+  params: { teamId: string }, 
+  children: React.ReactNode }
+) {
   const headerQuery = useSuspenseQuery({
     queryKey: ["team", params.teamId], 
     queryFn: async () => {
@@ -44,7 +47,7 @@ export default function TeamsPage({ params }: { params: { teamId: string } }) {
       <div className="mx-[256px] my-[32px] flex flex-col items-stretch gap-[24px]">
         <TeamHeader team={headerQuery.data} />
         <TeamSectionOptions />
-        <TeamPageSection />
+        {children}
       </div>
     </TeamStoreContext.Provider>
   );

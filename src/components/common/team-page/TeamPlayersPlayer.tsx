@@ -1,6 +1,10 @@
+import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
 import { Player } from "@/models/player.models";
 import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
+import { useStore } from "zustand";
 
 
 interface ITeamPlayersPlayerProps {
@@ -8,8 +12,21 @@ interface ITeamPlayersPlayerProps {
 }
 
 const TeamPlayersPlayer : React.FC<ITeamPlayersPlayerProps> = ({ player }) => {
+  const router = useRouter();
+  const store = useContext(TeamStoreContext);
+  const updateCurrentPlayerId = useStore(store, (state) => state.updateCurrentPlayerId);
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    updateCurrentPlayerId(player.PERSON_ID);
+    router.push(`/teams/${player.TEAM_ID}/players/${player.PERSON_ID}`);
+  }
+
   return (
-    <div className="flex flex-col gap-[24px] items-stretch p-[24px] rounded-md w-1/4 bg-color3">
+    <div 
+      className="flex flex-col gap-[24px] items-stretch p-[24px] rounded-md w-1/4 bg-color3"
+      onClick={handleClick}
+    >
       <div className="flex items-center justify-between">
         <div className="text-[20px]">
           <p>
