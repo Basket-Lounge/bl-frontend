@@ -6,17 +6,9 @@ import Footer from "@/components/common/Footer";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { QueryProvider } from "@/components/common/QueryProvider";
+import ModalController from "@/components/common/modal/ModalController";
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
+
 const pretendard = localFont({
   src: './fonts/PretendardVariable.woff2',
   display: 'swap',
@@ -42,6 +34,7 @@ export default function RootLayout({
         <NavBar />
         <div className="grow">
           <QueryProvider>
+            <ModalController />
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
               <Suspense fallback={<div>Loading...</div>}>
                 {children}

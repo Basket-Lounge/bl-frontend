@@ -1,14 +1,14 @@
 'use client'
 
 import Image from "next/image";
-import TeamGeneralInfoSeasonBestPlayer from "@/components/common/team-page/TeamGeneralInfoSeasonBestPlayer";
-import TeamGeneralInfoSeasonStandings from "@/components/common/team-page/TeamGeneralInfoSeasonStandings";
-import TeamGeneralInfoRecentGames from "@/components/common/team-page/TeamGeneralInfoRecentGames";
+import TeamGeneralInfoSeasonBestPlayer from "@/components/team-page/TeamGeneralInfoSeasonBestPlayer";
+import TeamGeneralInfoSeasonStandings from "@/components/team-page/TeamGeneralInfoSeasonStandings";
+import TeamGeneralInfoRecentGames from "@/components/team-page/TeamGeneralInfoRecentGames";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getLast4Games, getTeamFranchiseHistory, getTeamsStandings } from "@/api/team.api";
 import { getPlayersFromTeam } from "@/api/player.api";
-import TeamGeneralInfoFranchiseInfo from "@/components/common/team-page/TeamGeneralInfoFranchiseInfo";
+import TeamGeneralInfoFranchiseInfo from "@/components/team-page/TeamGeneralInfoFranchiseInfo";
 
 
 export default function TeamGeneralInfo() {

@@ -1,12 +1,11 @@
 'use client'
 
-import { Player } from "@/models/player.models";
-import TeamPlayersPlayer from "@/components/common/team-page/TeamPlayersPlayer";
+import TeamPlayersPlayer from "@/components/team-page/TeamPlayersPlayer";
 import { useContext } from "react";
 import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
 import { useStore } from "zustand";
 import { filterPlayersByPosition } from "@/utils/player.utils";
-import TeamPlayersFilter from "@/components/common/team-page/TeamPlayersFilter";
+import TeamPlayersFilter from "@/components/team-page/TeamPlayersFilter";
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getPlayersFromTeam } from "@/api/player.api";

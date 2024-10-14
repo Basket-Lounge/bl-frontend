@@ -3,8 +3,8 @@
 import { createContext } from 'react';
 import { createStore } from 'zustand';
 
-import TeamHeader from "@/components/common/team-page/TeamHeader";
-import TeamSectionOptions from "@/components/common/team-page/TeamSectionOptions";
+import TeamHeader from "@/components/team-page/TeamHeader";
+import TeamSectionOptions from "@/components/team-page/TeamSectionOptions";
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTeamGeneralInfo } from '@/api/team.api';
 
