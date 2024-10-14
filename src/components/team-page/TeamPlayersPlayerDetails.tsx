@@ -20,6 +20,7 @@ const TeamPlayersPlayerDetails : React.FC<ITeamPlayersPlayerDetailsProps> = ({ p
   }
 
   const playerPosition = getPositionInKoreanFromAbbreviation(player.POSITION);
+
   return (
     <div className="flex flex-col gap-[24px] items-stretch">
       <button className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit" onClick={handleGoBackClick}>
@@ -67,7 +68,7 @@ const TeamPlayersPlayerDetails : React.FC<ITeamPlayersPlayerDetailsProps> = ({ p
         </div>
       </div>
       <div>
-        <h3 className="text-white text-[20px] font-bold">2024-25 시즌 스탯</h3>
+        <h3 className="text-white text-[20px] font-bold">선수 정보</h3>
       </div>
     </div>
   )
