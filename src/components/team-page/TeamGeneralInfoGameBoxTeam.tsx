@@ -38,7 +38,7 @@ const TeamGeneralInfoGameBoxTeam : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
       </div>
       {/* 점수 */}
       <p className="text-white text-[24px] font-medium">{
-        !lineScore || gameStatusId === 1 ? '-' : calculateTotalPoints(lineScore)
+        (!lineScore || gameStatusId === 1) ? '-' : calculateTotalPoints(lineScore)
       }</p>
     </div>
   )

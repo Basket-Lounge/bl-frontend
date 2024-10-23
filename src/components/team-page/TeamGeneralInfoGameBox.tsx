@@ -1,4 +1,4 @@
-import { Game } from "@/models/game.models"
+import { Game, LineScore } from "@/models/game.models"
 import TeamGeneralInfoGameBoxTeam from "./TeamGeneralInfoGameBoxTeam";
 import { displayGameTimeForGameBox, displayLiveGameTimeForGameBox } from "@/utils/game.utils";
 
@@ -10,8 +10,8 @@ interface ITeamaGeneralInfoGameBoxProps {
 const TeamGeneralInfoGameBox : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
   game
 }) => {
-  const awayTeamLineScore = game.line_scores.find(score => score.team === game.visitor_team.id) || null;
-  const homeTeamLineScore = game.line_scores.find(score => score.team === game.home_team.id ) || null;
+  const awayTeamLineScore = game.visitor_team.linescore as LineScore;
+  const homeTeamLineScore = game.home_team.linescore as LineScore;
   const currentGameTime = game.game_status_id == 1 ? displayGameTimeForGameBox(
     game.game_date_est,
     game.game_status_text

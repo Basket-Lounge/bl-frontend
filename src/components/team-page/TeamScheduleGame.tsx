@@ -16,9 +16,14 @@ const TeamScheduleGame : React.FC<ITeamScheduleGameProps> = ({
   const isHome = game.home_team.id == parseInt(teamId as string);
   const bgColor = isHome ? "bg-color4" : "bg-color3";
 
-  const teamLineScore = game.line_scores.find(score => score.team === parseInt(teamId as string)) as LineScore;
+  const teamLineScore = isHome ? 
+    game.home_team.linescore as LineScore :
+    game.visitor_team.linescore as LineScore;
   const teamTotalPoints = calculateTotalPoints(teamLineScore);
-  const opponentLineScore = game.line_scores.find(score => score.team !== parseInt(teamId as string)) as LineScore;
+
+  const opponentLineScore = isHome ? 
+    game.visitor_team.linescore as LineScore :
+    game.home_team.linescore as LineScore;
   const opponentTotalPoints = calculateTotalPoints(opponentLineScore);
 
   const winStatus = teamTotalPoints > opponentTotalPoints ? "승리" : "패배";
