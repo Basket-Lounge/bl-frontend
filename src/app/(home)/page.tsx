@@ -1,6 +1,21 @@
+'use client'
+
+import { getTodayGames } from "@/api/game.api";
+import TodayGamesContainer from "@/components/home-page/TodayGamesContainer";
+import { filterTodayGames } from "@/utils/game.utils";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 
+
 export default function Home() {
+  const todayGamesQuery = useSuspenseQuery({
+    queryKey: ["home", "today-games"],
+    queryFn: async () => {
+      const games = await getTodayGames();
+      return filterTodayGames(games);
+    }
+  });
+
   return (
     <div className="w-full flex flex-col gap-[32px] px-[256px] items-stretch">
       {/* Greeting Section */}
@@ -19,92 +34,7 @@ export default function Home() {
       {/* Today's Game Section */}
       <div>
         <h3 className="text-[20px] font-bold">오늘의 경기</h3>
-        <div className="mt-[16px] flex items-start gap-[32px]">
-          <div className="p-[24px] bg-color3 rounded-md w-1/3 flex flex-col gap-[16px]">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">GS</p>
-                  <p className="text-[16px] font-light">골든스테이트</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">MEM</p>
-                  <p className="text-[16px] font-light">멤피스</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <p className="text-[16px] font-medium text-center">경기 종료</p>
-            <button className="bg-color1 rounded-full justify-center py-[12px] w-full font-medium">
-              상세보기
-            </button>
-          </div>
-          <div className="p-[24px] bg-color3 rounded-md w-1/3 flex flex-col gap-[16px]">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">GS</p>
-                  <p className="text-[16px] font-light">골든스테이트</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">MEM</p>
-                  <p className="text-[16px] font-light">멤피스</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <p className="text-[16px] font-medium text-center">경기 종료</p>
-            <button className="bg-color1 rounded-full justify-center py-[12px] w-full font-medium">
-              상세보기
-            </button>
-          </div>
-          <div className="p-[24px] bg-color3 rounded-md w-1/3 flex flex-col gap-[16px]">
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">GS</p>
-                  <p className="text-[16px] font-light">골든스테이트</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <div className="flex gap-[16px] items-center">
-                <div className="w-[48px] h-[48px] bg-color1 rounded-full flex items-center justify-center">
-                </div>
-                <div className="flex flex-col gap-[8px] items-start">
-                  <p className="text-[24px] font-medium">MEM</p>
-                  <p className="text-[16px] font-light">멤피스</p>
-                </div>
-              </div>
-              <p className="text-[32px]">100</p>
-            </div>
-            <p className="text-[16px] font-medium text-center">경기 종료</p>
-            <button className="bg-color1 rounded-full justify-center py-[12px] w-full font-medium">
-              상세보기
-            </button>
-          </div>
-        </div>
+        <TodayGamesContainer games={todayGamesQuery.data} />
       </div>
       {/* Top 10 Players Section */}
       <div>

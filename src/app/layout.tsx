@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   description: "NBA를 좋아하는 사람들을 위한 커뮤니티",
 };
 
-
 export default function RootLayout({
   children,
 }: Readonly<{
