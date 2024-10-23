@@ -1,1 +1,1 @@
-export const BACKEND_SERVER_URL = "http://127.0.0.1:8000";
+export const BACKEND_SERVER_URL = process.env.BACKEND_SERVER_URL || 'http://127.0.0.1:8001';
