@@ -1,4 +1,4 @@
-import { Game, LineScore } from "@/models/game.models";
+import { Game, LineScore, PlayerStatistics } from "@/models/game.models";
 
 
 export const calculateTotalPoints = (lineScore: LineScore) => {
@@ -18,6 +18,27 @@ export const calculateTotalPoints = (lineScore: LineScore) => {
     lineScore.pts_ot9 || 0,
     lineScore.pts_ot10 || 0
   ].reduce((acc, cur) => acc + (cur || 0), 0);
+}
+
+export const extractOnlyValidPeriods = (lineScore: LineScore) => {
+  const validPeriods = [
+    lineScore.pts_qtr1,
+    lineScore.pts_qtr2,
+    lineScore.pts_qtr3,
+    lineScore.pts_qtr4,
+    lineScore.pts_ot1,
+    lineScore.pts_ot2,
+    lineScore.pts_ot3,
+    lineScore.pts_ot4,
+    lineScore.pts_ot5,
+    lineScore.pts_ot6,
+    lineScore.pts_ot7,
+    lineScore.pts_ot8,
+    lineScore.pts_ot9,
+    lineScore.pts_ot10
+  ];
+
+  return validPeriods.filter(period => period !== null);
 }
 
 export const convertESTtoLocalTime = (date: string | Date, timeInEST: string) => {
@@ -44,6 +65,15 @@ export const convertESTtoLocalTime = (date: string | Date, timeInEST: string) =>
   date = new Date(date.toLocaleString('en-US', { timeZone: userTimeZone }));
   return date;
 };
+
+export const convertUTCtoLocalTime = (date: string | Date) => {
+  if (typeof date === 'string')
+    date = new Date(date);
+
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  date = new Date(date.toLocaleString('en-US', { timeZone: userTimeZone }));
+  return date;
+}
 
 export const displayGameTimeForGameBox = (date: string | Date, timeInEST: string) => {
   date = convertESTtoLocalTime(date, timeInEST);
@@ -83,6 +113,20 @@ export const filterGamesByMonth = (games: Game[], month: string) => {
   return filteredGames;
 }
 
+export const filterTodayGames = (games: Game[]) => {
+  const today = new Date();
+  const filteredGames : Game[] = [];
+
+  for (const game of games) {
+    const gameDate = convertUTCtoLocalTime(game.game_date_est);
+    if (gameDate.getDate() == today.getDate() && gameDate.getMonth() == today.getMonth()) {
+      filteredGames.push(game);
+    }
+  }
+
+  return filteredGames;
+}
+
 export const getGameOutcome = (teamScore: LineScore, opponentScore: LineScore) => {
   const teamTotalPoints = calculateTotalPoints(teamScore);
   const opponentTotalPoints = calculateTotalPoints(opponentScore);
@@ -94,4 +138,10 @@ export const getGameOutcome = (teamScore: LineScore, opponentScore: LineScore) =
   } else {
     return '경기전';
   }
+}
+
+export const getTop4PlayersFromGame = (playersStats: PlayerStatistics[]) => {
+  return playersStats.sort(
+    (a, b) => (b.points + b.assists + b.rebounds_total) - (a.points + a.assists + a.rebounds_total)
+  ).slice(0, 4);
 }

@@ -1,4 +1,6 @@
-interface TeamNameSet {
+import { LineScore } from "./game.models";
+
+export interface TeamNameSet {
     language: {
         name: string;
     };
@@ -105,6 +107,7 @@ export interface Team {
     teamname_set: TeamNameSet[];
     symbol: string;
     stats?: Stats;
+    linescore?: LineScore;
 }
 
 export interface TeamFranchiseHistory {
