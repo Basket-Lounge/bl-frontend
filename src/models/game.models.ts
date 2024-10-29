@@ -4,6 +4,7 @@ type TTeamWithoutStats = Omit<Team, "stats">;
 
 export interface Game {
     game_id: string;
+    line_scores?: LineScore[];
     home_team: TTeamWithoutStats;
     visitor_team: TTeamWithoutStats;
     game_date_est: string;
@@ -28,6 +29,7 @@ export interface Game {
 
 export interface LineScore {
     line_score_id: string;
+    team: TTeamWithoutStats;
     pts_qtr1: number | null;
     pts_qtr2: number | null;
     pts_qtr3: number | null;
@@ -50,7 +52,6 @@ export interface LineScore {
     tov: number | null;
     created_at: string;
     updated_at: string;
-    team?: number;
 }
 
 export interface TeamStatistics {
@@ -169,4 +170,15 @@ export interface PlayerStatistics {
     two_pointers_attempted: number;
     two_pointers_made: number;
     two_pointers_percentage: number;
+}
+
+
+export interface IGameChatMessage {
+    message: string;
+    user: {
+        id: number,
+        username: string,
+    },
+    game: number,
+    created_at: number,
 }

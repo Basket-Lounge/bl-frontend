@@ -1,63 +1,109 @@
+import { Team, TTeamWithoutTeamNameSet } from "./team.models";
+
 export interface Player {
-  PERSON_ID: number;
-  PLAYER_LAST_NAME: string;
-  PLAYER_FIRST_NAME: string;
-  PLAYER_SLUG: string;
-  TEAM_SLUG: string;
-  TEAM_ID: number;
-  TEAM_CITY: string;
-  TEAM_NAME: string;
-  TEAM_ABBREVIATION: string;
-  JERSEY_NUMBER: string | null;
-  POSITION: string;
-  HEIGHT: string;
-  WEIGHT: string;
-  COLLEGE: string;
-  COUNTRY: string;
-  DRAFT_YEAR: number | null;
-  DRAFT_ROUND: number | null;
-  DRAFT_NUMBER: number | null;
-  ROSTER_STATUS: number;
-  FROM_YEAR: string;
-  TO_YEAR: string;
-  PTS: number | null;
-  REB: number | null;
-  AST: number | null;
-  STATS_TIMEFRAME: string;
+  id: number;
+  team: Team;
+  last_name: string;
+  first_name: string;
+  slug: string;
+  jersey_number: string;
+  position: string;
+  height: string;
+  weight: number;
+  college: string;
+  country: string;
+  draft_year: number | null;
+  draft_round: number | null;
+  draft_number: number | null;
+  roster_status: number;
+  from_year: number;
+  to_year: number;
+  stats_timeframe: string;
+  pts: number | null;
+  reb: number | null;
+  ast: number | null;
 }
 
 export interface PlayerCareerStats {
-  stats: PlayerSeasonStats[];
+  id: number;
+  team_data: TTeamWithoutTeamNameSet;
+  season_id: string;
+  player_age: number;
+  games_played: number;
+  games_started: number;
+  minutes: number;
+  field_goals_made: number;
+  field_goals_attempted: number;
+  field_goals_percentage: number;
+  three_point_field_goals_made: number;
+  three_point_field_goals_attempted: number;
+  three_point_field_goals_percentage: number;
+  free_throws_made: number;
+  free_throws_attempted: number;
+  free_throws_percentage: number;
+  rebounds_offensive: number;
+  rebounds_defensive: number;
+  rebounds_total: number;
+  assists: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  personal_fouls: number;
+  points: number;
 }
 
+// {
+//   "id": 4424,
+//   "season_id": "2024-25",
+//   "player_age": 21.0,
+//   "games_played": 2,
+//   "games_started": 2,
+//   "minutes": 29.5,
+//   "field_goals_made": 7.0,
+//   "field_goals_attempted": 11.0,
+//   "field_goals_percentage": 0.636,
+//   "three_point_field_goals_made": 2.0,
+//   "three_point_field_goals_attempted": 4.0,
+//   "three_point_field_goals_percentage": 0.5,
+//   "free_throws_made": 0.5,
+//   "free_throws_attempted": 2.0,
+//   "free_throws_percentage": 0.25,
+//   "rebounds_offensive": 1.5,
+//   "rebounds_defensive": 1.5,
+//   "rebounds_total": 3.0,
+//   "assists": 3.0,
+//   "steals": 3.5,
+//   "blocks": 1.5,
+//   "turnovers": 1.0,
+//   "personal_fouls": 4.5,
+//   "points": 16.5
+// }
+
 export interface PlayerSeasonStats {
-  PLAYER_ID: number;
-  SEASON_ID: string;
-  LEAGUE_ID: string
-  TEAM_ID: number;
-  TEAM_ABBREVIATION: string;
-  PLAYER_AGE: number;
-  GP: number;           // Games Played
-  GS: number;           // Games Started
-  MIN: number;          // Minutes per Game
-  FGM: number;          // Field Goals Made per Game
-  FGA: number;          // Field Goals Attempted per Game
-  FG_PCT: number;       // Field Goal Percentage
-  FG3M: number;         // Three-Point Field Goals Made per Game
-  FG3A: number;         // Three-Point Field Goals Attempted per Game
-  FG3_PCT: number;      // Three-Point Field Goal Percentage
-  FTM: number;          // Free Throws Made per Game
-  FTA: number;          // Free Throws Attempted per Game
-  FT_PCT: number;       // Free Throw Percentage
-  OREB: number;         // Offensive Rebounds per Game
-  DREB: number;         // Defensive Rebounds per Game
-  REB: number;          // Total Rebounds per Game
-  AST: number;          // Assists per Game
-  STL: number;          // Steals per Game
-  BLK: number;          // Blocks per Game
-  TOV: number;          // Turnovers per Game
-  PF: number;           // Personal Fouls per Game
-  PTS: number;          // Points per Game
+  id: number;
+  season_id: string;
+  player_age: number;
+  games_played: number;
+  games_started: number;
+  minutes: number;
+  field_goals_made: number;
+  field_goals_attempted: number;
+  field_goals_percentage: number;
+  three_point_field_goals_made: number;
+  three_point_field_goals_attempted: number;
+  three_point_field_goals_percentage: number;
+  free_throws_made: number;
+  free_throws_attempted: number;
+  free_throws_percentage: number;
+  rebounds_offensive: number;
+  rebounds_defensive: number;
+  rebounds_total: number;
+  assists: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  personal_fouls: number;
+  points: number;
 }
 
 export interface PlayerGameStats {
@@ -130,4 +176,54 @@ export interface PlayerGameStats {
   WNBA_FANTASY_PTS_RANK: number; // WNBA Fantasy Points Rank
   AVAILABLE_FLAG: number; // Availability Flag
   MIN_SEC: string; // Minutes in "MM:SS" format
+}
+
+export interface PlayerGameStatistics {
+  id: number;
+  player: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  };
+  game_data: {
+    home_team: TTeamWithoutTeamNameSet;
+    visitor_team: TTeamWithoutTeamNameSet;
+  };
+  team: TTeamWithoutTeamNameSet;
+  status: string;
+  order: number;
+  position: string | null;
+  starter: boolean;
+  assists: number;
+  blocks: number;
+  blocks_received: number;
+  field_goals_attempted: number;
+  field_goals_made: number;
+  field_goals_percentage: number;
+  fouls_offensive: number;
+  fouls_drawn: number;
+  fouls_personal: number;
+  fouls_technical: number;
+  free_throws_attempted: number;
+  free_throws_made: number;
+  free_throws_percentage: number;
+  minus: number;
+  minutes: string;
+  plus: number;
+  plus_minus_points: number;
+  points: number;
+  points_fast_break: number;
+  points_in_the_paint: number;
+  points_second_chance: number;
+  rebounds_defensive: number;
+  rebounds_offensive: number;
+  rebounds_total: number;
+  steals: number;
+  three_pointers_attempted: number;
+  three_pointers_made: number;
+  three_pointers_percentage: number;
+  turnovers: number;
+  two_pointers_attempted: number;
+  two_pointers_made: number;
+  two_pointers_percentage: number;
 }

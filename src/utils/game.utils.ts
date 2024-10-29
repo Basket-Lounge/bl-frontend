@@ -75,8 +75,8 @@ export const convertUTCtoLocalTime = (date: string | Date) => {
   return date;
 }
 
-export const displayGameTimeForGameBox = (date: string | Date, timeInEST: string) => {
-  date = convertESTtoLocalTime(date, timeInEST);
+export const displayGameTimeForGameBox = (date: string | Date) => {
+  date = convertUTCtoLocalTime(date);
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
@@ -86,7 +86,7 @@ export const displayLiveGameTimeForGameBox = (liveStatusId: number, livePeriod: 
   }
 
   if (liveStatusId === 1) {
-    return displayGameTimeForGameBox(new Date(), '12:00 PM');
+    return displayGameTimeForGameBox(new Date());
   }
 
   if (liveStatusId === 3) {
@@ -100,7 +100,7 @@ export const filterGamesByMonth = (games: Game[], month: string) => {
   const filteredGames : Game[] = [];
 
   for (const game of games) {
-    const gameDate = convertESTtoLocalTime(game.game_date_est, game.game_status_text);
+    const gameDate = convertUTCtoLocalTime(game.game_date_est);
     if (month == '0') {
       filteredGames.push(game);
     } else {
@@ -142,6 +142,26 @@ export const getGameOutcome = (teamScore: LineScore, opponentScore: LineScore) =
 
 export const getTop4PlayersFromGame = (playersStats: PlayerStatistics[]) => {
   return playersStats.sort(
-    (a, b) => (b.points + b.assists + b.rebounds_total) - (a.points + a.assists + a.rebounds_total)
+    (a, b) => (b.points + b.assists + b.rebounds_total + b.blocks + b.steals) - (a.points + a.assists + a.rebounds_total + a.blocks + a.steals)
   ).slice(0, 4);
+}
+
+export const filterPlayerStatsByTeam = (playersStats: PlayerStatistics[], teamId: number) => {
+  return playersStats.filter(playerStat => playerStat.team.id === teamId);
+};
+
+export function formatPlayerGameTime(inputString: string): string | null {
+  // Use a regular expression to extract minutes and seconds
+  const match = inputString.match(/^PT(\d+)M(\d+\.\d+)S$/);
+
+  if (match) {
+      // Parse minutes and seconds
+      const minutes = parseInt(match[1], 10);
+      const seconds = Math.floor(parseFloat(match[2]));
+
+      // Return formatted string with zero-padded seconds if necessary
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  } else {
+      return null;  // Return null for invalid format
+  }
 }

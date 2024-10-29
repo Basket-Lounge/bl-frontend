@@ -1,5 +1,5 @@
 import { Player } from "@/models/player.models";
-import { ConferenceStandings, ConferenceTeam, Team } from "@/models/team.models";
+import { ConferenceStandings, ConferenceTeam, Team, TeamPostStatus } from "@/models/team.models";
 
 
 export const extractTeamEnglishName = (team: Team) => {
@@ -8,6 +8,14 @@ export const extractTeamEnglishName = (team: Team) => {
 
 export const extractTeamKoreanName = (team: Team) => {
     return team.teamname_set.find(name => name.language.name === "Korean")?.name || "";
+}
+
+export const extractStatusKoreanName = (status: TeamPostStatus) => {
+    return status.poststatusdisplayname_set.find(name => name.language_data.name === "Korean")?.display_name || "";
+}
+
+export const extractStatusEnglishName = (status: TeamPostStatus) => {
+    return status.poststatusdisplayname_set.find(name => name.language_data.name === "English")?.display_name || "";
 }
 
 export const getTeamConferenceInKorean = (standings: ConferenceStandings, teamId: number) => {
@@ -66,7 +74,7 @@ export const getBestPlayerFromList = (players: Player[]) => {
 
     let bestPlayer = players[0];
     players.forEach(player => {
-      if ((player.PTS || 0) > (bestPlayer.PTS || 0)) {
+      if ((player.pts || 0) > (bestPlayer.pts || 0)) {
         bestPlayer = player;
       }
     });

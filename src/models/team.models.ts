@@ -110,6 +110,8 @@ export interface Team {
     linescore?: LineScore;
 }
 
+export type TTeamWithoutTeamNameSet = Omit<Team, "teamname_set">;
+
 export interface TeamFranchiseHistory {
     LEAGUE_ID: string;
     TEAM_ID: number;
@@ -148,4 +150,42 @@ export interface ConferenceTeam {
 export interface ConferenceStandings {
     East: ConferenceTeam[];
     West: ConferenceTeam[];
+}
+
+export interface TeamPost {
+    id: number;
+    title: string;
+    content?: string;
+    created_at: string;
+    updated_at: string;
+    user_data: {
+        id: number;
+        username: string;
+    },
+    team_data: {
+        id: number;
+        symbol: string;
+    },
+    status_data: TeamPostStatus;
+    likes_count: number;
+}
+
+export interface TeamPostStatus {
+  id: number;
+  name: 'created' | 'deleted' | 'hidden';
+  poststatusdisplayname_set: {
+    language_data: {
+      name: string;
+    };
+    display_name: string;
+  }[];
+}
+
+export type TTeamPostsFilter = "all" | "recent" | "popular";
+
+export interface TeamPostPaginationResult {
+    count: number;
+    next: string;
+    previous: string;
+    results: TeamPost[];
 }

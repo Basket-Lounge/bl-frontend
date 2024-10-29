@@ -15,5 +15,5 @@ export const filterPlayersByPosition = (players: Player[], position: string): Pl
   if (position === "A") {
     return players;
   }
-  return players.filter(player => player.POSITION.includes(position));
+  return players.filter(player => player.position.includes(position));
 }
