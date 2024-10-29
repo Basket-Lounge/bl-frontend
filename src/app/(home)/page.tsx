@@ -5,6 +5,7 @@ import TodayGamesContainer from "@/components/home-page/TodayGamesContainer";
 import { filterTodayGames } from "@/utils/game.utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 
 export default function Home() {
@@ -16,8 +17,13 @@ export default function Home() {
     }
   });
 
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [leftBtnVisible, setLeftBtnVisible] = useState<boolean>(false);
+  const [rightBtnVisible, setRightBtnVisible] = useState<boolean>(true);
+  const [itemsPerView, setItemsPerView] = useState(3);
+
   return (
-    <div className="w-full flex flex-col gap-[32px] px-[256px] items-stretch">
+    <div className="w-full flex flex-col gap-[32px] items-stretch mx-auto">
       {/* Greeting Section */}
       <div className="h-[300px] bg-white w-full relative flex flex-col justify-center items-start overflow-hidden">
         {/* <video 
