@@ -20,16 +20,20 @@ export default function SummaryPage() {
   });
 
   const playersStatsQuery = useSuspenseQuery({
-    queryKey: ["players-stats"],
+    queryKey: ["game", gameId as string, "players-stats"],
     queryFn: async () => {
       return await getGamePlayersStats(gameId as string);
-    }
+    },
+    refetchInterval: 30000
   });
 
   return (
     <div className="flex flex-col gap-[32px] items-stretch">
+      { headerQuery.data.game_status_id > 1 && (
       <GameSummaryTop4Players playersStats={playersStatsQuery.data} />
+      )}
       <div className="flex gap-[32px]">
+        { headerQuery.data.game_status_id > 1 && (
         <div className="w-1/2">
           <GameSummaryLineScore
             homeTeam={headerQuery.data.home_team}
@@ -39,6 +43,7 @@ export default function SummaryPage() {
             game={headerQuery.data}
           />
         </div>
+        )}
         <div className="w-1/2">
           <GameSummaryGeneralInfo game={headerQuery.data} />
         </div>
