@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { QueryProvider } from "@/components/common/QueryProvider";
 import ModalController from "@/components/common/modal/ModalController";
+import PageSizeController from "@/components/common/PageSizeController";
 
 
 const pretendard = localFont({
@@ -28,10 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${pretendard.className} antialiased bg-color2 flex flex-col min-h-screen items-stretch`}
+        className={`${pretendard.className} antialiased bg-color2 w-full`}
       >
-        <NavBar />
-        <div className="grow">
+        <PageSizeController>
           <QueryProvider>
             <ModalController />
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
@@ -40,8 +40,7 @@ export default function RootLayout({
               </Suspense>
             </ErrorBoundary>
           </QueryProvider>
-        </div>
-        <Footer />
+        </PageSizeController>
       </body>
     </html>
   );
