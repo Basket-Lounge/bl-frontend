@@ -1,4 +1,4 @@
-import { Player, PlayerGameStats, PlayerSeasonStats } from "@/models/player.models";
+import { Player, PlayerCareerStats, PlayerGameStatistics, PlayerGameStats, PlayerSeasonStats } from "@/models/player.models";
 import { httpClient } from "./http";
 
 
@@ -13,11 +13,11 @@ export const getPlayerSeasonStats = async (teamId: string | number, playerId: st
 }
 
 export const getPlayerCareerStats = async (teamId: string | number, playerId: string | number) => {
-  const response = await httpClient.get<PlayerSeasonStats[]>(`/api/teams/${teamId}/players/${playerId}/career-stats/`);
+  const response = await httpClient.get<PlayerCareerStats[]>(`/api/teams/${teamId}/players/${playerId}/career-stats/`);
   return response.data;
 }
 
 export const getPlayerLast5GamesStats = async (teamId: string | number, playerId: string | number) => {
-  const response = await httpClient.get<PlayerGameStats[]>(`/api/teams/${teamId}/players/${playerId}/last-5-games/`);
+  const response = await httpClient.get<PlayerGameStatistics[]>(`/api/teams/${teamId}/players/${playerId}/last-5-games/`);
   return response.data;
 }

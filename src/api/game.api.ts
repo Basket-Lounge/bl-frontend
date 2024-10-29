@@ -20,3 +20,15 @@ export const getGamePlayersStats = async (gameId: string): Promise<PlayerStatist
   const response = await httpClient.get<PlayerStatistics[]>(`/api/games/${gameId}/player-statistics/`);
   return response.data as PlayerStatistics[];
 }
+
+export const sendGameChatMessage = async (
+  gameId: string, 
+  message: string, 
+  subscriptionToken: string
+) => {
+  const response = await httpClient.post(
+    `/api/games/${gameId}/chat/`, 
+    { message, subscription_token: subscriptionToken }
+  );
+  return response.status;
+}

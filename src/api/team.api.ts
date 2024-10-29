@@ -1,4 +1,4 @@
-import { ConferenceStandings, Team, TeamFranchiseHistory } from "@/models/team.models";
+import { ConferenceStandings, Team, TeamFranchiseHistory, TeamPost, TeamPostPaginationResult, TeamPostStatus } from "@/models/team.models";
 import { httpClient } from "./http";
 import { Game } from "@/models/game.models";
 
@@ -33,6 +33,21 @@ export const getTeamFranchiseHistory = async (teamId: string) => {
     return response.data as TeamFranchiseHistory;
 }
 
+export const getTeamPosts = async (teamId: string) => {
+    const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/`);
+    return response.data as TeamPostPaginationResult;
+}
+
+export const getTeamPostStatus = async () => {
+  const response = await httpClient.get<TeamPostStatus[]>(`/api/teams/posts/statuses/`);
+  return response.data as TeamPostStatus[];
+}
+
+export const getTeamPostStatusForCreate = async () => {
+  const response = await httpClient.get<TeamPostStatus[]>(`/api/teams/posts/statuses/for-creation/`);
+  return response.data as TeamPostStatus[];
+}
+
 export const getTeamsStandings = async () => {
     const response = await httpClient.get<ConferenceStandings>(`/api/teams/standings/`);
     return response.data as ConferenceStandings;
@@ -41,4 +56,19 @@ export const getTeamsStandings = async () => {
 export const getLast4Games = async (teamId: string) => {
     const response = await httpClient.get<Game[]>(`/api/teams/${teamId}/last-4-games/`);
     return response.data as Game[];
+}
+
+export const publishTeamPost = async (
+  teamId: string, 
+  title: string, 
+  content: string,
+  status: number
+) => {
+  const response = await httpClient.post<TeamPost>(`/api/teams/${teamId}/posts/`, { title, content, status });
+  return response.data;
+}
+
+export const getTeamPost = async (teamId: string, postId: string) => {
+    const response = await httpClient.get<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`);
+    return response.data;
 }

@@ -2,7 +2,7 @@ import { BACKEND_SERVER_URL } from "@/constants/backend";
 import axios, {AxiosRequestConfig} from "axios";
 
 
-const DEFAULT_TIMEOUT = 10000;
+const DEFAULT_TIMEOUT = 30000;
 
 export const createClient = (config?: AxiosRequestConfig) => {
   const axiosInstance = axios.create({
