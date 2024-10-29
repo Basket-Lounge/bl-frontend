@@ -1,9 +1,9 @@
-import { PlayerSeasonStats } from "@/models/player.models";
+import { PlayerCareerStats, PlayerSeasonStats } from "@/models/player.models";
 import TeamPlayersPlayerDetailsCareerStatsLine from "./TeamPlayersPlayerDetailsCareerStatsLine";
 
 
 interface ITeamPlayersPlayerDetailsCareerStatsProps {
-  stats: PlayerSeasonStats[];
+  stats: PlayerCareerStats[];
 }
 
 export default function TeamPlayersPlayerDetailsCareerStats({stats}: ITeamPlayersPlayerDetailsCareerStatsProps) {
@@ -17,7 +17,7 @@ export default function TeamPlayersPlayerDetailsCareerStats({stats}: ITeamPlayer
         </div>
         { stats.length > 0 && stats.map((seasonStats, index) => (
           <div className="py-[16px]">
-            <p className="w-[200px] font-semibold">{seasonStats.SEASON_ID}</p>
+            <p className="w-[200px] font-semibold">{seasonStats.season_id}</p>
           </div>
         ))}
       </div>

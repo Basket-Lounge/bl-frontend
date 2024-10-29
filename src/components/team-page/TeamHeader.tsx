@@ -10,7 +10,7 @@ interface ITeamHeaderProps {
 export default function TeamHeader({ team }: ITeamHeaderProps) {
   const EnglishName = extractTeamEnglishName(team);
   const KoreanName = extractTeamKoreanName(team);
-  const leagueRank = team.stats?.LeagueRank || 0;
+  const leagueRank = team.stats?.PlayoffRank || 0;
   const wins = team.stats?.WINS || 0;
   const losses = team.stats?.LOSSES || 0;
 
@@ -35,7 +35,7 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
         </div>
         <div className="flex items-center gap-[24px]">
           <div className="px-[32px] py-[4px] rounded-full bg-white">
-            <p className="text-[14px] text-color1 font-bold">리그 전체 {leagueRank}위</p>
+            <p className="text-[14px] text-color1 font-bold">지구 {leagueRank}위</p>
           </div>
           <div className="px-[32px] py-[4px] rounded-full bg-white">
             <p className="text-[14px] text-color1 font-bold">{wins} - {losses}</p>

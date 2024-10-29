@@ -14,7 +14,6 @@ const TeamGeneralInfoGameBox : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
   const homeTeamLineScore = game.home_team.linescore as LineScore;
   const currentGameTime = game.game_status_id == 1 ? displayGameTimeForGameBox(
     game.game_date_est,
-    game.game_status_text
   ) : displayLiveGameTimeForGameBox(game.game_status_id, game.live_period, game.live_pc_time);
 
   return (

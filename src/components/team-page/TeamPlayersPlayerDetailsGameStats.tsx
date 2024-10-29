@@ -1,9 +1,9 @@
-import { PlayerGameStats } from "@/models/player.models";
+import { PlayerGameStatistics } from "@/models/player.models";
 import TeamPlayersPlayerDetailsGameStatsLine from "./TeamPlayersPlayerDetailsGameStatsLine";
 
 
 interface ITeamPlayersPlayerDetailsGameStatsProps {
-  stats: PlayerGameStats[];
+  stats: PlayerGameStatistics[];
 }
 
 export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersPlayerDetailsGameStatsProps) {
@@ -17,7 +17,11 @@ export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersP
         </div>
         { stats.length > 0 && stats.map((seasonStats, index) => (
           <div className="py-[16px]">
-            <p className="w-[200px] font-semibold">{seasonStats.MATCHUP}</p>
+            <p className="w-[200px] font-semibold">{
+              seasonStats.game_data.visitor_team.id === seasonStats.team.id ?
+              `${seasonStats.game_data.visitor_team.symbol} @ ${seasonStats.game_data.home_team.symbol}` :
+              `${seasonStats.game_data.home_team.symbol} vs ${seasonStats.game_data.visitor_team.symbol}`
+            }</p>
           </div>
         ))}
       </div>
