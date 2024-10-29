@@ -17,8 +17,8 @@ export default function GameHeader({ game }: { game: IGameWithTeamStats }) {
   return (
     <div className="">
       <div className="flex items-center justify-between">
-        <h4 className="text-white text-[20px] font-medium text-left">원정팀</h4>
-        <h4 className="text-white text-[20px] font-medium text-right">홈팀</h4>
+        <h4 className="text-white text-[16px] font-medium text-left">원정팀</h4>
+        <h4 className="text-white text-[16px] font-medium text-right">홈팀</h4>
       </div>
       {/* Team Logos and Scores */}
       <div className="flex justify-between items-center mt-[16px]">
