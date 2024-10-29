@@ -30,7 +30,7 @@ const TeamPlayersContainer = () => {
       <TeamPlayersFilter />
       <div className="flex items-start w-full gap-[32px] flex-wrap">
         {filteredPlayers.map(player => (
-          <TeamPlayersPlayer key={player.PERSON_ID} player={player} />
+          <TeamPlayersPlayer key={player.id} player={player} />
         ))}
       </div>
     </div>
