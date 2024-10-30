@@ -17,7 +17,10 @@ export default function NavBar() {
   const pageWidth = useStore(store, (state) => state.pageWidth);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isTeamMenuOpen, setIsTeamMenuOpen] = useState(false);
+
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const teamMenuButtonRef = useRef<HTMLButtonElement>(null);
   const searchParams = useSearchParams();
 
   const {
@@ -26,10 +29,15 @@ export default function NavBar() {
   } = useStore(useAuthStore);
 
   useClickOutside(menuButtonRef, setIsMenuOpen);
+  useClickOutside(teamMenuButtonRef, setIsTeamMenuOpen);
   useTokenRefresh();
 
   const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
+  }
+
+  const handleTeamMenuClick = () => {
+    setIsTeamMenuOpen(!isTeamMenuOpen);
   }
 
   // Redirect code handling logic for various scenarios
@@ -44,12 +52,25 @@ export default function NavBar() {
       <div className="flex items-center" style={{ width: `${pageWidth}px`, margin: 'auto' }}>
         <h2 className="text-white text-[20px] font-medium w-1/3">Basket Lounge</h2>
         <div className="flex items-center justify-center gap-[32px] w-1/3">
-          <Link href="/teams/1610612750/general-info/">
+          <Link href="/">
             홈
           </Link>
-          <Link href="/my-page">
-            팀
-          </Link>
+          <div>
+            <button 
+              className="relative"
+              ref={teamMenuButtonRef}
+              onClick={handleTeamMenuClick}
+            >
+              팀
+              {isTeamMenuOpen && (
+              <div 
+                className="absolute top-[40px] left-0 w-[300px] bg-color3 rounded-md p-[24px] z-10"
+              >
+
+              </div>
+              )}
+            </button>
+          </div>
           <a href="#" className="font-medium">선수</a>
           <a href="#" className="font-medium">스케쥴</a>
         </div>
@@ -67,7 +88,7 @@ export default function NavBar() {
             />
             {isMenuOpen && (
             <div
-              className={`absolute top-[40px] right-0 w-[300px] bg-color4 rounded-md p-[24px] z-10`}
+              className={`absolute top-[40px] right-0 w-[300px] bg-color3 rounded-md p-[24px] z-10`}
             >
               {isAuthenticated ? (
               <p>
