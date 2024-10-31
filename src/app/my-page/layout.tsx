@@ -40,7 +40,7 @@ export default function MyPage({ children }: {
 
   return (
     <TeamStoreContext.Provider value={TeamStore}>
-      <div className="mx-[256px] my-[32px] flex flex-col items-stretch gap-[24px]">
+      <div className="my-[32px] flex flex-col items-stretch gap-[24px]">
         <h1 className="text-white text-[32px] font-bold">계정 관리</h1>
         <UserHeader user={query.data} />
         <MyPageSectionOptions />

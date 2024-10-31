@@ -5,19 +5,20 @@ import TeamPostsContainer from "@/components/team-page/TeamPostsContainer";
 import TeamPostsFilter from "@/components/team-page/TeamPostsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 
 
 export default function TeamPosts() {
   const { teamId } = useParams();
-  const [ page, setPage ] = useState(1);
+  const searchParams = useSearchParams();
+
+  const page = parseInt(searchParams.get("page") || '1') || 1;
 
   const teamPostsQuery = useSuspenseQuery({
     queryKey: ['team', teamId, "posts", page],
     queryFn: async () => {
-      return await getTeamPosts(teamId as string);
-    }
+      return await getTeamPosts(teamId as string, page);
+    },
   });
 
   return (

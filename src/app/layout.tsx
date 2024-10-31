@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import NavBar from "@/components/common/NavBar";
-import Footer from "@/components/common/Footer";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { QueryProvider } from "@/components/common/QueryProvider";

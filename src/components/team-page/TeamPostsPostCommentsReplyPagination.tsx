@@ -1,27 +1,37 @@
 import Image from "next/image";
-import Link from "next/link";
 
 
-interface ITeamPostsPaginationProps {
+interface ITeamPostsPostCommentsReplyPaginationProps {
   currentPageNumber: number;
   previousLink: string;
   nextLink: string;
+  setPageNumber: (pageNumber: number) => void;
 }
 
-const TeamPostsPagination = ({
-    previousLink, nextLink, currentPageNumber
-}: ITeamPostsPaginationProps) => {
+const TeamPostsPostCommentsReplyPagination = ({
+    previousLink, nextLink, currentPageNumber, setPageNumber 
+}: ITeamPostsPostCommentsReplyPaginationProps) => {
 
   if (!previousLink && !nextLink) {
     return null;
+  }
+
+  const handlePreviousClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setPageNumber(currentPageNumber - 1);
+  }
+
+  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setPageNumber(currentPageNumber + 1);
   }
 
   return (
     <div className="">
       <div className="flex px-[24px] py-[16px] rounded-full bg-color3 w-fit mx-auto items-center gap-[24px]">
         {previousLink && (
-        <Link
-          href={previousLink}
+        <button
+          onClick={handlePreviousClick}
         >
           <Image
             src="/icons/arrow_back_24dp.svg"
@@ -29,12 +39,12 @@ const TeamPostsPagination = ({
             width={24}
             height={24}
           />
-        </Link>
+        </button>
         )}
         <span className="rounded-full p-[6px] bg-color1">{currentPageNumber}</span>
         {nextLink && (
-        <Link 
-          href={nextLink}
+        <button
+          onClick={handleNextClick}
         >
           <Image
             src="/icons/arrow_forward_24dp.svg"
@@ -42,11 +52,11 @@ const TeamPostsPagination = ({
             width={24}
             height={24}
           />
-        </Link>
+        </button>
         )}
       </div>
     </div>
   );
 }
 
-export default TeamPostsPagination;
+export default TeamPostsPostCommentsReplyPagination;
