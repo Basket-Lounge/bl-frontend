@@ -7,6 +7,14 @@ export default function GameBoxScorePlayerStatsLine(
 ) {
   const className = 'w-[1330px] flex py-[16px]';
   const minutes = formatPlayerGameTime(stats.minutes);
+  
+  if (stats.status === 'INACTIVE') {
+    return (
+      <div className="w-[1330px] flex py-[16px]">
+        <p className="w-[70px] text-right">미출전</p>
+      </div>
+    )
+  }
 
   return (
     <div className={className}>
