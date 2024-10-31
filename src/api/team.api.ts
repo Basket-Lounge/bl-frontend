@@ -1,6 +1,19 @@
-import { ConferenceStandings, Team, TeamFranchiseHistory, TeamPost, TeamPostPaginationResult, TeamPostStatus } from "@/models/team.models";
+import { 
+  ConferenceStandings, 
+  Team, 
+  TeamFranchiseHistory, 
+  TeamPost, 
+  TeamPostComment, 
+  TeamPostCommentLikes, 
+  TeamPostCommentReply, 
+  TeamPostCommentReplyPaginationResult, 
+  TeamPostCommentsPaginationResult, 
+  TeamPostPaginationResult, 
+  TeamPostStatus 
+} from "@/models/team.models";
 import { httpClient } from "./http";
 import { Game } from "@/models/game.models";
+import { teardownHeapProfiler } from "next/dist/build/swc";
 
 
 export const getAllTeams = async () => {
@@ -33,8 +46,8 @@ export const getTeamFranchiseHistory = async (teamId: string) => {
     return response.data as TeamFranchiseHistory;
 }
 
-export const getTeamPosts = async (teamId: string) => {
-    const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/`);
+export const getTeamPosts = async (teamId: string, page: number) => {
+    const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/?page=${page}`);
     return response.data as TeamPostPaginationResult;
 }
 
@@ -69,6 +82,72 @@ export const publishTeamPost = async (
 }
 
 export const getTeamPost = async (teamId: string, postId: string) => {
-    const response = await httpClient.get<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`);
-    return response.data;
+  const response = await httpClient.get<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`);
+  return response.data;
+}
+
+export const getTeamPostComments = async (
+  teamId: string, 
+  postId: string, 
+  page: number,
+  filter: string
+) => {
+  const response = await httpClient.get<TeamPostCommentsPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/?page=${page}&filter=${filter}`);
+  return response.data;
+}
+
+export const publishTeamPostComment = async (
+  teamId: string,
+  postId: string,
+  content: string
+) => {
+  const response = await httpClient.post(`/api/teams/${teamId}/posts/${postId}/comments/`, { content });
+  return response.data;
+}
+
+export const getTeamPostComment = async (
+  teamId: string,
+  postId: string,
+  commentId: string
+) => {
+  const response = await httpClient.get<TeamPostComment>(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/`);
+  return response.data;
+}
+
+export const likeTeamPostComment = async (
+  teamId: string,
+  postId: string,
+  commentId: string
+) => {
+  const response = await httpClient.post<TeamPostCommentLikes>(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/likes/`);
+  return response.data;
+}
+
+export const unlikeTeamPostComment = async (
+  teamId: string,
+  postId: string,
+  commentId: string
+) => {
+  const response = await httpClient.delete(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/likes/`);
+  return response.data;
+}
+
+export const getTeamPostCommentReplies = async (
+  teamId: string,
+  postId: string,
+  commentId: string,
+  page: number
+) => {
+  const response = await httpClient.get<TeamPostCommentReplyPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/?page=${page}`);
+  return response.data;
+}
+
+export const publishTeamPostCommentReply = async (
+  teamId: string,
+  postId: string,
+  commentId: string,
+  content: string
+) => {
+  const response = await httpClient.post(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/`, { content });
+  return response.data;
 }

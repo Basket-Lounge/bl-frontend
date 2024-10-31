@@ -168,6 +168,7 @@ export interface TeamPost {
     },
     status_data: TeamPostStatus;
     likes_count: number;
+    comments_count: number;
 }
 
 export interface TeamPostStatus {
@@ -188,4 +189,57 @@ export interface TeamPostPaginationResult {
     next: string;
     previous: string;
     results: TeamPost[];
+}
+
+export interface TeamPostCommentsPaginationResult {
+    count: number;
+    next: string;
+    previous: string;
+    results: TeamPostComment[];
+}
+
+export interface TeamPostComment {
+    id: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    replies_count: number;
+    likes_count: number;
+    liked?: boolean;
+    user_data: {
+        id: number;
+        username: string;
+    };
+    status_data: {
+        id: number;
+        name: string;
+    }
+}
+
+export interface TeamPostCommentReplyPaginationResult {
+    count: number;
+    next: string;
+    previous: string;
+    results: TeamPostCommentReply[];
+}
+
+export interface TeamPostCommentReply {
+    id: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+    user_data: {
+        id: number;
+        username: string;
+    };
+    status_data: {
+        id: number;
+        name: string;
+    }
+}
+
+export interface TeamPostCommentLikes {
+  id: string;
+  likes_count: number;
+  liked?: boolean;
 }

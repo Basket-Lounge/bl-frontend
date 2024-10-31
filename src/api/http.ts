@@ -51,9 +51,15 @@ export const createClientFormData = (config?: AxiosRequestConfig) => {
       return response;
     },
     (error) => {
+      console.log(error);
       if (error.response?.status === 401) {
         // redirect to login page
-        window.location.href = "/login"; 
+        window.history.pushState({}, "", "/login");
+        return
+      }
+      if (error.response?.status === 404) {
+        // redirect to forbidden page
+        window.history.pushState({}, "", "/forbidden");
         return
       }
       return Promise.reject(error);
