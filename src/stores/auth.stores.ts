@@ -8,6 +8,8 @@ interface IAuthStore {
   setUsername: (username: string) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
+  authenticationAttempted: boolean;
+  setAuthenticationAttempted: (authenticationAttempted: boolean) => void;
 }
 
 export const useAuthStore = create<IAuthStore>()(
@@ -18,5 +20,7 @@ export const useAuthStore = create<IAuthStore>()(
     setUsername: (username: string) => set({ username }),
     isAuthenticated: false,
     setIsAuthenticated: (isAuthenticated: boolean) => set({ isAuthenticated }),
+    authenticationAttempted: false,
+    setAuthenticationAttempted: (authenticationAttempted: boolean) => set({ authenticationAttempted }),
   }))
 );
