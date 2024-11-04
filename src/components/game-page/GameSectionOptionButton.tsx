@@ -1,6 +1,5 @@
 import { TSection } from "@/app/games/[gameId]/layout";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 
 interface IGameSectionOptionButtonProps {
@@ -9,16 +8,21 @@ interface IGameSectionOptionButtonProps {
 };
 
 export default function GameSectionOptionButton({ name, designatedSection }: IGameSectionOptionButtonProps) {
+  const router = useRouter();
   const {gameId} = useParams();
   const pathname = usePathname();
 
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/games/${gameId}/${designatedSection}`);
+  }
+
   return (
-    <Link href={`/games/${gameId}/${designatedSection}`}>
-      <button
-        className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
-      >
-        {name}
-      </button>
-    </Link>
+    <button
+      className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
+      onClick={handleClick}
+    >
+      {name}
+    </button>
   );
 };

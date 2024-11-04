@@ -29,16 +29,16 @@ export default function RootLayout({
       <body
         className={`${pretendard.className} antialiased bg-color2 w-full`}
       >
-        <PageSizeController>
-          <QueryProvider>
+        <QueryProvider>
+          <PageSizeController>
             <ModalController />
             <ErrorBoundary fallback={<div>Something went wrong</div>}>
               <Suspense fallback={<div>Loading...</div>}>
                 {children}
               </Suspense>
             </ErrorBoundary>
-          </QueryProvider>
-        </PageSizeController>
+          </PageSizeController>
+        </QueryProvider>
       </body>
     </html>
   );

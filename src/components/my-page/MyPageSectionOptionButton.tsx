@@ -1,6 +1,5 @@
-import { TSection } from "@/app/teams/[teamId]/layout";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 
 interface IMyPageSectionOptionButtonProps {
@@ -10,14 +9,19 @@ interface IMyPageSectionOptionButtonProps {
 
 export default function MyPageSectionOptionButton({ name, designatedSection }: IMyPageSectionOptionButtonProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/my-page/${designatedSection}`);
+  }
 
   return (
-    <Link href={`/my-page/${designatedSection}`}>
-      <button
-        className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
-      >
-        {name}
-      </button>
-    </Link>
+    <button
+      className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
+      onClick={handleClick}
+    >
+      {name}
+    </button>
   );
 };
