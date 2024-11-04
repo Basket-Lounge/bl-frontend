@@ -1,10 +1,12 @@
-import { Team } from "@/models/team.models";
+import { Team, TeamWithLikes } from "@/models/team.models";
 import { extractTeamEnglishName, extractTeamKoreanName } from "@/utils/team.utils";
 import Image from "next/image";
+import { useState } from "react";
+import TeamHeaderLikeButton from "./TeamHeaderLikeButton";
 
 
 interface ITeamHeaderProps {
-  team: Team;
+  team: TeamWithLikes;
 }
 
 export default function TeamHeader({ team }: ITeamHeaderProps) {
@@ -42,15 +44,7 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
           </div>
         </div>
       </div>
-      <div className="bg-color3 rounded-lg text-[16px] p-[12px] font-medium flex gap-[12px]">
-        <Image
-          src={"/icons/favorite_border_24dp_FFFFFF.svg"}
-          alt="favorite"
-          width={24}
-          height={24}
-        />
-        24
-      </div>
+      <TeamHeaderLikeButton liked={team.liked || false} likesCount={team.likes_count} />
     </div>
   )
 }

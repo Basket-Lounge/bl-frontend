@@ -23,8 +23,12 @@ interface ITeamStore {
   updateSearchValue: (value: string) => void;
   postsCreateTitle: string;
   updatePostsCreateTitle: (value: string) => void;
+  postsCreateTitleError: string | null;
+  updatePostsCreateTitleError: (value: string | null) => void;
   postsCreateContent: string;
   updatePostsCreateContent: (value: string) => void;
+  postsCreateContentError: string | null;
+  updatePostsCreateContentError: (value: string | null) => void;
 }
 
 export type TSection = "general-info" | "players" | "schedule" | "posts";
@@ -42,8 +46,12 @@ const TeamStore = createStore<ITeamStore>((set) => ({
   updateSearchValue: (value) => set({ searchValue: value }),
   postsCreateTitle: "",
   updatePostsCreateTitle: (value) => set({ postsCreateTitle: value }),
+  postsCreateTitleError: "",
+  updatePostsCreateTitleError: (value) => set({ postsCreateTitleError: value }),
   postsCreateContent: "",
   updatePostsCreateContent: (value) => set({ postsCreateContent: value }),
+  postsCreateContentError: "",
+  updatePostsCreateContentError: (value) => set({ postsCreateContentError: value }),
 }));
 
 export const TeamStoreContext = createContext(TeamStore);

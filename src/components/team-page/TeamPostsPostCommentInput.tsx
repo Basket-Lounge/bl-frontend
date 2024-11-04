@@ -1,4 +1,5 @@
 import { publishTeamPostComment } from "@/api/team.api";
+import { TeamPostCommentValidation } from "@/utils/validation.utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -6,15 +7,24 @@ import { useState } from "react";
 
 const TeamPostsPostCommentInput = () => {
   const [comment, setComment] = useState<string>("");
+  const [commentError, setCommentError] = useState<string>("");
+
   const { teamId, postId } = useParams();
 
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (comment: string) => {
-      return publishTeamPostComment(teamId as string, postId as string, comment);
+      return publishTeamPostComment(
+        teamId as string, 
+        postId as string, 
+        comment
+      );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string],});
+      queryClient.removeQueries({queryKey: ["team", teamId as string, "posts", "pagination"],});
+      queryClient.removeQueries({queryKey: ['my-page', "posts", "pagination"]});
+      queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string, 'post'],});
+      queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string, 'comments'],});
       setComment("");
     }
   });
@@ -23,7 +33,18 @@ const TeamPostsPostCommentInput = () => {
     setComment(e.target.value);
   };
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const validationResults = TeamPostCommentValidation.safeParse({content: comment});
+    if (!validationResults.success) {
+      const errorFormat = validationResults.error.format();
+      
+      const contentError = errorFormat.content?._errors.toString();
+      setCommentError(contentError || '알 수 없는 에러가 발생했습니다.');
+
+      return;
+    }
     mutation.mutate(comment);
   };
 
@@ -42,6 +63,7 @@ const TeamPostsPostCommentInput = () => {
       { comment && (
       <div className="mt-[8px] flex items-center justify-between">
         <div>
+        {commentError && <p className="mt-[16px] text-red-500">{commentError}</p>}
         {mutation.isPending && <p className="mt-[16px] text-white">저장 중...</p>}
         {mutation.isError && <p className="mt-[16px] text-white">저장 중 오류가 발생했습니다.</p>}
         {mutation.isSuccess && <p className="mt-[16px] text-white">저장되었습니다.</p>}

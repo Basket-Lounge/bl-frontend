@@ -1,3 +1,4 @@
+import { TeamPostCommentValidation } from "@/utils/validation.utils";
 import { useEffect, useState } from "react";
 
 
@@ -11,12 +12,24 @@ const TeamPostsPostCommentsReplyInput = ({
   handleMutation
 }: ITeamPostsPostCommentsReplyInputProps) => {
   const [reply, setReply] = useState<string>("");
+  const [replyError, setReplyError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReply(e.target.value);
   };
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const validationResults = TeamPostCommentValidation.safeParse({content: reply});
+    if (!validationResults.success) {
+      const errorFormat = validationResults.error.format();
+      
+      const contentError = errorFormat.content?._errors.toString();
+      setReplyError(contentError || '에러가 발생했습니다.');
+      return;
+    }
+
     handleMutation(reply);
   };
 
@@ -42,6 +55,7 @@ const TeamPostsPostCommentsReplyInput = ({
       <div className="mt-[8px] flex items-center justify-between">
         <div>
         {isMutating && <p className="mt-[16px] text-white">저장 중...</p>}
+        {replyError && <p className="mt-[16px] text-red-500">{replyError}</p>}
         </div>
         <button 
           className="bg-color1 text-white py-2 px-4 rounded-full"

@@ -6,21 +6,24 @@ import {
 } from "@/api/team.api";
 import { useAuthStore } from "@/stores/auth.stores";
 import { TeamPostComment, TeamPostCommentLikes } from "@/models/team.models";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useStore } from "zustand";
 import TeamPostsPostCommentsReply from "./TeamPostsPostCommentsReply";
 import TeamPostsPostCommentsItemUser from "./TeamPostsPostCommentsItemUser";
 import TeamPostsPostCommentsItemLikesRepliesButtonsContainer from "./TeamPostsPostCommentsItemLikesReplies";
 import TeamPostsPostCommentsReplyInput from "./TeamPostsPostCommentsReplyInput";
 import TeamPostsPostCommentsReplyPagination from "./TeamPostsPostCommentsReplyPagination";
+import { PostCommentsContext } from "./TeamPostsPostCommentsContainer";
 
 
 const TeamPostsPostCommentsItem = ({
   comment
 }: {comment: TeamPostComment}) => {
+  const queryClient = useQueryClient();
   const { teamId, postId } = useParams();
+
   const [ noRefresh, setNoRefresh ] = useState<boolean>(false);
   const [ realComment, setRealComment ] = useState<TeamPostComment>(comment);
   const [ isReplyOpen, setIsReplyOpen ] = useState<boolean>(false);
@@ -29,6 +32,10 @@ const TeamPostsPostCommentsItem = ({
   const [ likesCount, setLikesCount ] = useState<number>(comment.likes_count);
   const [ repliesCount, setRepliesCount ] = useState<number>(comment.replies_count);
   const [ repliesPage, setRepliesPage ] = useState<number>(1);
+
+  const PostCommentsStore = useContext(PostCommentsContext);
+  const page = useStore(PostCommentsStore, (state) => state.page);
+  const filter = useStore(PostCommentsStore, (state) => state.currentCommentsFilterValue);
 
   const {
     isAuthenticated
@@ -80,6 +87,9 @@ const TeamPostsPostCommentsItem = ({
     onSuccess: (data) => {
       setLikesCount(data.likes_count);
       setLiked(data.liked || false);
+      queryClient.removeQueries({
+        queryKey: ["team", teamId as string, "posts", postId as string, "comments", page, filter]
+      });
     }
   })
 
@@ -98,6 +108,7 @@ const TeamPostsPostCommentsItem = ({
     }
   })
 
+  // For clicking the like button
   const handleLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!isAuthenticated) {
@@ -107,6 +118,7 @@ const TeamPostsPostCommentsItem = ({
     likeMutation.mutate();
   }
 
+  // For clicking the reply button
   const handleReplyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // Load replies for the first time when the reply button is clicked
@@ -117,6 +129,7 @@ const TeamPostsPostCommentsItem = ({
     setIsReplyOpen(!isReplyOpen);
   }
 
+  // For handling pagination of replies
   const handlePagination = (pageNumber: number) => {
     setRepliesPage(pageNumber);
     postCommentRepliesQuery.refetch();

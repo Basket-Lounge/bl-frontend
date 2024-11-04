@@ -7,9 +7,13 @@ const TeamPostsCreateTitle = () => {
   const store = useContext(TeamStoreContext);
   const title = useStore(store, (state) => state.postsCreateTitle);
   const setTitle = useStore(store, (state) => state.updatePostsCreateTitle);
+  const titleError = useStore(store, (state) => state.postsCreateTitleError);
 
   return (
-    <div className="flex">
+    <div className="flex flex-col items-stretch gap-[16px]">
+      {titleError && (
+        <p className="text-red-500 font-semibold text-[16px]">{titleError}</p>
+      )}
       <input
         type="text"
         placeholder="제목을 입력하세요"

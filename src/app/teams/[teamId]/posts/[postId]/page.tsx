@@ -3,10 +3,9 @@
 import { getTeamPost } from "@/api/team.api";
 import TeamPostsPostCommentInput from "@/components/team-page/TeamPostsPostCommentInput";
 import TeamPostsPostCommentsContainer from "@/components/team-page/TeamPostsPostCommentsContainer";
+import TeamPostsPostLikeCommentButtonContainer from "@/components/team-page/TeamPostsPostLikeCommentButtonContainer";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 
 const PostPage = () => {
@@ -14,7 +13,7 @@ const PostPage = () => {
   const { teamId, postId } = useParams();
   
   const postQuery = useSuspenseQuery({
-    queryKey: ["team", teamId as string, "posts", postId as string],
+    queryKey: ["team", teamId as string, "posts", postId as string, "post"],
     queryFn: async () => {
       return await getTeamPost(teamId as string, postId as string);
     }
@@ -52,28 +51,11 @@ const PostPage = () => {
       >
         {postQuery.data.content}
       </p>
-      <div className="flex items-center gap-[24px]">
-        <div className="flex items-center text-[16px] gap-[16px] bg-color3 rounded-full py-[8px] px-[16px]">
-          <Image
-            src='/icons/favorite_24dp_FFFFFF.svg'
-            alt="avatar"
-            width={20}
-            height={20}
-            className="rounded-full"
-          />
-          <span>{postQuery.data.likes_count}</span>
-        </div>
-        <div className="flex items-center text-[16px] gap-[16px] bg-color3 rounded-full py-[8px] px-[16px]">
-          <Image
-            src='/icons/comment_24dp_FFFFFF.svg'
-            alt="avatar"
-            width={20}
-            height={20}
-            className="rounded-full"
-          />
-          <span>{postQuery.data.comments_count}</span>
-        </div>
-      </div>
+      <TeamPostsPostLikeCommentButtonContainer
+        likesCount={postQuery.data.likes_count}
+        commentsCount={postQuery.data.comments_count}
+        liked={postQuery.data.liked ? true : false}
+      />
       <TeamPostsPostCommentInput />
       <TeamPostsPostCommentsContainer />
     </div>
