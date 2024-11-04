@@ -14,6 +14,13 @@ const config: Config = {
         color3: "#423F3E",
         color4: "#362222",
       },
+      screens: {
+        "desktop-2": "1200px",
+        "desktop-1": "1024px",
+        "tablet": "768px",
+        "mobile-2": "480px",
+        "mobile-1": "320px",
+      }
     },
   },
   plugins: [],
