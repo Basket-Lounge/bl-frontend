@@ -1,37 +1,32 @@
 'use client'
 
 import useTokenRefresh from "@/hooks/useTokenRefresh";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useContext, useEffect } from "react";
-import { useStore } from "zustand";
-import { pageSizeControllerStoreContext } from "./PageSizeController";
+import { useRouter, useSearchParams } from "next/navigation";
 import Team from "./navbar/Team";
 import UserMenu from "./navbar/UserMenu";
 
 
 export default function NavBar() {
-  const store = useContext(pageSizeControllerStoreContext);
-  const pageWidth = useStore(store, (state) => state.pageWidth);
-  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useTokenRefresh();
 
-  // Redirect code handling logic for various scenarios
-  useEffect(() => {
-    if (searchParams.get("redirect-code")) {
-      const redirectCode = searchParams.get("redirect-code");
-    }
-  }, [searchParams]);
+  const handleHomeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/");
+  }
 
   return (
     <div className="bg-color1 w-full py-[20px]">
-      <div className="flex items-center" style={{ width: `${pageWidth}px`, margin: 'auto' }}>
-        <h2 className="text-white text-[20px] font-medium w-1/3">Basket Lounge</h2>
+      <div className="flex items-center mobile-1:w-[360px] mobile-2:w-[480px] tablet:w-[768px] desktop-1:w-[1024px] desktop-2:w-[1200px] mx-auto">
+        <div className="text-white text-[20px] font-medium w-1/3">
+          <button
+            onClick={handleHomeClick}
+          >
+            Basket Lounge
+          </button>
+        </div>
         <div className="flex items-center justify-center gap-[32px] w-1/3">
-          <Link href="/">
-            홈
-          </Link>
           <Team />
           <a href="#" className="font-medium">선수</a>
           <a href="#" className="font-medium">스케쥴</a>

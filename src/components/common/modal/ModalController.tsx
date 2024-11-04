@@ -4,6 +4,7 @@ import React from "react";
 import { useStore } from "zustand";
 import Modal from "./Modal";
 import { useModalStore } from "@/stores/modal.stores";
+import ModalDeleteComment from "./modal-contents/ModalDeleteComment";
 
 interface IModalData {
   type: TModalType;
@@ -14,13 +15,13 @@ interface IModalData {
 }
 
 const modalData: IModalData[] = [
-  // {
-  //   type: "signin",
-  //   title: "모달 로그인",
-  //   size: "small",
-  //   overlayClose: true,
-  //   component: ModalSignIn
-  // },
+  {
+    type: 'delete-comment',
+    title: 'Delete Comment',
+    size: 'small',
+    overlayClose: false,
+    component: ModalDeleteComment
+  }
 ];
 
 const ModalController = () => {
