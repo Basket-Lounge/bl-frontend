@@ -110,6 +110,13 @@ export interface Team {
     linescore?: LineScore;
 }
 
+export interface TeamWithLikes extends Team {
+    likes_count: number;
+    liked?: boolean;
+}
+
+export type TTeamLikesResult = Pick<TeamWithLikes, "id" | "symbol" | "likes_count" | "liked">;
+
 export type TTeamWithoutTeamNameSet = Omit<Team, "teamname_set">;
 
 export interface TeamFranchiseHistory {
@@ -169,6 +176,12 @@ export interface TeamPost {
     status_data: TeamPostStatus;
     likes_count: number;
     comments_count: number;
+    liked?: boolean;
+}
+
+export interface TeamPostError {
+    title: string[][];
+    content: string[][];
 }
 
 export interface TeamPostStatus {
@@ -186,8 +199,8 @@ export type TTeamPostsFilter = "all" | "recent" | "popular";
 
 export interface TeamPostPaginationResult {
     count: number;
-    next: string;
-    previous: string;
+    next: string | null;
+    previous: string | null;
     results: TeamPost[];
 }
 

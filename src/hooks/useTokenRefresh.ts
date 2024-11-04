@@ -3,35 +3,44 @@ import { useEffect } from "react";
 import { refreshAccessToken } from "@/api/login.api";
 import { useAuthStore } from "@/stores/auth.stores";
 import { useStore } from "zustand";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 
 const useTokenRefresh = () => {
   const { 
     setUsername, 
-    setIsAuthenticated 
+    setIsAuthenticated,
+    setAuthenticationAttempted
   } = useStore(useAuthStore);
 
-  useEffect(() => {
-    refreshAccessToken().then((data) => {
-      setIsAuthenticated(true);
-    }).catch(() => {
-      setIsAuthenticated(false);
-    });
+  const accessTokenQuery = useQuery({
+    queryKey: ["access-token"],
+    queryFn: async () => {
+      return await refreshAccessToken();
+    },
+    retry: 2,
+  });
 
+  useEffect(() => {
     // setInterval is used to refresh the token every 3 minutes
     const interval = setInterval(async () => {
-      try { 
-        const data = await refreshAccessToken();
-        setUsername(data.username);
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-        setUsername("");
-      }
+      accessTokenQuery.refetch();
     }, 30 * 1000);
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (accessTokenQuery.data) {
+      setUsername(accessTokenQuery.data.username);
+      setIsAuthenticated(true);
+    }
+  }, [accessTokenQuery.data]);
+
+  useEffect(() => {
+    if (!accessTokenQuery.isLoading)
+      setAuthenticationAttempted(true);
+  }, [accessTokenQuery.isLoading]);
 };
 
 export default useTokenRefresh;

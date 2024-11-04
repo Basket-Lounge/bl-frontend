@@ -1,3 +1,3 @@
 
 type TModalSize = "small" | "medium" | "large" | "full";
-type TModalType = "";
+type TModalType = "delete-comment" | "signin";
