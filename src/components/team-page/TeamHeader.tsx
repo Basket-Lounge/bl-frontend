@@ -1,7 +1,6 @@
-import { Team, TeamWithLikes } from "@/models/team.models";
+import { TeamWithLikes } from "@/models/team.models";
 import { extractTeamEnglishName, extractTeamKoreanName } from "@/utils/team.utils";
 import Image from "next/image";
-import { useState } from "react";
 import TeamHeaderLikeButton from "./TeamHeaderLikeButton";
 
 

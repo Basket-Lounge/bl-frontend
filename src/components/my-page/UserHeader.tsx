@@ -1,6 +1,7 @@
 import { IUser } from "@/models/user.models";
 import { translateRoleNameToKorean } from "@/utils/user.utils";
 import Image from "next/image";
+import UserHeaderLikeButton from "./UserHeaderLikeButton";
 
 
 interface IUserHeaderProps {
@@ -35,15 +36,7 @@ export default function UserHeader({ user }: IUserHeaderProps) {
           </div>
         </div>
       </div>
-      <div className="bg-color3 rounded-lg text-[16px] p-[12px] font-medium flex gap-[12px]">
-        <Image
-          src={"/icons/favorite_border_24dp_FFFFFF.svg"}
-          alt="favorite"
-          width={24}
-          height={24}
-        />
-        24
-      </div>
+      <UserHeaderLikeButton likesCount={user.likes_count} />
     </div>
   )
 }

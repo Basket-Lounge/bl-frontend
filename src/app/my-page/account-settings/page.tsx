@@ -1,6 +1,6 @@
 'use client'
 
-import { getAllTeams, getUserFavoriteTeams } from "@/api/team.api";
+import { getAllTeams, getMyFavoriteTeams } from "@/api/team.api";
 import { getMyInfo } from "@/api/user.api";
 import UserAccountSettingsTeamIntroduction from "@/components/my-page/UserAccountSettingsTeamIntroduction";
 import UserAccountSettingsTeamLikes from "@/components/my-page/UserAccountSettingsTeamLikes";
@@ -26,7 +26,7 @@ const AccountSettingsPage = () => {
   const userFavoriteTeamsQuery = useSuspenseQuery({
     queryKey: ["my-page", "user-favorite-teams"],
     queryFn: async () => {
-      return await getUserFavoriteTeams();
+      return await getMyFavoriteTeams();
     }
   });
 
