@@ -21,8 +21,13 @@ export const getAllTeams = async () => {
   return response.data as Team[];
 }
 
-export const getUserFavoriteTeams = async () => {
+export const getMyFavoriteTeams = async () => {
   const response = await httpClient.get<Team[]>(`/api/users/me/favorite-teams/`);
+  return response.data as Team[];
+}
+
+export const getUserFavoriteTeams = async (userId: number) => {
+  const response = await httpClient.get<Team[]>(`/api/users/${userId}/favorite-teams/`);
   return response.data as Team[];
 }
 
