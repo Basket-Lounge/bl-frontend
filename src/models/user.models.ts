@@ -8,11 +8,13 @@ export interface IRole {
 
 export interface IUser {
   username: string;
-  email: string;
+  email?: string;
   role: IRole;
   level: number;
   introduction: string;
   is_profile_visible: boolean;
+  likes_count: number;
+  liked?: boolean;
 }
 
 export interface IUpdateUserIntroduction {
@@ -58,4 +60,48 @@ export interface MyPageComment {
         username: string;
       }
     }
+}
+
+export interface UserChatsPaginationResult {
+  count: number;
+  next: string;
+  previous: string;
+  results: UserChat[];
+}
+
+export interface UserChat {
+  id: string;
+  participants: UserChatParticipants[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserChatParticipants {
+  id: string;
+  user_data: {
+    id: number;
+    username: string;
+  };
+  messages?: UserChatMessage[];
+  last_message?: UserChatMessage;
+}
+
+export interface UserChatMessage {
+  id: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserChatMessageWithUserData extends UserChatMessage {
+  user_data: {
+    id: number;
+    username: string;
+  };
+}
+
+export interface UserLikes {
+  id: string;
+  likes_count: number;
+  liked?: boolean;
 }

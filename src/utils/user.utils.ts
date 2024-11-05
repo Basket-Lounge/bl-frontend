@@ -1,3 +1,5 @@
+import { UserChatMessage, UserChatMessageWithUserData } from "@/models/user.models";
+
 export const translateRoleNameToKorean = (role: string) => {
   switch (role) {
     case 'user':
@@ -15,4 +17,11 @@ export const translateRoleNameToKorean = (role: string) => {
     default:
       return '알 수 없음';
   }
+}
+
+
+export const sortUserChatMessagesByDate = (messages: UserChatMessageWithUserData[]) => {
+  return messages.sort((a, b) => {
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
 }
