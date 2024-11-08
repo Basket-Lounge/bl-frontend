@@ -43,6 +43,16 @@ export const createUserChat = async (userId: number) => {
   return response.data;
 }
 
+export const deleteUserChat = async (userId: number) => {
+  const response = await httpClient.delete(`/api/users/me/chats/${userId}/`);
+  return response.data;
+}
+
+export const blockUserChat = async (userId: number) => {
+  const response = await httpClient.post(`/api/users/me/chats/${userId}/block/`);
+  return response.data;
+}
+
 export const createUserChatMessage = async (userId: number, message: string) => {
   const response = await httpClient.post(`/api/users/me/chats/${userId}/messages/`, { message });
   return response.data;
@@ -51,6 +61,11 @@ export const createUserChatMessage = async (userId: number, message: string) => 
 export const getUserComments = async (userId: number, page: number) => {
   const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/${userId}/comments/?page=${page}`);
   return response.data as MyPageCommentsPaginationResult;
+}
+
+export const markChatAsRead = async (userId: number) => {
+  const response = await httpClient.put(`/api/users/me/chats/${userId}/mark-as-read/`);
+  return response.data;
 }
 
 export const updateUserIntroduction = async (introduction: string) => {
