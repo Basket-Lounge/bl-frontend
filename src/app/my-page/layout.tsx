@@ -20,9 +20,9 @@ interface IMyPageStore {
   updateCommentsFilterValue: (value: TTeamPostsFilter) => void;
   commentsDeleted: boolean;
   setCommentsDeleted: (value: boolean) => void;
+  chatDeleted: boolean;
+  setChatDeleted: (value: boolean) => void;
 }
-
-export type TSection = "profile" | "posts" | "comments" | "dm";
 
 const MyPageStore = createStore<IMyPageStore>((set) => ({
   postsPaginationpage: 1,
@@ -45,6 +45,8 @@ const MyPageStore = createStore<IMyPageStore>((set) => ({
   updateCommentsFilterValue: (value) => set({ commentsFilterValue: value }),
   commentsDeleted: false,
   setCommentsDeleted: (value) => set({ commentsDeleted: value }),
+  chatDeleted: false,
+  setChatDeleted: (value) => set({ chatDeleted: value }),
 }));
 
 export const MyPageStoreContext = createContext(MyPageStore);

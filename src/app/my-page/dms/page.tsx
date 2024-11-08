@@ -7,13 +7,19 @@ import UserDMsFilter from "@/components/my-page/UserDMsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useContext, useEffect } from "react";
+import { MyPageStoreContext } from "../layout";
+import { useStore } from "zustand";
 
 
 const DMsPage: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const store = useContext(MyPageStoreContext);
+  const chatDeleted = useStore(store, (state) => state.chatDeleted);
+  const setChatDeleted = useStore(store, (state) => state.setChatDeleted);
 
   const page = parseInt(searchParams.get("page") || '1');
   const userToChatWith = parseInt(searchParams.get("user") || '');
@@ -29,23 +35,30 @@ const DMsPage: React.FC = () => {
     router.push(pathname + `?page=${newPage}`);
   }
 
-  const handleCloseChatClick = () => {
-    router.push(pathname + `?page=${page}`);
-  }
-
-  console.log(userChatsQuery.data.results);
+  // console.log(userChatsQuery.data.results);
 
   const divClassName = isNaN(userToChatWith) ? 
     "flex flex-col items-stretch gap-[32px]" : "desktop-1:grid grid-cols-2 item-start gap-[32px]";
+
+  useEffect(() => {
+    if (chatDeleted) {
+      router.push(pathname + `?page=${page}`);
+      userChatsQuery.refetch();
+      setChatDeleted(false);
+    }
+  }, [userToChatWith, chatDeleted]);
 
   return (
     <div className="flex flex-col gap-[24px] items-stretch">
       <UserDMsFilter />
       <div className={divClassName}>
-        <UserDMsContainer chats={userChatsQuery.data.results} />
+        {userChatsQuery.isRefetching ? 
+          <div>Loading...</div> :
+          <UserDMsContainer chats={userChatsQuery.data.results} />
+        }
         {isNaN(userToChatWith) ? null : (
           <Suspense fallback={<div>Loading...</div>}>
-            <UserDMsChat userId={userToChatWith} closeChatCallback={handleCloseChatClick} />
+            <UserDMsChat userId={userToChatWith} />
           </Suspense>
         )}
       </div>
