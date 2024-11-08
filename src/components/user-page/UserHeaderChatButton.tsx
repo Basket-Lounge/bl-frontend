@@ -1,11 +1,10 @@
 'use client'
 
-import { createUserChat, getUserChat } from "@/api/user.api";
+import { createUserChat } from "@/api/user.api";
 import { useAuthStore } from "@/stores/auth.stores";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useStore } from "zustand";
 
 
@@ -16,13 +15,6 @@ export default function UserHeaderChatButton() {
     isAuthenticated
   } = useStore(useAuthStore);
 
-  const getChatQuery = useQuery({
-    queryKey: ["users", userId as string, "chat"],
-    queryFn: async () => {
-      return await getUserChat(parseInt(userId as string));
-    },
-    enabled: false,
-  });
 
   const createChatMutation = useMutation({
     mutationFn: () => {
@@ -37,17 +29,8 @@ export default function UserHeaderChatButton() {
     e.preventDefault();
     if (!isAuthenticated) return;
 
-    getChatQuery.refetch();
+    createChatMutation.mutate();
   }
-
-  useEffect(() => {
-    if (getChatQuery.status === "error") {
-      createChatMutation.mutate();
-    } else if (getChatQuery.status === "success") {
-      router.push(`/my-page/dms/`);
-    }
-
-  }, [getChatQuery.status]);
 
   return (
     <button 
@@ -60,7 +43,7 @@ export default function UserHeaderChatButton() {
         width={24}
         height={24}
       />
-      {getChatQuery.isLoading || getChatQuery.isRefetching ?
+      {createChatMutation.isPending ?
         <span>채팅중...</span> :
         <span>채팅하기</span>
       }

@@ -6,7 +6,9 @@ interface IUserSectionOptionButtonProps {
   name: string;
 };
 
-export default function UserSectionOptionButton({ name, designatedSection }: IUserSectionOptionButtonProps) {
+export default function UserSectionOptionButton(
+  { name, designatedSection }: IUserSectionOptionButtonProps
+) {
   const { userId } = useParams();
   const pathname = usePathname();
   const router = useRouter();

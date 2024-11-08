@@ -1,4 +1,4 @@
-import { getConnectionToken, getSubscriptionToken } from "@/api/webSocket.api";
+import { getConnectionToken, getSubscriptionTokenForLiveGameChat } from "@/api/webSocket.api";
 import { IGameChatMessage } from "@/models/game.models";
 import { Centrifuge } from "centrifuge";
 import { useParams } from "next/navigation";
@@ -45,7 +45,7 @@ const GameLiveChatBox = () => {
 
     const subscription = client.newSubscription(`games/${gameId}/live-chat`, {
       getToken: async () => {
-        const data = await getSubscriptionToken(`games/${gameId}/live-chat`);
+        const data = await getSubscriptionTokenForLiveGameChat(parseInt(gameId as string));
         setSubscriptionToken(data.token);
         return data.token;
       }

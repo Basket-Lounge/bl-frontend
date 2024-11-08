@@ -34,6 +34,7 @@ const UserDMsChatInput = () => {
         className="bg-transparent text-white outline-none grow"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        disabled={sendMessageMutation.isPending}
       />
       <button 
         className="bg-color1 text-white rounded-full px-[16px] py-[8px] ml-[16px]"

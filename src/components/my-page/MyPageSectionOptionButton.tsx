@@ -2,7 +2,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 
 interface IMyPageSectionOptionButtonProps {
-  designatedSection: 'account-settings' | 'posts' | 'comments' | 'dms';
+  designatedSection: 'account-settings' | 'posts' | 'comments' | 'dms' | 'inquiries';
   name: string;
 };
 
