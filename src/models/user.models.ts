@@ -84,6 +84,7 @@ export interface UserChatParticipants {
   };
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
+  unread_messages_count: number;
 }
 
 export interface UserChatMessage {
