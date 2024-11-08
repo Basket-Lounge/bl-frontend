@@ -8,6 +8,7 @@ import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 const useTokenRefresh = () => {
   const { 
+    setUserId,
     setUsername, 
     setIsAuthenticated,
     setAuthenticationAttempted
@@ -32,10 +33,19 @@ const useTokenRefresh = () => {
 
   useEffect(() => {
     if (accessTokenQuery.data) {
+      setUserId(accessTokenQuery.data.id);
       setUsername(accessTokenQuery.data.username);
       setIsAuthenticated(true);
     }
   }, [accessTokenQuery.data]);
+
+  useEffect(() => {
+    if (accessTokenQuery.isError) {
+      setUserId(null);
+      setUsername(null);
+      setIsAuthenticated(false);
+    }
+  }, [accessTokenQuery.isLoading]);
 
   useEffect(() => {
     if (!accessTokenQuery.isLoading)
