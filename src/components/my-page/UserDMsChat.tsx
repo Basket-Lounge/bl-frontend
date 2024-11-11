@@ -5,12 +5,15 @@ import UserDMsChatInput from "./UserDMsChatInput";
 import UserDMsChatHistory from "./UserDMsChatHistory";
 import { UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatControlButtons from "./UserDMsChatControlButtons";
+import { useEffect, useState } from "react";
 
 interface IUserDMsChatProps {
   userId: number;
 }
 
 const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
+  const [currentUserId, setCurrentUserId] = useState<number>(userId);
+
   const chatQuery = useSuspenseQuery({
     queryKey: ['my-page', "DMs", "chat", userId],
     queryFn: async () => {
@@ -36,6 +39,17 @@ const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
 
   const messages = userMessages.concat(otherUserMessages || []) || []
   const sortedMessages = sortUserChatMessagesByDate(messages);
+
+  useEffect(() => {
+    if (userId !== currentUserId) {
+      setCurrentUserId(userId);
+      chatQuery.refetch();
+    }
+  }, [userId]);
+
+  if (chatQuery.isRefetching) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
