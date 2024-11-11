@@ -106,3 +106,69 @@ export interface UserLikes {
   likes_count: number;
   liked?: boolean;
 }
+
+export interface InquiryType {
+  id: number;
+  display_names: InquiryTypeDisplayName[];
+  name: string;
+  description: string;
+}
+
+export interface InquiryTypeDisplayName {
+  id: number;
+  display_name: string;
+  language_data: {
+    name: string;
+  }
+}
+
+export interface InquiryCreateErrors {
+  inquiry_type?: string[];
+  title?: string[];
+  message?: string[];
+  non_field_errors?: string[];
+}
+
+export interface UserInquiriesPaginationResult {
+  count: number;
+  next: string;
+  previous: string;
+  results: UserInquiry[];
+}
+
+export interface UserInquiry {
+  id: string;
+  title: string;
+  message: string;
+  inquiry_type_data: InquiryType;
+  created_at: string;
+  updated_at: string;
+  last_message?: UserChatMessage;
+  messages?: UserChatMessage[];
+  unread_messages_count?: number;
+  last_read_at: string;
+  moderators: UserInquiryModerator[];
+  solved: boolean;
+}
+
+export interface UserInquiryWithUserData extends UserInquiry {
+  user_data: {
+    id: number;
+    username: string;
+  };
+}
+
+export interface UserInquiryModerator {
+  id: string;
+  inquiry_data?: UserInquiry;
+  moderator_data: {
+    id: number;
+    username: string;
+  };
+  last_read_at: string;
+  assigned_at: string;
+  in_charge: boolean;
+  messages?: UserChatMessage[];
+  last_message?: UserChatMessage;
+  unread_messages_count?: number;
+}
