@@ -1,4 +1,4 @@
-import { IUpdateProfileVisibility, IUpdateUserIntroduction, IUser, MyPageCommentsPaginationResult, UserChat, UserChatsPaginationResult, UserLikes } from "@/models/user.models";
+import { InquiryType, IUpdateProfileVisibility, IUpdateUserIntroduction, IUser, MyPageCommentsPaginationResult, UserChat, UserChatsPaginationResult, UserInquiry, UserInquiryWithUserData, UserLikes } from "@/models/user.models";
 import { httpClient } from "./http";
 import { TeamPostPaginationResult } from "@/models/team.models";
 
@@ -21,6 +21,21 @@ export const getMyComments = async (page: number) => {
 export const getMyChats = async (page: number) => {
   const response = await httpClient.get<UserChatsPaginationResult>(`/api/users/me/chats/?page=${page}`);
   return response.data as UserChatsPaginationResult;
+}
+
+export const getMyInquiries = async (page: number) => {
+  const response = await httpClient.get(`/api/users/me/inquiries/?page=${page}`);
+  return response.data;
+}
+
+export const getInquiry = async (inquiryId: string) => {
+  const response = await httpClient.get<UserInquiryWithUserData>(`/api/inquiries/${inquiryId}/`);
+  return response.data as UserInquiryWithUserData;
+}
+
+export const getInquiryTypes = async () => {
+  const response = await httpClient.get<InquiryType[]>(`/api/inquiries/types/`);
+  return response.data as InquiryType[];
 }
 
 export const getUserInfo = async (userId: number) => {
@@ -58,6 +73,11 @@ export const createUserChatMessage = async (userId: number, message: string) => 
   return response.data;
 }
 
+export const createInquiryMessage = async (inquiryId: string, message: string) => {
+  const response = await httpClient.post(`/api/users/me/inquiries/${inquiryId}/messages/`, { message });
+  return response.data;
+}
+
 export const getUserComments = async (userId: number, page: number) => {
   const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/${userId}/comments/?page=${page}`);
   return response.data as MyPageCommentsPaginationResult;
@@ -65,6 +85,11 @@ export const getUserComments = async (userId: number, page: number) => {
 
 export const markChatAsRead = async (userId: number) => {
   const response = await httpClient.put(`/api/users/me/chats/${userId}/mark-as-read/`);
+  return response.data;
+}
+
+export const markInquiryAsRead = async (inquiryId: string) => {
+  const response = await httpClient.put(`/api/users/me/inquiries/${inquiryId}/mark-as-read/`);
   return response.data;
 }
 
@@ -86,4 +111,16 @@ export const likeUser = async (userId: number) => {
 export const unlikeUser = async (userId: number) => {
   const response = await httpClient.delete<UserLikes>(`/api/users/${userId}/likes/`);
   return response.data as UserLikes;
+}
+
+export const createInquiry = async (
+  title: string, 
+  message: string, 
+  inquiryTypeId: number
+) => {
+  const response = await httpClient.post(
+    `/api/inquiries/`, 
+    { title, message, inquiry_type: inquiryTypeId }
+  );
+  return response.data;
 }

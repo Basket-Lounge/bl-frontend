@@ -26,3 +26,13 @@ export const getSubscriptionTokenForLiveChatUpdate = async () => {
   const response = await httpClient.get("/api/token/subscription/users/chat-updates/");
   return response.data;
 }
+
+export const getSubscriptionTokenForLiveInquiryChat = async (inquiryId: string) => {
+  const response = await httpClient.get("/api/token/subscription/users/inquiries/" + inquiryId + "/");
+  return response.data;
+}
+
+export const getSubscriptionTokenForLiveInquiriesUpdate = async () => {
+  const response = await httpClient.get("/api/token/subscription/users/inquiry-updates/");
+  return response.data;
+}
