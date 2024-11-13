@@ -139,10 +139,13 @@ export interface UserInquiriesPaginationResult {
 export interface UserInquiry {
   id: string;
   title: string;
-  message: string;
   inquiry_type_data: InquiryType;
   created_at: string;
   updated_at: string;
+  user_data?: {
+    id: number;
+    username: string;
+  };
   last_message?: UserChatMessage;
   messages?: UserChatMessage[];
   unread_messages_count?: number;
@@ -166,8 +169,8 @@ export interface UserInquiryModerator {
     username: string;
   };
   last_read_at: string;
-  assigned_at: string;
-  in_charge: boolean;
+  assigned_at?: string;
+  in_charge?: boolean;
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
   unread_messages_count?: number;
