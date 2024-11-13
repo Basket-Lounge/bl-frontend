@@ -1,4 +1,4 @@
-import { InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator } from "@/models/user.models";
+import { InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator, UserInquiryWithUserData } from "@/models/user.models";
 
 
 export const translateRoleNameToKorean = (role: string) => {
@@ -128,4 +128,41 @@ export const extractInquiryTypeNameInEnglish = (inquiryType: InquiryType) => {
 
 export const extractInquiryTypeNameInKorean = (inquiryType: InquiryType) => {
   return inquiryType.display_names.find(name => name.language_data.name === "Korean")?.display_name || "";
+}
+
+export const findInquiryModeratorInCharge = (moderators: UserInquiryModerator[]) => {
+  return moderators.filter(moderator => moderator.in_charge === true);
+}
+
+export const updateInquiry = (inquiry: UserInquiryWithUserData, newDetails: UserInquiryWithUserData) => {
+  return {
+    ...inquiry,
+    ...newDetails,
+  }
+}
+
+export const updateInquiryModerator = (inquiry: UserInquiryWithUserData, newDetails: UserInquiryWithUserData) => {
+  const newModerators = newDetails.moderators;
+  const newInquiry : UserInquiryWithUserData = {
+    ...inquiry,
+    ...newDetails,
+    moderators: inquiry.moderators,
+  }
+  
+  newModerators.forEach((newModerator) => {
+    const moderatorIndex = newInquiry.moderators.findIndex(
+      (moderator) => moderator.moderator_data.id === newModerator.moderator_data.id
+    );
+
+    if (moderatorIndex === -1) {
+      newInquiry.moderators.push(newModerator);
+    } else {
+      newInquiry.moderators[moderatorIndex] = {
+        ...newInquiry.moderators[moderatorIndex], 
+        ...newModerator
+      };
+    }
+  });
+
+  return newInquiry;
 }
