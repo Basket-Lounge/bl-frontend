@@ -7,7 +7,7 @@ import UserInquiriesLiveChat from "@/components/my-page/UserInquiriesLiveChat";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 
 
 const InquiriesPage = () => {

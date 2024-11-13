@@ -1,7 +1,7 @@
 import { getInquiry } from "@/api/user.api";
 import { extractInquiryTypeNameInKorean, sortUserChatMessagesByDate } from "@/utils/user.utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { UserChatMessageWithUserData } from "@/models/user.models";
+import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
 import UserInquiriesLiveChatHistory from "./UserInquiriesLiveChatHistory";
 import UserInquiriesLiveChatInput from "./UserInquiriesLiveChatInput";
 import { useEffect, useState } from "react";
@@ -13,13 +13,13 @@ interface IUserInquiriesLiveChatProps {
 
 const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
   const [currentInquiryId, setCurrentInquiryId] = useState<string>(inquiryId);
-
   const chatQuery = useSuspenseQuery({
     queryKey: ['my-page', 'inquiries', 'chat', inquiryId],
     queryFn: async () => {
       return await getInquiry(inquiryId);
     }
   });
+  const [realInquiry, setRealInquiry] = useState<UserInquiryWithUserData>(chatQuery.data);
 
   const moderatorMessages : UserChatMessageWithUserData[] = chatQuery.data.moderators.map((moderator) => {
     return moderator.messages?.map((message) => {
@@ -40,7 +40,7 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
   const messages = moderatorMessages.concat(userMessages || []) || []
   const sortedMessages = sortUserChatMessagesByDate(messages);
 
-  const inquiryTypeInKorean = extractInquiryTypeNameInKorean(chatQuery.data.inquiry_type_data);
+  const inquiryTypeInKorean = extractInquiryTypeNameInKorean(realInquiry.inquiry_type_data);
 
   useEffect(() => {
     if (inquiryId !== currentInquiryId) {
@@ -48,6 +48,12 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
       chatQuery.refetch();
     }
   }, [inquiryId]);
+
+  useEffect(() => {
+    if (chatQuery.isSuccess) {
+      setRealInquiry(chatQuery.data)
+    }
+  }, [chatQuery.data]);
 
   if (chatQuery.isRefetching) {
     return <div>Loading...</div>
@@ -58,8 +64,8 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
       <div className="p-[24px] flex justify-between items-center relative">
         <div className="flex gap-[24px]">
           <div className="flex flex-col gap-[12px] items-start">
-            <p className="font-semibold text-[16px] line-clamp-1">{chatQuery.data.title}</p>
-            <p className="text-[14px]">{chatQuery.data.updated_at}</p>
+            <p className="font-semibold text-[16px] line-clamp-1">{realInquiry.title}</p>
+            <p className="text-[14px]">{realInquiry.updated_at}</p>
             <p className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold">{inquiryTypeInKorean.trim()}</p>
           </div>
         </div>

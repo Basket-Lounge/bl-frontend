@@ -1,21 +1,28 @@
-import { UserChatMessageWithUserData } from "@/models/user.models";
+import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
 import { useEffect, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
-import { getConnectionToken, getSubscriptionTokenForLiveInquiryChat } from "@/api/webSocket.api";
+import { getConnectionToken, getSubscriptionTokenForLiveAdminInquiryChat } from "@/api/webSocket.api";
 import { useMutation } from "@tanstack/react-query";
 import { markInquiryAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
-import UserInquiriesLiveChatHistoryEntry from "./UserInquiriesLiveChatHistoryEntry";
+import AdminInquiriesLiveChatHistoryEntry from "./AdminInquiriesLiveChatHistoryEntry";
 
 
-interface IUserInquiriesLiveChatHistoryProps {
+interface IAdminInquiriesLiveChatHistoryProps {
   messages: UserChatMessageWithUserData[];
   inquiryId: string;
+  updateInquiryState: (inquiry: UserInquiryWithUserData) => void;
+  updateInquiryModerator: (inquiry: UserInquiryWithUserData) => void;
+  solved: boolean;
 }
 
-const UserInquiriesLiveChatHistory = (
-  { messages, inquiryId }: IUserInquiriesLiveChatHistoryProps
-) => {
+const AdminInquiriesLiveChatHistory = ({ 
+  messages, 
+  inquiryId, 
+  updateInquiryModerator, 
+  updateInquiryState,
+  solved
+}: IAdminInquiriesLiveChatHistoryProps ) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
   const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>(messages);
@@ -39,6 +46,11 @@ const UserInquiriesLiveChatHistory = (
     markAsReadDebounceCallback();
   }
 
+  const handleRetryClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setConnectionAttempt(connectionAttempt + 1);
+  }
+
   useEffect(() => {
     const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
       getToken: async () => {
@@ -52,13 +64,14 @@ const UserInquiriesLiveChatHistory = (
       setError(null);
     });
     client.on("error", (ctx) => {
+      console.log(ctx);
       setIsLoading(false);
       setError("웹소켓 연결 중 오류가 발생했습니다.");
     });
 
     const subscription = client.newSubscription(`users/inquiries/${inquiryId}`, {
       getToken: async () => {
-        const data = await getSubscriptionTokenForLiveInquiryChat(inquiryId);
+        const data = await getSubscriptionTokenForLiveAdminInquiryChat(inquiryId);
         return data.token;
       }
     });
@@ -77,6 +90,10 @@ const UserInquiriesLiveChatHistory = (
       console.log(ctx);
       if (ctx.data.type === "message") {
         setSortedMessages((prevMessages) => [...prevMessages, ctx.data.message]);
+      } else if (ctx.data.type.includes("moderator")) {
+        updateInquiryModerator(ctx.data.inquiry);
+      } else if (ctx.data.type === "inquiry_state_update") {
+        updateInquiryState(ctx.data.inquiry);
       }
     });
 
@@ -111,6 +128,12 @@ const UserInquiriesLiveChatHistory = (
         <p className="font-bold text-[20px]">
           {error}
         </p>
+        <button 
+          className="bg-color1 text-white rounded-md py-[8px] px-[16px] font-bold"
+          onClick={handleRetryClick}
+        >
+          다시 시도
+        </button>
       </div>
     );
   }
@@ -135,10 +158,15 @@ const UserInquiriesLiveChatHistory = (
       onClick={handleClick}
     >
       {sortedMessages.map((message) => (
-        <UserInquiriesLiveChatHistoryEntry key={message.id} message={message} />
+        <AdminInquiriesLiveChatHistoryEntry key={message.id} message={message} />
       ))}
+      { solved && (
+        <div className="w-full py-[8px] bg-[#16A34A] rounded-full text-center">
+          <span>문의가 해결되었습니다.</span>
+        </div>
+      )}
     </div>
   )
 }
 
-export default UserInquiriesLiveChatHistory;
+export default AdminInquiriesLiveChatHistory;
