@@ -1,4 +1,15 @@
-import { InquiryType, IUpdateProfileVisibility, IUpdateUserIntroduction, IUser, MyPageCommentsPaginationResult, UserChat, UserChatsPaginationResult, UserInquiry, UserInquiryWithUserData, UserLikes } from "@/models/user.models";
+import { 
+  InquiryType, 
+  IReportType, 
+  IUpdateProfileVisibility, 
+  IUpdateUserIntroduction, 
+  IUser, 
+  MyPageCommentsPaginationResult, 
+  UserChat, 
+  UserChatsPaginationResult, 
+  UserInquiryWithUserData, 
+  UserLikes 
+} from "@/models/user.models";
 import { httpClient } from "./http";
 import { TeamPostPaginationResult } from "@/models/team.models";
 
@@ -121,6 +132,33 @@ export const createInquiry = async (
   const response = await httpClient.post(
     `/api/inquiries/`, 
     { title, message, inquiry_type: inquiryTypeId }
+  );
+  return response.data;
+}
+
+export const getReportTypes = async () => {
+  const response = await httpClient.get<IReportType[]>(`/api/reports/types/`);
+  return response.data as IReportType[];
+}
+
+export const createReport = async (
+  title: string, 
+  description: string,
+  reportTypeId: number,
+  accusedUserId: number
+) => {
+  if (isNaN(accusedUserId)) {
+    throw new Error('accusedUserId should be a number');
+  }
+
+  const response = await httpClient.post(
+    `/api/reports/`, 
+    { 
+      title, 
+      description, 
+      report_type: reportTypeId, 
+      accused: accusedUserId 
+    }
   );
   return response.data;
 }

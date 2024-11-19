@@ -6,15 +6,25 @@ export interface IRole {
   weight: number;
 }
 
+export interface IUserPaginationResult {
+  count: number;
+  next: string;
+  previous: string;
+  results: IUser[];
+}
+
 export interface IUser {
+  id: number;
   username: string;
   email?: string;
-  role: IRole;
+  role_data: IRole;
   level: number;
+  created_at: string;
   introduction: string;
   is_profile_visible: boolean;
   likes_count: number;
   liked?: boolean;
+  chat_blocked: boolean;
 }
 
 export interface IUpdateUserIntroduction {
@@ -174,4 +184,54 @@ export interface UserInquiryModerator {
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
   unread_messages_count?: number;
+}
+
+export interface IReportPaginationResult {
+  count: number;
+  next: string;
+  previous: string;
+  results: IReportWithoutUserData[];
+}
+
+export interface IReport {
+  id: number;
+  title: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  accuser_data: {
+    id: number;
+    username: string;
+  };
+  accused_data: {
+    id: number;
+    username: string;
+  };
+  resolved: boolean;
+  type_data: IReportType;
+}
+
+export type IReportWithoutUserData = Omit<IReport, 'accuser_data' | 'accused_data'>;
+
+export interface IReportType {
+  id: number;
+  name: string;
+  description: string;
+  display_names: IReportTypeDisplayName[];
+}
+
+export interface IReportTypeDisplayName {
+  id: number;
+  display_name: string;
+  language_data: {
+    name: string;
+  }
+}
+
+export interface IReportCreateErrors {
+  title?: string[];
+  description?: string[];
+  report_type?: string[];
+  accused?: string[];
+  non_field_errors?: string[];
 }

@@ -1,6 +1,40 @@
-import { UserInquiriesPaginationResult } from "@/models/user.models";
+import { IReport, IReportPaginationResult, IRole, IUser, IUserPaginationResult, UserInquiriesPaginationResult } from "@/models/user.models";
 import { httpClient } from "./http";
+import { Team } from "@/models/team.models";
 
+
+export const getAllRoles = async () => {
+  const response = await httpClient.get<IRole[]>('/api/admin/users/roles/');
+  return response.data as IRole[];
+}
+
+export const getAllUsers = async (
+  page: number,
+  roles?: string, 
+  sort?: string,
+  search?: string
+) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (roles) {
+    searchParams.set('roles', roles);
+  }
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  const response = await httpClient.get<IUserPaginationResult>(`/api/admin/users/?${searchParams.toString()}`);
+  return response.data as IUserPaginationResult;
+}
+
+export const getUser = async (userId: string) => {
+  const response = await httpClient.get<IUser>(`/api/admin/users/${userId}/`);
+  return response.data as IUser;
+}
 
 export const getAllInquiries = async (page: number) => {
   const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/?page=${page}`);
@@ -72,4 +106,66 @@ export const markInquiryAsSolved = async (inquiryId: string) => {
 export const markInquiryAsUnsolved = async (inquiryId: string) => {
   const response = await httpClient.patch(`/api/admin/inquiries/${inquiryId}/`, { solved: false });
   return response.data;
+}
+
+export const getAllReports = async (page: number) => {
+  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/?page=${page}`);
+  return response.data as IReportPaginationResult;
+}
+
+export const getUnresolvedReports = async (page: number) => {
+  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/unresolved/?page=${page}`);
+  return response.data as IReportPaginationResult;
+}
+
+export const getResolvedReports = async (page: number) => {
+  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/resolved/?page=${page}`);
+  return response.data as IReportPaginationResult;
+}
+
+export const resolveReport = async (reportId: string) => {
+  const response = await httpClient.patch(`/api/admin/reports/${reportId}/`, { solved: true });
+  return response.data;
+}
+
+export const unresolveReport = async (reportId: string) => {
+  const response = await httpClient.patch(`/api/admin/reports/${reportId}/`, { solved: false });
+  return response.data;
+}
+
+export const getReport = async (reportId: string) => {
+  const response = await httpClient.get<IReport>(`/api/admin/reports/${reportId}/`);
+  return response.data as IReport;
+}
+
+export const updateUserFavoriteTeams = async (userId: number, teams: Team[]) => {
+  const teamIds : {id: number}[] = [];
+  for (let i = 0; i < teams.length; i++) {
+    teamIds.push({id: teams[i].id});
+  };
+
+  const response = await httpClient.put<Team[]>(`/api/admin/users/${userId}/favorite-teams/`, teamIds);
+  return response.data as Team[];
+}
+
+export const updateUser = async (
+  userId: number,
+  data: {
+    introduction?: string,
+    is_profile_visible?: boolean,
+    role?: string, 
+    chat_blocked?: boolean,
+  }
+) => {
+  const { introduction, is_profile_visible, role, chat_blocked } = data;
+  if (!introduction && is_profile_visible === undefined && !role && chat_blocked === undefined) {
+    throw new Error('At least one of the parameters should be provided');
+  }
+
+  const response = await httpClient.patch<IUser>(
+    `/api/admin/users/${userId}/`, 
+    { introduction, is_profile_visible, role, chat_blocked }
+  );
+
+  return response.data as IUser;
 }
