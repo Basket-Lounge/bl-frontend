@@ -8,7 +8,7 @@ interface IAdminHeaderProps {
 }
 
 export default function AdminHeader({ user }: IAdminHeaderProps) {
-  const role = translateRoleNameToKorean(user.role.name);
+  const role = translateRoleNameToKorean(user.role_data.name);
 
   return (
     <div className="flex gap-[48px] items-start justify-between">

@@ -1,13 +1,13 @@
 import useClickOutside from "@/hooks/useClickOutside";
 import { useRef, useState } from "react";
-import AdminInquiriesTypeFilterButtonOptionsContainer from "./AdminInquiriesTypeFilterButtonOptionsContainer";
+import AdminReportsTypeFilterButtonOptionsContainer from "./AdminReportsTypeFilterButtonOptionsContainer";
 
 
-interface IAdminInquiriesFilterButtonProps {
+interface IAdminReportsFilterButtonProps {
   name: string;
 };
 
-const AdminInquiriesTypeFilterButton : React.FC<IAdminInquiriesFilterButtonProps> = ({ name }) => {
+const AdminReportsTypeFilterButton : React.FC<IAdminReportsFilterButtonProps> = ({ name }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -26,10 +26,10 @@ const AdminInquiriesTypeFilterButton : React.FC<IAdminInquiriesFilterButtonProps
     >
       {name}
       {isMenuOpen && (
-        <AdminInquiriesTypeFilterButtonOptionsContainer />
+        <AdminReportsTypeFilterButtonOptionsContainer />
       )}
     </button>
   )
 }
 
-export default AdminInquiriesTypeFilterButton;
+export default AdminReportsTypeFilterButton;

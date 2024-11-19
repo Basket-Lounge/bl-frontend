@@ -11,7 +11,6 @@ import {
 import AdminInquiriesContainer from "@/components/admin-page/AdminInquiriesContainer";
 import AdminInquiriesFilter from "@/components/admin-page/AdminInquiriesFilter";
 import AdminInquiriesLiveChat from "@/components/admin-page/AdminInquiriesLiveChat";
-import UserInquiriesLiveChat from "@/components/my-page/UserInquiriesLiveChat";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { TInquiryChannelType } from "@/models/admin.models";
 import { useSuspenseQuery } from "@tanstack/react-query";

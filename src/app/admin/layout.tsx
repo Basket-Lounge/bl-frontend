@@ -52,7 +52,7 @@ export default function AdminPage({ children }: {
     router.push("/");
   }
 
-  if (query.data.role.weight > 2) {
+  if (query.data.role_data.weight > 2) {
     return <Error403 reset={handleRedirectHomeClick} />;
   }
 

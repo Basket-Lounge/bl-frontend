@@ -63,7 +63,7 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
       }
     }
     return false;
-  }, [realInquiry.moderators]);
+  }, [realInquiry.moderators, userId]);
 
   // Update Inquiry whenever a new Inquiry is selected from the list
   useEffect(() => {

@@ -6,7 +6,7 @@ const AdminInquiriesTypeFilterButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="absolute w-[300px] bg-color1 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[100%] left-0"
+      className="absolute w-[300px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[100%] left-0"
     >
       <AdminInquiriesFilterButtonOption<TInquiryChannelType>
         name="전체" 

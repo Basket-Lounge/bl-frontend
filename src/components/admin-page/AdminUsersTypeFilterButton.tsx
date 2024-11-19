@@ -1,13 +1,13 @@
 import useClickOutside from "@/hooks/useClickOutside";
-import { useRef, useState } from "react";
-import AdminInquiriesTypeFilterButtonOptionsContainer from "./AdminInquiriesTypeFilterButtonOptionsContainer";
+import { Suspense, useRef, useState } from "react";
+import AdminUsersTypeFilterButtonOptionsContainer from "./AdminUsersTypeFilterButtonOptionsContainer";
 
 
-interface IAdminInquiriesFilterButtonProps {
+interface IAdminUsersFilterButtonProps {
   name: string;
 };
 
-const AdminInquiriesTypeFilterButton : React.FC<IAdminInquiriesFilterButtonProps> = ({ name }) => {
+const AdminUsersTypeFilterButton : React.FC<IAdminUsersFilterButtonProps> = ({ name }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -26,10 +26,12 @@ const AdminInquiriesTypeFilterButton : React.FC<IAdminInquiriesFilterButtonProps
     >
       {name}
       {isMenuOpen && (
-        <AdminInquiriesTypeFilterButtonOptionsContainer />
+        <Suspense fallback={<div>로딩중...</div>}>
+          <AdminUsersTypeFilterButtonOptionsContainer />
+        </Suspense>
       )}
     </button>
   )
 }
 
-export default AdminInquiriesTypeFilterButton;
+export default AdminUsersTypeFilterButton;

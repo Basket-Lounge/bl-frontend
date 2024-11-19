@@ -2,14 +2,14 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 
 
-interface IAdminInquiriesFilterButtonOptionProps<CustomType> {
+interface IAdminReportsFilterButtonOptionProps<CustomType> {
   name: string;
   queryKey: string;
   queryValue: CustomType;
 };
 
-const AdminInquiriesFilterButtonOption = <CustomType extends string>(
-  { name, queryKey, queryValue } : IAdminInquiriesFilterButtonOptionProps<CustomType>
+const AdminReportsFilterButtonOption = <CustomType extends string>(
+  { name, queryKey, queryValue } : IAdminReportsFilterButtonOptionProps<CustomType>
 ) => {
   const router = useRouter();
   const pathname = usePathname()
@@ -18,19 +18,7 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
-
-      const currentValue = params.get(name)?.split(',')
-      if (currentValue) {
-        if (currentValue.includes(value)) {
-          currentValue.splice(currentValue.indexOf(value), 1)
-          params.set(name, currentValue.join(','))
-        } else {
-          currentValue.push(value)
-          params.set(name, currentValue.join(','))
-        }
-      } else {
-        params.set(name, value)
-      }
+      params.set(name, value)
  
       return params.toString()
     },
@@ -40,12 +28,7 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
   const findQueryStringValue = useCallback(
     (name: string) => {
       const params = new URLSearchParams(searchParams.toString())
-      const currentValue = params.get(name)?.split(',')
-      if (currentValue) {
-        return currentValue.includes(queryValue)
-      } else {
-        return false
-      }
+      return params.get(name)
     },
     [searchParams]
   )
@@ -55,8 +38,8 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
     router.push(pathname + "?" + createQueryString(queryKey, queryValue))
   }
 
-  const bgColor = findQueryStringValue(queryKey) ? "bg-white" : "bg-color1";
-  const textColor = findQueryStringValue(queryKey) ? "text-color1" : "text-white";
+  const bgColor = findQueryStringValue(queryKey) === queryValue ? "bg-white" : "bg-color1";
+  const textColor = findQueryStringValue(queryKey) === queryValue ? "text-color1" : "text-white";
 
   return (
     <button
@@ -68,4 +51,4 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
   )
 }
 
-export default AdminInquiriesFilterButtonOption;
+export default AdminReportsFilterButtonOption;
