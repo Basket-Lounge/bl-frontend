@@ -3,6 +3,7 @@ import { translateRoleNameToKorean } from "@/utils/user.utils";
 import Image from "next/image";
 import UserHeaderLikeButton from "./UserHeaderLikeButton";
 import UserHeaderChatButton from "./UserHeaderChatButton";
+import UserHeaderReportButton from "./UserHeaderReportButton";
 
 
 interface IUserHeaderProps {
@@ -32,14 +33,17 @@ export default function UserHeader({ user }: IUserHeaderProps) {
           </h3>
           <div className="flex items-center gap-[24px] mt-[6px]">
             <div className="px-[32px] py-[4px] rounded-full bg-white">
-              <p className="text-[14px] text-color1 font-bold">{translateRoleNameToKorean(user.role.name)}</p>
+              <p className="text-[14px] text-color1 font-bold">{translateRoleNameToKorean(user.role_data.name)}</p>
             </div>
           </div>
         </div>
       </div>
       <div className="flex flex-col items-end gap-[16px]">
         <UserHeaderLikeButton liked={user.liked || false} likesCount={user.likes_count} />
-        <UserHeaderChatButton />
+        <div className="flex gap-[16px] items-center">
+          <UserHeaderChatButton />
+          <UserHeaderReportButton />
+        </div>
       </div>
     </div>
   )
