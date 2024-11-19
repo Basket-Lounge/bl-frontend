@@ -1,17 +1,17 @@
-import { MyPageStoreContext } from "@/app/my-page/layout";
 import useClickOutside from "@/hooks/useClickOutside";
-import { InquiryType } from "@/models/user.models";
+import { IReportType } from "@/models/user.models";
 import { useContext, useRef, useState } from "react";
 import { useStore } from "zustand";
-import UserInquiriesCreateTypeButton from "./UserInquiriesCreateTypeButton";
 import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
+import { UserStoreContext } from "@/app/users/[userId]/layout";
+import UserReportCreateTypeButton from "./UserReportCreateTypeButton";
 
 
-interface IUserInquiriesCreateTypesProps {
-  types: InquiryType[];
+interface IUserReportCreateTypeProps {
+  types: IReportType[];
 }
 
-export default function UserInquiriesCreateTypes({ types }: IUserInquiriesCreateTypesProps) {
+export default function UserReportCreateType({ types }: IUserReportCreateTypeProps) {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
@@ -22,10 +22,10 @@ export default function UserInquiriesCreateTypes({ types }: IUserInquiriesCreate
     setIsMenuOpen(!isMenuOpen);
   }
 
-  const store = useContext(MyPageStoreContext);
-  const inquiryTypeId = useStore(store, (state) => state.inquiriesCreateTypeId);
+  const store = useContext(UserStoreContext);
+  const reportTypeId = useStore(store, (state) => state.reportCreateTypeId);
 
-  const inquiry = types.find((type) => type.id === inquiryTypeId);
+  const inquiry = types.find((type) => type.id === reportTypeId);
   let inquiryTypeNameInKorean;
   if (inquiry) {
     inquiryTypeNameInKorean = extractInquiryTypeNameInKorean(inquiry);
@@ -42,7 +42,7 @@ export default function UserInquiriesCreateTypes({ types }: IUserInquiriesCreate
         className="inline-flex w-fit justify-center rounded-full bg-color1 px-[32px] py-[12px] text-[16px] font-medium text-white shadow-sm"
         onClick={handleMenuClick}
       >
-        {inquiryTypeId ? 
+        {reportTypeId ?
           inquiryTypeNameInKorean :
           "이것을 누르고 문의하려는 이유를 선택해주세요"
         }
@@ -50,7 +50,7 @@ export default function UserInquiriesCreateTypes({ types }: IUserInquiriesCreate
       {isMenuOpen && (
         <div className="flex gap-[16px] flex-wrap">
           {types.map((type) => (
-            <UserInquiriesCreateTypeButton
+            <UserReportCreateTypeButton
               key={type.id}
               type={type}
             />

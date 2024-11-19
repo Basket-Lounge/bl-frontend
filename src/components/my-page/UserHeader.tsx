@@ -31,7 +31,7 @@ export default function UserHeader({ user }: IUserHeaderProps) {
           </h3>
           <div className="flex items-center gap-[24px] mt-[6px]">
             <div className="px-[32px] py-[4px] rounded-full bg-white">
-              <p className="text-[14px] text-color1 font-bold">{translateRoleNameToKorean(user.role.name)}</p>
+              <p className="text-[14px] text-color1 font-bold">{translateRoleNameToKorean(user.role_data.name)}</p>
             </div>
           </div>
         </div>

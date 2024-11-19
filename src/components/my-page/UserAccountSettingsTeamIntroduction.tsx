@@ -27,7 +27,7 @@ const UserAccountSettingsTeamIntroduction = ({introduction}: {introduction: stri
   };
 
   return (
-    <div className="w-1/2">
+    <div className="tablet:w-1/2">
       <label className="text-white text-[20px] font-bold block">자기 소개</label>
       {initialIntroduction && <p className="mt-[16px] text-[16px]">{initialIntroduction}</p>}
       <textarea 

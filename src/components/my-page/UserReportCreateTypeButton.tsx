@@ -1,17 +1,17 @@
-import { MyPageStoreContext } from "@/app/my-page/layout";
-import { InquiryType } from "@/models/user.models";
+import { UserStoreContext } from "@/app/users/[userId]/layout";
+import { IReportType } from "@/models/user.models";
 import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
 
-interface IUserInquiriesCreateTypeButtonProps {
-  type: InquiryType;
+interface IUserReportCreateTypeButtonProps {
+  type: IReportType;
 }
 
-export default function UserInquiriesCreateTypeButton({ type }: IUserInquiriesCreateTypeButtonProps) {
-  const store = useContext(MyPageStoreContext);
-  const setInquiryTypeId = useStore(store, (state) => state.updateInquiriesCreateTypeId);
+export default function UserReportCreateTypeButton({ type }: IUserReportCreateTypeButtonProps) {
+  const store = useContext(UserStoreContext);
+  const setInquiryTypeId = useStore(store, (state) => state.updateReportCreateTypeId);
 
   const displayNameInKorean = extractInquiryTypeNameInKorean(type);
 

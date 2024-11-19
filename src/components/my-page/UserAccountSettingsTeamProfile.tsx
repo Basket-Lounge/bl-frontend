@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Toggle from "../common/toggle/Toggle";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserProfileVisibility } from "@/api/user.api";
 
@@ -34,7 +35,7 @@ const UserAccountSettingsTeamProfile = ({isChecked}: IUserAccountSettingsTeamPro
   }, [isProfileVisible]);
 
   return (
-    <div className="w-1/2">
+    <div>
       <h3 className="text-white text-[20px] font-bold">계정 설정</h3>
       <div className="mt-[16px] w-full">
         <Toggle isChecked={isProfileVisible} handleClick={handleProfileVisibility} />
