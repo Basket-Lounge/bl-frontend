@@ -13,6 +13,8 @@ import { createStore } from 'zustand';
 interface IAdminPageStore {
   postsPaginationpage: number;
   setPostsPaginationPage: (page: number) => void;
+  lastModifiedPostId: string | null;
+  setLastModifiedPostId: (postId: string | null) => void;
 }
 
 const AdminPageStore = createStore<IAdminPageStore>((set) => ({
@@ -23,6 +25,10 @@ const AdminPageStore = createStore<IAdminPageStore>((set) => ({
     }
     set({ postsPaginationpage: page })
   },
+  lastModifiedPostId: null,
+  setLastModifiedPostId: (postId: string | null) => {
+    set({ lastModifiedPostId: postId });
+  }
 }));
 
 export const AdminPageStoreContext = createContext(AdminPageStore);

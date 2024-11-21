@@ -19,7 +19,7 @@ const AdminUsersSortButtonOption = (
       <h3 className="text-[14px] font-bold text-left">{name}</h3>
       <div className="flex gap-[8px]">
         <button 
-          className={"px-[12px] py-[2px] rounded-full w-full " + ascendingOrderButtonBgColor + " " + ascendingOrderButtonTextColor}
+          className={"px-[12px] py-[2px] rounded-full w-full font-bold text-[14px] " + ascendingOrderButtonBgColor + " " + ascendingOrderButtonTextColor}
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             sortValue('asc');
@@ -29,7 +29,7 @@ const AdminUsersSortButtonOption = (
           오름차순
         </button>
         <button 
-          className={"px-[12px] py-[2px] rounded-full w-full " + descendingOrderButtonBgColor + " " + descendingOrderButtonTextColor}
+          className={"px-[12px] py-[2px] rounded-full w-full font-bold text-[14px] " + descendingOrderButtonBgColor + " " + descendingOrderButtonTextColor}
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault();
             sortValue('desc');

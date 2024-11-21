@@ -43,9 +43,9 @@ const AdminUserManagementPage = () => {
     return params.toString();
   }, [searchParams]);
 
-  const handlePageChange = (newPage: number) => {
+  const handlePageChange = useCallback((newPage: number) => {
     router.push(pathname + "?" + createQueryString('page', newPage.toString()));  
-  }
+  }, [pathname, createQueryString]);
 
   useEffect(() => {
     if (usersQuery.isRefetching) {

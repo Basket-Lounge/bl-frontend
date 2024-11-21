@@ -92,7 +92,7 @@ export default function UserPage({ children }: {
 
   return (
     <UserManagementStoreContext.Provider value={UserManagementStore}>
-      <div className="my-[32px] flex flex-col items-stretch gap-[24px]">
+      <div className="flex flex-col items-stretch gap-[24px]">
         <button 
           className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit"
           onClick={handleBackButtonClick}
