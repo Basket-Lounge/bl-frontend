@@ -31,6 +31,37 @@ export const getAllUsers = async (
   return response.data as IUserPaginationResult;
 }
 
+export const getUserPosts = async (
+  userId: number,
+  page: number,
+  data: {
+    sort?: string,
+    search?: string,
+    teams?: string,
+    status?: string,
+  }
+) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  const { sort, search, teams, status } = data;
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+  if (search) {
+    searchParams.set('search', search);
+  }
+  if (status) {
+    searchParams.set('status', status);
+  }
+  if (teams) {
+    searchParams.set('teams', teams);
+  }
+
+  const response = await httpClient.get(`/api/admin/users/${userId}/posts/?${searchParams.toString()}`);
+  return response.data;
+}
+
 export const getUser = async (userId: string) => {
   const response = await httpClient.get<IUser>(`/api/admin/users/${userId}/`);
   return response.data as IUser;
@@ -168,4 +199,35 @@ export const updateUser = async (
   );
 
   return response.data as IUser;
+}
+
+export const updatePost = async (
+  postId: string,
+  data: {
+    title? : string,
+    status? : number,
+    content? : string
+  }
+) => {
+  const { title, status, content } = data;
+  if (!title && !status && !content) {
+    throw new Error('At least one of the parameters should be provided');
+  }
+  if (typeof title === 'string' && title.length === 0) {
+    throw new Error('title should not be empty');
+  }
+  if (typeof content === 'string' && content.length === 0) {
+    throw new Error('content should not be empty');
+  }
+
+  const response = await httpClient.patch(`/api/admin/posts/${postId}/`, { status, content, title });
+  return response.data;
+}
+
+export const deletePost = async (
+  userId: number,
+  postId: string
+) => {
+  const response = await httpClient.delete(`/api/admin/users/${userId}/posts/${postId}/`);
+  return response.data;
 }
