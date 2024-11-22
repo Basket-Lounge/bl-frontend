@@ -4,12 +4,14 @@ interface ITeamPostsPaginationProps {
   currentPageNumber: number;
   previousCallback?: () => void;
   nextCallback?: () => void;
+  disabled?: boolean;
 }
 
 const TeamPostsPagination = ({
   currentPageNumber,
   previousCallback,
   nextCallback,
+  disabled
 }: ITeamPostsPaginationProps) => {
 
   const handlePreviousClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,6 +38,7 @@ const TeamPostsPagination = ({
         {previousCallback && (
         <button
           onClick={handlePreviousClick}
+          disabled={disabled}
         >
           <Image
             src="/icons/arrow_back_24dp.svg"
@@ -49,6 +52,7 @@ const TeamPostsPagination = ({
         {nextCallback && (
         <button
           onClick={handleNextClick}
+          disabled={disabled}
         >
           <Image
             src="/icons/arrow_forward_24dp.svg"
