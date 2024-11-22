@@ -10,7 +10,8 @@ import {
   TeamPostCommentsPaginationResult, 
   TeamPostPaginationResult, 
   TeamPostStatus, 
-  TTeamLikesResult
+  TTeamLikesResult,
+  TeamPostCommentStatus
 } from "@/models/team.models";
 import { httpClient } from "./http";
 import { Game } from "@/models/game.models";
@@ -69,6 +70,11 @@ export const getTeamPosts = async (teamId: string, page: number) => {
 export const getTeamPostStatus = async () => {
   const response = await httpClient.get<TeamPostStatus[]>(`/api/teams/posts/statuses/`);
   return response.data as TeamPostStatus[];
+}
+
+export const getTeamPostCommentStatus = async () => {
+  const response = await httpClient.get<TeamPostCommentStatus[]>(`/api/teams/posts/comments/statuses/`);
+  return response.data as TeamPostCommentStatus[];
 }
 
 export const getTeamPostStatusForCreate = async () => {

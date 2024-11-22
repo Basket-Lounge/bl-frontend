@@ -1,4 +1,4 @@
-import { IReport, IReportPaginationResult, IRole, IUser, IUserPaginationResult, UserInquiriesPaginationResult } from "@/models/user.models";
+import { IReport, IReportPaginationResult, IRole, IUser, IUserPaginationResult, MyPageCommentsPaginationResult, UserChat, UserInquiriesPaginationResult } from "@/models/user.models";
 import { httpClient } from "./http";
 import { Team } from "@/models/team.models";
 
@@ -60,6 +60,67 @@ export const getUserPosts = async (
 
   const response = await httpClient.get(`/api/admin/users/${userId}/posts/?${searchParams.toString()}`);
   return response.data;
+}
+
+export const getUserPostComments = async (
+  userId: number,
+  page: number,
+  data: {
+    teams?: string,
+    status?: string,
+    sort?: string,
+    search?: string,
+  }
+) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  const { teams, status, sort, search } = data;
+  if (teams) {
+    searchParams.set('teams', teams);
+  }
+  if (status) {
+    searchParams.set('status', status);
+  }
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  console.log(searchParams.toString());
+
+  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/admin/users/${userId}/comments/?${searchParams.toString()}`);
+  return response.data as MyPageCommentsPaginationResult;
+}
+
+export const getUserChats = async (
+  userId: number, 
+  page: number,
+  data: {
+    sort?: string,
+    search?: string
+  }
+) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  const { sort, search } = data;
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  const response = await httpClient.get(`/api/admin/users/${userId}/chats/?${searchParams.toString()}`);
+  return response.data;
+}
+
+export const getUserChat = async (userId: number, chatId: string) => {
+  const response = await httpClient.get<UserChat>(`/api/admin/users/${userId}/chats/${chatId}/`);
+  return response.data as UserChat;
 }
 
 export const getUser = async (userId: string) => {
@@ -229,5 +290,26 @@ export const deletePost = async (
   postId: string
 ) => {
   const response = await httpClient.delete(`/api/admin/users/${userId}/posts/${postId}/`);
+  return response.data;
+}
+
+export const deletePostComment = async (
+  userId: number,
+  commentId: string
+) => {
+  const response = await httpClient.delete(`/api/admin/users/${userId}/comments/${commentId}/`);
+  return response.data;
+}
+
+export const updatePostComment = async (
+  userId: number,
+  commentId: string,
+  data: {
+    status?: number,
+    content?: string
+  }
+) => {
+  const { status, content } = data;
+  const response = await httpClient.patch(`/api/admin/users/${userId}/comments/${commentId}/`, { status, content });
   return response.data;
 }
