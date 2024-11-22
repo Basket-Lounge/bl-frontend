@@ -4,7 +4,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 
-const AdminUsersSearchBox = () => {
+interface IAdminUsersSearchBoxProps {
+  pressEnterCallback?: () => void;
+}
+
+const AdminUsersSearchBox = ({ pressEnterCallback }: IAdminUsersSearchBoxProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,6 +35,7 @@ const AdminUsersSearchBox = () => {
 
     if (e.key === "Enter") {
       e.preventDefault();
+      pressEnterCallback && pressEnterCallback();
       router.push(pathname + "?" + createQueryString())      
     }
   };
