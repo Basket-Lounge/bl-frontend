@@ -195,6 +195,17 @@ export interface TeamPostStatus {
   }[];
 }
 
+export interface TeamPostCommentStatus {
+  id: number;
+  name: 'created' | 'deleted';
+  postcommentstatusdisplayname_set: {
+    language_data: {
+      name: string;
+    };
+    display_name: string;
+  }[];
+}
+
 export type TTeamPostsFilter = "all" | "recent" | "popular";
 
 export interface TeamPostPaginationResult {
