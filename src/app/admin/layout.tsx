@@ -15,6 +15,18 @@ interface IAdminPageStore {
   setPostsPaginationPage: (page: number) => void;
   lastModifiedPostId: string | null;
   setLastModifiedPostId: (postId: string | null) => void;
+  postsArgumentsModified: boolean;
+  setPostsArgumentsModified: (modified: boolean) => void;
+
+  lastModifiedCommentId: string | null;
+  setLastModifiedCommentId: (commentId: string | null) => void;
+  commentArgumentsModified: boolean;
+  setCommentArgumentsModified: (modified: boolean) => void;
+
+  lastModifiedChatId: string | null;
+  setLastModifiedChatId: (chatId: string | null) => void;
+  chatArgumentsModified: boolean;
+  setChatArgumentsModified: (modified: boolean) => void;
 }
 
 const AdminPageStore = createStore<IAdminPageStore>((set) => ({
@@ -25,10 +37,33 @@ const AdminPageStore = createStore<IAdminPageStore>((set) => ({
     }
     set({ postsPaginationpage: page })
   },
+
   lastModifiedPostId: null,
   setLastModifiedPostId: (postId: string | null) => {
     set({ lastModifiedPostId: postId });
-  }
+  },
+  postsArgumentsModified: false,
+  setPostsArgumentsModified: (modified: boolean) => {
+    set({ postsArgumentsModified: modified });
+  },
+
+  lastModifiedCommentId: null,
+  setLastModifiedCommentId: (commentId: string | null) => {
+    set({ lastModifiedCommentId: commentId });
+  },
+  commentArgumentsModified: false,
+  setCommentArgumentsModified: (modified: boolean) => {
+    set({ commentArgumentsModified: modified });
+  },
+
+  lastModifiedChatId: null,
+  setLastModifiedChatId: (chatId: string | null) => {
+    set({ lastModifiedChatId: chatId });
+  },
+  chatArgumentsModified: false,
+  setChatArgumentsModified: (modified: boolean) => {
+    set({ chatArgumentsModified: modified });
+  },
 }));
 
 export const AdminPageStoreContext = createContext(AdminPageStore);

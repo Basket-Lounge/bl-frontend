@@ -1,10 +1,16 @@
-import AdminUsersDetailsPostsSearchBox from "./AdminUsersDetailsPostsSearchBox copy";
 import AdminFilterButton from "./AdminFilterButton";
 import AdminUsersDetailsPostsStatusFilterButtonOptionsContainer from "./AdminUsersDetailsPostsStatusFilterButtonOptionsContainer";
 import AdminUsersDetailsPostsSortButtonOptionsContainer from "./AdminUsersDetailsPostsSortButtonOptionsContainer";
 import AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer from "./AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer";
+import AdminUsersSearchBox from "./AdminUsersSearchBox";
+import { AdminPageStoreContext } from "@/app/admin/layout";
+import { useContext } from "react";
+import { useStore } from "zustand";
 
 const AdminUsersDetailsPostsFilter = () => {
+  const store = useContext(AdminPageStoreContext);
+  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+
   return (
     <div className="flex justify-between items-end">
       <div className="flex gap-[24px]">
@@ -19,7 +25,7 @@ const AdminUsersDetailsPostsFilter = () => {
         </AdminFilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <AdminUsersDetailsPostsSearchBox />
+        <AdminUsersSearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
       </div>
     </div>
   );

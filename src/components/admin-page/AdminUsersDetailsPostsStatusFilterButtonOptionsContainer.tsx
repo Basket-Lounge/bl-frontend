@@ -1,9 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getTeamPostStatus } from "@/api/team.api";
 import { extractPostStatusKoreanName } from "@/utils/admin.utils";
+import { AdminPageStoreContext } from "@/app/admin/layout";
+import { useStore } from "zustand";
 
 
 const AdminUsersDetailsPostsStatusFilterButtonOptionsContainer = () => {
@@ -19,6 +21,10 @@ const AdminUsersDetailsPostsStatusFilterButtonOptionsContainer = () => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const store = useContext(AdminPageStoreContext);
+  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+
   const [status, setStatus] = useState<string[]>(searchParams.get(queryKey)?.split(',') || []);
 
   const createQueryString = () => {
@@ -42,6 +48,7 @@ const AdminUsersDetailsPostsStatusFilterButtonOptionsContainer = () => {
 
   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setPostsArgumentsModified(true);
     router.push(pathname + "?" + createQueryString())
   }
 

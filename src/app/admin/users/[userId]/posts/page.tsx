@@ -29,11 +29,13 @@ const PostsPage = () => {
   const store = useContext(AdminPageStoreContext);
   const lastModifiedPostId = useStore(store, (state) => state.lastModifiedPostId);
   const setLastModifiedPostId = useStore(store, (state) => state.setLastModifiedPostId);
+  const postsArgumentsModified = useStore(store, (state) => state.postsArgumentsModified);
+  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
 
   const { userId } = useParams();
 
   const teamPostsQuery = useSuspenseQuery({
-    queryKey: ['admin', 'users', "posts", "pagination", page],
+    queryKey: ['admin', 'users', userId as string, "posts", "pagination", page],
     queryFn: async () => {
       return await getUserPosts(
         parseInt(userId as string), 
@@ -48,7 +50,7 @@ const PostsPage = () => {
     },
   });
 
-  const teamPostStatusesQuery = useSuspenseQuery({
+  useSuspenseQuery({
     queryKey: ['admin', 'users', "posts", "statuses"],
     queryFn: async () => {
       return await getTeamPostStatus();
@@ -67,12 +69,11 @@ const PostsPage = () => {
   }
 
   useEffect(() => {
-    if (teamPostsQuery.isRefetching) {
-      return;
+    if (postsArgumentsModified) {
+      teamPostsQuery.refetch();
+      setPostsArgumentsModified(false);
     }
-
-    teamPostsQuery.refetch();
-  }, [searchParams]);
+  }, [sort, search, status, teams]);
 
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const PostsPage = () => {
     }
   }, [lastModifiedPostId]);
 
-  if (teamPostsQuery.isRefetching) {
+  if (teamPostsQuery.isRefetching || teamPostsQuery.isLoading) {
     return <div>Loading...</div>
   }
 
