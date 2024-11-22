@@ -5,6 +5,7 @@ import { useStore } from "zustand";
 import Modal from "./Modal";
 import { useModalStore } from "@/stores/modal.stores";
 import ModalDeleteComment from "./modal-contents/ModalDeleteComment";
+import ModalAdminDeleteComment from "./modal-contents/ModalAdminDeleteComment";
 
 interface IModalData {
   type: TModalType;
@@ -21,6 +22,13 @@ const modalData: IModalData[] = [
     size: 'small',
     overlayClose: false,
     component: ModalDeleteComment
+  },
+  {
+    type: 'admin-delete-comment',
+    title: 'Delete Comment',
+    size: 'small',
+    overlayClose: false,
+    component: ModalAdminDeleteComment
   }
 ];
 
