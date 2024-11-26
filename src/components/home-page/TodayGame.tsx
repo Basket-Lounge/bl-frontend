@@ -16,7 +16,7 @@ export default function TodayGame({ game }: ITodayGameProps) {
   }
 
   return (
-    <div className="p-[24px] bg-color3 rounded-md w-1/3 flex flex-col gap-[16px]">
+    <div className="p-[24px] bg-color3 rounded-md flex flex-col gap-[16px]">
       <TeamGeneralInfoGameBoxTeam 
         team={game.visitor_team} 
         lineScore={game.visitor_team.linescore as LineScore} 
