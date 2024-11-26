@@ -245,18 +245,25 @@ export const updateUser = async (
   data: {
     introduction?: string,
     is_profile_visible?: boolean,
-    role?: string, 
+    username?: string,
+    role?: number,
     chat_blocked?: boolean,
   }
 ) => {
-  const { introduction, is_profile_visible, role, chat_blocked } = data;
-  if (!introduction && is_profile_visible === undefined && !role && chat_blocked === undefined) {
+  const { introduction, is_profile_visible, role, chat_blocked, username } = data;
+  if (
+    !introduction && 
+    is_profile_visible === undefined && 
+    role === undefined &&
+    chat_blocked === undefined &&
+    !username
+  ) {
     throw new Error('At least one of the parameters should be provided');
   }
 
   const response = await httpClient.patch<IUser>(
     `/api/admin/users/${userId}/`, 
-    { introduction, is_profile_visible, role, chat_blocked }
+    { introduction, is_profile_visible, role, chat_blocked, username }
   );
 
   return response.data as IUser;

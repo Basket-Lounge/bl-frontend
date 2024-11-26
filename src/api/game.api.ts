@@ -1,5 +1,35 @@
-import { Game, IGameWithTeamStats, PlayerStatistics } from "@/models/game.models";
+import { Game, GamePaginationResult, IGameWithTeamStats, PlayerStatistics } from "@/models/game.models";
 import { httpClient } from "./http";
+
+
+export const getGames = async (
+  page: number,
+  data: {
+    teams?: string,
+    dateStart?: string,
+    dateEnd?: string,
+  }
+) => {
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  const { teams, dateStart, dateEnd } = data;
+
+  if (teams) {
+    searchParams.set('teams', teams);
+  }
+
+  if (dateStart) {
+    searchParams.set('date-range-start', dateStart);
+  }
+
+  if (dateEnd) {
+    searchParams.set('date-range-end', dateEnd);
+  }
+
+  const response = await httpClient.get<GamePaginationResult>('/api/games/?' + searchParams.toString());
+  return response.data as GamePaginationResult;
+}
 
 export const getGamesForTeam = async (teamId: string): Promise<Game[]> => {
   const response = await httpClient.get<Game[]>(`/api/teams/${teamId}/games/`);

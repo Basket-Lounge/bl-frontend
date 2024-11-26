@@ -1,6 +1,7 @@
 import { 
   InquiryType, 
   IReportType, 
+  IRole, 
   IUpdateProfileVisibility, 
   IUpdateUserIntroduction, 
   IUser, 
@@ -13,6 +14,11 @@ import {
 import { httpClient } from "./http";
 import { TeamPostPaginationResult } from "@/models/team.models";
 
+
+export const getAllRoles = async () => {
+  const response = await httpClient.get<IRole[]>('/api/users/roles/');
+  return response.data as IRole[];
+}
 
 export const getMyInfo = async () => {
   const response = await httpClient.get<IUser>("/api/users/me/");

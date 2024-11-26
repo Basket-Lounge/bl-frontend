@@ -52,6 +52,11 @@ export const removeUserFavoriteTeam = async (teamId: string) => {
   return response.data as TTeamLikesResult;
 }
 
+export const getPopularPosts = async () => {
+  const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/posts/popular/`);
+  return response.data as TeamPostPaginationResult;
+}
+
 export const getTeamGeneralInfo = async (teamId: string) => {
   const response = await httpClient.get<TeamWithLikes>(`/api/teams/${teamId}/`);
   return response.data as TeamWithLikes;

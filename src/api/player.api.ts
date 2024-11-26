@@ -2,6 +2,11 @@ import { Player, PlayerCareerStats, PlayerGameStatistics, PlayerGameStats, Playe
 import { httpClient } from "./http";
 
 
+export const getTop10PlayersThisSeason = async () => {
+  const response = await httpClient.get<Player[]>('/api/players/top-10/');
+  return response.data as Player[];
+}
+
 export const getPlayersFromTeam = async (teamId: string | number) => {
   const response = await httpClient.get<Player[]>(`/api/teams/${teamId}/players/`);
   return response.data as Player[];

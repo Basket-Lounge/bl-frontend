@@ -12,7 +12,7 @@ export const getSubscriptionToken = async (channelName: string) => {
   return response.data;
 }
 
-export const getSubscriptionTokenForLiveGameChat = async (gameId: number) => {
+export const getSubscriptionTokenForLiveGameChat = async (gameId: string) => {
   const response = await httpClient.get("/api/token/subscription/games/" + gameId + "/live-chat/");
   return response.data;
 }
