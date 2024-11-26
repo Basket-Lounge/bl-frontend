@@ -45,7 +45,7 @@ const GameLiveChatBox = () => {
 
     const subscription = client.newSubscription(`games/${gameId}/live-chat`, {
       getToken: async () => {
-        const data = await getSubscriptionTokenForLiveGameChat(parseInt(gameId as string));
+        const data = await getSubscriptionTokenForLiveGameChat(gameId as string);
         setSubscriptionToken(data.token);
         return data.token;
       }
