@@ -127,6 +127,26 @@ export const filterTodayGames = (games: Game[]) => {
   return filteredGames;
 }
 
+export const sortGamesByDate = (games: Game[]) => {
+  const gamesByDate: [string, Game[]][] = [];
+
+  for (const game of games) {
+    const gameDate = convertUTCtoLocalTime(game.game_date_est);
+    const dateKey = `${gameDate.getFullYear()}년 ${gameDate.getMonth() + 1}월 ${gameDate.getDate()}일`;
+
+    const gameList = gamesByDate.find(([date, _]) => date === dateKey);
+
+    if (gameList) {
+      gameList[1].push(game);
+    } else {
+      gamesByDate.push([dateKey, [game]]);
+    }
+  }
+
+  return gamesByDate;
+}
+
+
 export const getGameOutcome = (teamScore: LineScore, opponentScore: LineScore) => {
   const teamTotalPoints = calculateTotalPoints(teamScore);
   const opponentTotalPoints = calculateTotalPoints(opponentScore);

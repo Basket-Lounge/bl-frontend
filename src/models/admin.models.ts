@@ -2,4 +2,4 @@ export type TInquiryChannelType = "all" | "unassigned" | "assigned" | "solved" |
 
 export type TReportType = "all" | "unsolved" | "solved";
 
-export type TAdminUsersSection = 'account-settings' | 'posts' | 'comments' | 'dms' | 'inquiries';
+export type TAdminUsersSection = 'account-settings' | 'posts' | 'comments' | 'dms';
