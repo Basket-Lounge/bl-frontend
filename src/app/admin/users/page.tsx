@@ -6,7 +6,9 @@ import AdminUsersFilter from "@/components/admin-page/AdminUsersFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { AdminPageStoreContext } from "../layout";
+import { useStore } from "zustand";
 
 
 const AdminUserManagementPage = () => {
@@ -21,6 +23,10 @@ const AdminUserManagementPage = () => {
   const roles = searchParams.get('roles') || '';
   const search = searchParams.get('search') || '';
   const sort = searchParams.get('sort') || '';
+
+  const store = useContext(AdminPageStoreContext);
+  const userArgumentsModified = useStore(store, (state) => state.userArgumentsModified);
+  const setUserArgumentsModified = useStore(store, (state) => state.setUserArgumentsModified);
 
   useSuspenseQuery({
     queryKey: ['admin', 'users', 'roles'],
@@ -44,16 +50,17 @@ const AdminUserManagementPage = () => {
   }, [searchParams]);
 
   const handlePageChange = useCallback((newPage: number) => {
+    setUserArgumentsModified(true);
     router.push(pathname + "?" + createQueryString('page', newPage.toString()));  
   }, [pathname, createQueryString]);
 
   useEffect(() => {
-    if (usersQuery.isRefetching) {
-      return;
+    if (userArgumentsModified) {
+      setUserArgumentsModified(false);
+      usersQuery.refetch();
     }
 
-    usersQuery.refetch();
-  }, [searchParams]);
+  }, [roles, search, sort, page]);
 
   if (usersQuery.isRefetching) {
     return <div>Loading...</div>

@@ -6,7 +6,7 @@ import AdminUsersDetailsDMsChat from "@/components/admin-page/AdminUsersDetailsD
 import AdminUsersDetailsDMsContainer from "@/components/admin-page/AdminUsersDetailsDMsContainer";
 import AdminUsersDetailsDMsFilter from "@/components/admin-page/AdminUsersDetailsDMsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";
@@ -29,7 +29,7 @@ const DMsPage: React.FC = () => {
   const search = searchParams.get("search") || '';
   const chatId = searchParams.get("chat") || '';
 
-  const userChatsQuery = useSuspenseQuery({
+  const userChatsQuery = useQuery({
     queryKey: ['admin', 'users', userId as string, "DMs", "pagination", page],
     queryFn: async () => {
       return await getUserChats(
@@ -51,6 +51,7 @@ const DMsPage: React.FC = () => {
   )
 
   const handlePageChange = (newPage: number) => {
+    setChatArgumentsModified(true);
     router.push(pathname + '?' + createQueryString('page', newPage.toString()));
   }
 
@@ -58,6 +59,10 @@ const DMsPage: React.FC = () => {
     "flex flex-col items-stretch gap-[32px]" : "desktop-1:grid grid-cols-2 item-start gap-[32px]";
 
   useEffect(() => {
+    if (userChatsQuery.isRefetching) {
+      return;
+    }
+
     if (lastModifiedChatId) {
       userChatsQuery.refetch();
       setLastModifiedChatId(null);
@@ -69,7 +74,7 @@ const DMsPage: React.FC = () => {
       userChatsQuery.refetch();
       setChatArgumentsModified(false);
     }
-  }, [sort, search]);
+  }, [sort, search, page]);
 
   if (userChatsQuery.isLoading || userChatsQuery.isRefetching) {
     return <div>Loading...</div>

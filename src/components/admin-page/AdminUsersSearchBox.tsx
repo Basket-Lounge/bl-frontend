@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 
 interface IAdminUsersSearchBoxProps {
@@ -15,7 +15,7 @@ const AdminUsersSearchBox = ({ pressEnterCallback }: IAdminUsersSearchBoxProps) 
 
   const [message, setMessage] = useState(searchParams.get('search') || '');
 
-  const createQueryString = () => {
+  const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     if (message.trim() === '') {
       params.delete('search')
@@ -23,8 +23,10 @@ const AdminUsersSearchBox = ({ pressEnterCallback }: IAdminUsersSearchBoxProps) 
       params.set('search', message)
     }
 
+    params.set('page', '1')
+
     return params.toString()
-  }
+  }, [message, searchParams])
 
   const handleSearchWithKeywordsKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>

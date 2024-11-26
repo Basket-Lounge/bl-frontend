@@ -65,27 +65,26 @@ const PostsPage = () => {
   }, [searchParams]);
 
   const handlePageChange = (newPage: number) => {
+    setPostsArgumentsModified(true);
     router.push(pathname + "?" + createQueryString('page', newPage.toString()));  
   }
+
+  useEffect(() => {
+    if (teamPostsQuery.isRefetching) {
+      return;
+    }
+    if (lastModifiedPostId) {
+      teamPostsQuery.refetch();
+      setLastModifiedPostId(null);
+    }
+  }, [lastModifiedPostId]);
 
   useEffect(() => {
     if (postsArgumentsModified) {
       teamPostsQuery.refetch();
       setPostsArgumentsModified(false);
     }
-  }, [sort, search, status, teams]);
-
-
-  useEffect(() => {
-    if (teamPostsQuery.isRefetching) {
-      return;
-    }
-
-    if (lastModifiedPostId) {
-        teamPostsQuery.refetch();
-        setLastModifiedPostId(null);
-    }
-  }, [lastModifiedPostId]);
+  }, [sort, search, status, teams, page]);
 
   if (teamPostsQuery.isRefetching || teamPostsQuery.isLoading) {
     return <div>Loading...</div>

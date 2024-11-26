@@ -93,6 +93,8 @@ const AdminUsersDetailsDMsSortButtonOptionsContainer = () => {
       params.set('sort', newSorts.join(','));
     }
 
+    params.set('page', '1')
+
     return params.toString()
   }, [searchParams, createdAtSort, updatedAtSort, usernameSort]) 
 

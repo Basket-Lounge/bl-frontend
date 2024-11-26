@@ -69,10 +69,15 @@ const CommentsPage = () => {
   )
 
   const handlePageChange = (newPage: number) => {
+    setCommentArgumentsModified(true);
     router.push(pathname + '?' + createQueryString('page', newPage.toString()));
   }
 
   useEffect(() => {
+    if (userCommentsQuery.isRefetching) {
+      return;
+    }
+
     if (lastModifiedCommentId) {
       userCommentsQuery.refetch();
       setLastModifiedCommentId(null);
@@ -84,7 +89,7 @@ const CommentsPage = () => {
       userCommentsQuery.refetch();
       setCommentArgumentsModified(false);
     }
-  }, [status, search, sort, teams]);
+  }, [status, search, sort, teams, page]);
 
   if (userCommentsQuery.isRefetching || userCommentsQuery.isLoading) {
     return <div>Loading...</div>

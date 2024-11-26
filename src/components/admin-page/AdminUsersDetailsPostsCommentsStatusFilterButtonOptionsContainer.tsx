@@ -1,5 +1,5 @@
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getTeamPostCommentStatus } from "@/api/team.api";
@@ -27,7 +27,7 @@ const AdminUsersDetailsPostsCommentsStatusFilterButtonOptionsContainer = () => {
 
   const [status, setStatus] = useState<string[]>(searchParams.get(queryKey)?.split(',') || []);
 
-  const createQueryString = () => {
+  const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     if (status.length === 0) {
       params.delete(queryKey)
@@ -35,8 +35,10 @@ const AdminUsersDetailsPostsCommentsStatusFilterButtonOptionsContainer = () => {
       params.set(queryKey, status.join(','))
     }
 
+    params.set('page', '1')
+
     return params.toString()
-  }
+  }, [status, searchParams])
 
   const handleRoleClick = (statusId: string) => {
     if (status.includes(statusId)) {

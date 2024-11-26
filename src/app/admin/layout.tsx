@@ -11,6 +11,11 @@ import { createStore } from 'zustand';
 
 
 interface IAdminPageStore {
+  lastUserExploredId: string | null;
+  setLastUserExploredId: (userId: string | null) => void;
+  userArgumentsModified: boolean;
+  setUserArgumentsModified: (modified: boolean) => void;
+
   postsPaginationpage: number;
   setPostsPaginationPage: (page: number) => void;
   lastModifiedPostId: string | null;
@@ -30,6 +35,15 @@ interface IAdminPageStore {
 }
 
 const AdminPageStore = createStore<IAdminPageStore>((set) => ({
+  lastUserExploredId: null,
+  setLastUserExploredId: (userId: string | null) => {
+    set({ lastUserExploredId: userId });
+  },
+  userArgumentsModified: false,
+  setUserArgumentsModified: (modified: boolean) => {
+    set({ userArgumentsModified: modified });
+  },
+
   postsPaginationpage: 1,
   setPostsPaginationPage: (page: number) => {
     if (page < 1) {
@@ -68,13 +82,13 @@ const AdminPageStore = createStore<IAdminPageStore>((set) => ({
 
 export const AdminPageStoreContext = createContext(AdminPageStore);
 
-export default function AdminPage({ children }: { 
-  children: React.ReactNode }
+export default function AdminPage(
+  { children }: { children: React.ReactNode }
 ) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const query = useSuspenseQuery({
-    queryKey: ["admin-page", "my-info"], 
+    queryKey: ["admin", "my-info"], 
     queryFn: async () => {
       return await getMyInfo();
     }
@@ -83,7 +97,7 @@ export default function AdminPage({ children }: {
   useEffect(() => {
     return () => {
       queryClient.invalidateQueries({
-        queryKey: ["admin-page", "my-info"],
+        queryKey: ["admin", "my-info"],
         exact: true,
       });
     }

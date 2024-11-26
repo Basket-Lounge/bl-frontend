@@ -1,24 +1,27 @@
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, useContext, useEffect, useState } from "react";
 import { Switch } from "@material-tailwind/react";
+import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { useStore } from "zustand";
 
 
-interface IAdminUsersDetailsAccountSettingsChatBlockProps {
-  isChecked: boolean;
-  updateChatBlock : () => void;
-}
+const AdminUsersDetailsAccountSettingsChatBlock = () => {
+  const store = useContext(UserManagementStoreContext);
+  const isChatBlocked = useStore(store, (state) => state.isChatBlocked);
+  const [newIsChatBlocked, setNewIsChatBlocked] = useState<boolean>(isChatBlocked);
 
-const AdminUsersDetailsAccountSettingsChatBlock = (
-  {isChecked, updateChatBlock}: IAdminUsersDetailsAccountSettingsChatBlockProps
-) => {
   const handleChatBlock : ChangeEventHandler<HTMLInputElement> = () => {
-    updateChatBlock();
+    setNewIsChatBlocked(!newIsChatBlocked);
   }
+
+  useEffect(() => {
+    setNewIsChatBlocked(isChatBlocked);
+  }, [isChatBlocked]);
 
   return (
     <div>
       <div className="mt-[16px] w-full flex gap-[16px]">
         <Switch 
-          checked={isChecked} 
+          checked={newIsChatBlocked}
           onChange={handleChatBlock}
           onPointerEnterCapture={undefined} 
           onPointerLeaveCapture={undefined} 

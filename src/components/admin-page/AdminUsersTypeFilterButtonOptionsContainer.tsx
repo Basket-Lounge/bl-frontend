@@ -1,9 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getAllRoles } from "@/api/admin.api";
 import { translateRoleNameToKorean } from "@/utils/user.utils";
-import { useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
+import { AdminPageStoreContext } from "@/app/admin/layout";
+import { useStore } from "zustand";
 
 
 const AdminUsersTypeFilterButtonOptionsContainer = () => {
@@ -20,7 +22,10 @@ const AdminUsersTypeFilterButtonOptionsContainer = () => {
   const searchParams = useSearchParams();
   const [types, setTypes] = useState<string[]>(searchParams.get(queryKey)?.split(',') || []);
 
-  const createQueryString = () => {
+  const store = useContext(AdminPageStoreContext);
+  const setUserArgumentsModified = useStore(store, (state) => state.setUserArgumentsModified);
+
+  const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     if (types.length === 0) {
       params.delete(queryKey)
@@ -28,8 +33,10 @@ const AdminUsersTypeFilterButtonOptionsContainer = () => {
       params.set(queryKey, types.join(','))
     }
 
+    params.set('page', '1')
+
     return params.toString()
-  }
+  }, [types, searchParams])
 
   const handleRoleClick = (role: string) => {
     if (types.includes(role)) {
@@ -41,6 +48,7 @@ const AdminUsersTypeFilterButtonOptionsContainer = () => {
 
   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setUserArgumentsModified(true);
     router.push(pathname + "?" + createQueryString())
   }
 

@@ -1,5 +1,4 @@
 import { markInquiryAsSolved, markInquiryAsUnsolved } from "@/api/admin.api";
-import { useAuthStore } from "@/stores/auth.stores";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";

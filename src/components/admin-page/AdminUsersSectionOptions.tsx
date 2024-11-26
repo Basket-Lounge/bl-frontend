@@ -36,12 +36,6 @@ export default function AdminUsersSectionOptions() {
         pathnameBit={pathnameBit}
         realPathname={realPathname}
       />
-      <SectionOptionButton<TAdminUsersSection> 
-        designatedSection="inquiries" 
-        name="문의"
-        pathnameBit={pathnameBit}
-        realPathname={realPathname}
-      />
     </div>
   )
 }

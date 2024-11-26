@@ -112,6 +112,8 @@ const AdminUsersDetailsPostsCommentsSortButtonOptionsContainer = () => {
       params.set('sort', newSorts.join(','));
     }
 
+    params.set('page', '1')
+
     return params.toString()
   }, [searchParams, createdAtSort, titleSort, teamsSort, statusSort]) 
 

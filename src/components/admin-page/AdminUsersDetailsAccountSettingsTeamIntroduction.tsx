@@ -1,13 +1,16 @@
-interface IAdminUsersDetailsAccountSettingsUserIntroductionProps {
-  introduction: string;
-  updateIntroduction: (introduction: string) => void;
-}
+import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { useContext, useEffect, useState } from "react";
+import { useStore } from "zustand";
 
-const AdminUsersDetailsAccountSettingsUserIntroduction = (
-  { introduction, updateIntroduction }: IAdminUsersDetailsAccountSettingsUserIntroductionProps
-) => {
+
+const AdminUsersDetailsAccountSettingsUserIntroduction = () => {
+  const store = useContext(UserManagementStoreContext);
+  const introduction = useStore(store, (state) => state.introduction);
+  const setIntroduction = useStore(store, (state) => state.setIntroduction);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateIntroduction(e.target.value);
+    e.preventDefault();
+    setIntroduction(e.target.value);
   };
 
   return (

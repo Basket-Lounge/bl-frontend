@@ -1,6 +1,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import AdminUsersSortButtonOption from "./AdminUsersSortButtonOption";
+import { AdminPageStoreContext } from "@/app/admin/layout";
+import { useStore } from "zustand";
 
 
 const AdminUsersSortButtonOptionsContainer = () => {
@@ -26,6 +28,9 @@ const AdminUsersSortButtonOptionsContainer = () => {
   const [createdAtSort, setCreatedAtSort] = useState<boolean | null>(
     createdAtIndex !== -1 ? (sort[createdAtIndex] === 'created_at' ? true : false) : null
   );
+
+  const store = useContext(AdminPageStoreContext);
+  const setUserArgumentsModified = useStore(store, (state) => state.setUserArgumentsModified);
 
   const handleUsernameSortClick = (sort: string) => {
     if (sort === 'asc') {
@@ -85,11 +90,14 @@ const AdminUsersSortButtonOptionsContainer = () => {
       params.set('sort', newSorts.join(','));
     }
 
+    params.set('page', '1')
+
     return params.toString()
   }, [searchParams, usernameSort, emailSort, createdAtSort])
 
   const handleApplyClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setUserArgumentsModified(true);
     router.push(pathname + "?" + createQueryString())
   }
 

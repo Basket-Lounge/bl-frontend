@@ -1,25 +1,23 @@
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, useContext } from "react";
 import { Switch } from "@material-tailwind/react";
+import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { useStore } from "zustand";
 
 
-interface IAdminUsersDetailsAccountSettingsUserProfileProps {
-  isChecked: boolean;
-  updateProfileVisibility: () => void;
-}
+const AdminUsersDetailsAccountSettingsUserProfile = () => {
+  const store = useContext(UserManagementStoreContext);
+  const isProfileVisible = useStore(store, (state) => state.isProfileVisible);
+  const setIsProfileVisible = useStore(store, (state) => state.setIsProfileVisible);
 
-const AdminUsersDetailsAccountSettingsUserProfile = (
-  {isChecked, updateProfileVisibility}: IAdminUsersDetailsAccountSettingsUserProfileProps
-) => {
   const handleProfileVisibility : ChangeEventHandler<HTMLInputElement> = () => {
-    updateProfileVisibility();
+    setIsProfileVisible(!isProfileVisible);
   }
 
   return (
     <div>
-      <h3 className="text-white text-[20px] font-bold">계정 설정</h3>
       <div className="mt-[16px] w-full flex gap-[16px]">
         <Switch 
-          checked={isChecked} 
+          checked={isProfileVisible}
           onChange={handleProfileVisibility}
           onPointerEnterCapture={undefined} 
           onPointerLeaveCapture={undefined} 
