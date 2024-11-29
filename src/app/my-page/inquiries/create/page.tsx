@@ -7,7 +7,7 @@ import UserInquiriesCreateTypes from "@/components/my-page/UserInquiriesCreateTy
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
-import { MyPageStoreContext } from "../../layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useStore } from "zustand";
 import UserInquiriesCreateSubmitButton from "@/components/my-page/UserInquiriesCreateSubmitButton";
 

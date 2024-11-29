@@ -1,6 +1,6 @@
 'use client'
 
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { TTeamPostsFilter } from "@/models/team.models";
 import { useContext } from "react";
 import { useStore } from "zustand";

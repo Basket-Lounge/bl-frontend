@@ -16,6 +16,7 @@ const InquiriesPage = () => {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || '1');
+  const search = searchParams.get('search') || '';
   const inquiry = searchParams.get("inquiry") || '';
 
   const userInquiriesQuery = useSuspenseQuery({

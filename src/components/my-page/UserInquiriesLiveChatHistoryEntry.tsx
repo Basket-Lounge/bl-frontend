@@ -11,7 +11,7 @@ const UserInquiriesLiveChatHistoryEntry = ({ message }: IUserInquiriesLiveChatHi
     userId
   } = useAuthStore();
 
-  if (message.user_data.id === userId) {
+  if (message.user_data!.id != userId) {
     return (
       <div className="flex gap-[16px] items-end">
         <div className="w-[48px] h-[48px] rounded-full bg-white"></div>

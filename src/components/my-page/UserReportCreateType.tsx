@@ -3,7 +3,7 @@ import { IReportType } from "@/models/user.models";
 import { useContext, useRef, useState } from "react";
 import { useStore } from "zustand";
 import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
-import { UserStoreContext } from "@/app/users/[userId]/layout";
+import { UserStoreContext } from '@/stores/users.stores';
 import UserReportCreateTypeButton from "./UserReportCreateTypeButton";
 
 

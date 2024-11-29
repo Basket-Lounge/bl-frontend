@@ -1,5 +1,5 @@
 import { createReport } from "@/api/user.api";
-import { UserStoreContext } from "@/app/users/[userId]/layout";
+import { UserStoreContext } from '@/stores/users.stores';
 import { IReportCreateErrors } from "@/models/user.models";
 import { UserReportValidation } from "@/utils/validation.utils";
 import { useMutation } from "@tanstack/react-query";

@@ -1,4 +1,4 @@
-import { UserStoreContext } from "@/app/users/[userId]/layout";
+import { UserStoreContext } from '@/stores/users.stores';
 import { IReportType } from "@/models/user.models";
 import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
 import { useContext } from "react";

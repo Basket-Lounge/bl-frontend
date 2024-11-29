@@ -40,7 +40,7 @@ const UserInquiriesLiveChatHistory = (
   }
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
+    const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;
@@ -74,9 +74,9 @@ const UserInquiriesLiveChatHistory = (
       console.log(ctx);
     });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
+      console.log("publication", ctx);
       if (ctx.data.type === "message") {
-        setSortedMessages((prevMessages) => [...prevMessages, ctx.data.message]);
+        setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
       }
     });
 

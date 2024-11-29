@@ -1,4 +1,4 @@
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useContext } from "react";
 import { useStore } from "zustand";
 

@@ -1,4 +1,4 @@
-import { UserStoreContext } from "@/app/users/[userId]/layout";
+import { UserStoreContext } from '@/stores/users.stores';
 import { useContext } from "react";
 import { useStore } from "zustand";
 

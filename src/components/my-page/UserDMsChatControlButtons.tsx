@@ -1,9 +1,10 @@
 import { blockUserChat, deleteUserChat } from "@/api/user.api";
-import { MyPageStoreContext } from "@/app/my-page/layout";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useContext } from "react";
 import { useStore } from "zustand";
+
 
 interface IUserDMsChatControlButtonsProps {
   userId: number;
@@ -18,9 +19,6 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
       return deleteUserChat(userId);
     },
     onSuccess: () => {
-      queryClient.removeQueries({
-        queryKey: ['my-page', "DMs", "chat", userId]
-      })
       setChatDeleted(true);
     }
   });
@@ -30,27 +28,17 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
       return blockUserChat(userId);
     },
     onSuccess: () => {
-      queryClient.removeQueries({
-        queryKey: ['my-page', "DMs", "chat", userId]
-      })
       setChatDeleted(true);
     }
   });
 
-  const queryClient = useQueryClient();
   const handleBlockChatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    queryClient.removeQueries({
-      queryKey: ['my-page', "DMs", "chat", userId]
-    })
     blockChatMutation.mutate();
   }
 
   const handleDeleteChatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    queryClient.removeQueries({
-      queryKey: ['my-page', "DMs", "chat", userId]
-    })
     deleteChatMutation.mutate();
   }
 

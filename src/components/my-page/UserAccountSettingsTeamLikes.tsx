@@ -1,39 +1,81 @@
-import { Team } from "@/models/team.models";
 import UserAccountSettingsTeamLikesTeamButton from "./UserAccountSettingsTeamLikesTeamButton";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserFavoriteTeams } from "@/api/team.api";
+import { useContext, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllTeams, getMyFavoriteTeams,  } from "@/api/team.api";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
+import { useStore } from "zustand";
+import UserAccountSettingsTeamLikesSubmitButton from "./UserAccountSettingsTeamLikesSubmitButton";
 
 
-const UserAccountSettingsTeamLikes = ({teams, userTeamLikes} : {teams: Team[], userTeamLikes: Team[]}) => {
-  const [initialLikedTeams, setInitialLikedTeams] = useState<Team[]>(userTeamLikes);
-  const [likedTeams, setLikedTeams] = useState<Team[]>(userTeamLikes);
+const UserAccountSettingsTeamLikes = () => {
+  const store = useContext(MyPageStoreContext);
+  const likedTeams = useStore(store, (state) => state.likedTeams);
+  const setAllTeams = useStore(store, (state) => state.setAllTeams);
+  const setLikedTeams = useStore(store, (state) => state.setLikedTeams);
+  const setPrevLikedTeams = useStore(store, (state) => state.setPrevLikedTeams);
 
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation({
-    mutationFn: (likedTeams: Team[]) => {
-      return updateUserFavoriteTeams(likedTeams);
-    },
-    onSuccess: () => {
-      setInitialLikedTeams(likedTeams);
-      queryClient.invalidateQueries({queryKey: ["my-page", "user-favorite-teams"],});
+  const teamsInfoQuery = useQuery({
+    queryKey: ["my-page", "teams-info"], 
+    queryFn: async () => {
+      return await getAllTeams();
     }
   });
 
-  const addTeamToFavorite = (teamSymbol : string) => {
-    setLikedTeams([...likedTeams, teams.find((team) => team.symbol === teamSymbol)!]);
+  const userFavoriteTeamsQuery = useQuery({
+    queryKey: ["my-page", "user-favorite-teams"],
+    queryFn: async () => {
+      return await getMyFavoriteTeams();
+    }
+  });
+
+  const handleTeamToFavorite = (teamSymbol : string) => {
+    if (likedTeams.some((team) => (team.symbol === teamSymbol && team.favorite))) {
+      const unlikedTeam = teamsInfoQuery.data!.find((team) => team.symbol === teamSymbol);
+      unlikedTeam!.favorite = false;
+      setLikedTeams(likedTeams.filter((likedTeam) => likedTeam.symbol !== teamSymbol));
+      return;
+    }
+    else if (likedTeams.some((team) => team.symbol === teamSymbol)) {
+      const newLikedTeams = likedTeams.map((likedTeam) => {
+        return {
+          ...likedTeam,
+          favorite: false
+        }
+      }).filter((likedTeam) => likedTeam.symbol !== teamSymbol);
+
+      const favoriteTeam = likedTeams.find((team) => team.symbol === teamSymbol);
+      favoriteTeam!.favorite = true;
+      setLikedTeams([favoriteTeam!, ...newLikedTeams]);
+      return;
+    }
+    setLikedTeams([...likedTeams, teamsInfoQuery.data!.find((team) => team.symbol === teamSymbol)!]);
   }
 
-  const removeTeamFromFavorite = (teamSymbol: string) => {
-    setLikedTeams(likedTeams.filter((likedTeam) => likedTeam.symbol !== teamSymbol));
-  }
+  useEffect(() => {
+    if (userFavoriteTeamsQuery.data) {
+      setPrevLikedTeams(userFavoriteTeamsQuery.data);
+      setLikedTeams(userFavoriteTeamsQuery.data);
+    }
+  }, [userFavoriteTeamsQuery.data]);
 
-  const saveLikedTeams = () => {
-    mutation.mutate(likedTeams);
-  }
+  useEffect(() => {
+    if (teamsInfoQuery.data) {
+      setAllTeams(teamsInfoQuery.data);
+    }
+  }, [teamsInfoQuery.data]);
 
-  console.log(userTeamLikes);
+  if (
+    teamsInfoQuery.isLoading || 
+    userFavoriteTeamsQuery.isLoading
+  ) {
+    return (
+      <div className="">
+        <h3 className="text-white text-[20px] font-bold">좋아하는 팀</h3>
+        <div className="mt-[16px] flex h-[400px] bg-color3 rounded-md animate-pulse">
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="">
@@ -46,38 +88,29 @@ const UserAccountSettingsTeamLikes = ({teams, userTeamLikes} : {teams: Team[], u
             teamNameSet={team.teamname_set} 
             teamAbbreviation={team.symbol}
             liked={true}
-            addToFavoriteCallback={addTeamToFavorite}
-            removeFromFavoriteCallback={removeTeamFromFavorite}
+            favorite={team.favorite}
+            clickCallback={handleTeamToFavorite}
           />
         ))}
       </div>
       )}
       <div className="p-[24px] rounded-md bg-color3 mt-[16px] flex flex-wrap gap-[24px]">
-        {teams.map((team) => (
+        {teamsInfoQuery.data!.map((team) => (
           <UserAccountSettingsTeamLikesTeamButton 
             key={team.id} 
             teamNameSet={team.teamname_set} 
             teamAbbreviation={team.symbol}
             liked={likedTeams.some((userTeam) => userTeam.id === team.id) ? true : false}
-            addToFavoriteCallback={addTeamToFavorite}
-            removeFromFavoriteCallback={removeTeamFromFavorite}
+            favorite={
+              likedTeams.some(
+                (userTeam) => (userTeam.id === team.id && userTeam.favorite)
+              ) ? true : false
+            }
+            clickCallback={handleTeamToFavorite}
           />
         ))}
       </div>
-      {/* If there are the same teams in the initialLikedTeams and likedTeams, the button will be disabled */}
-      {(
-        JSON.stringify(initialLikedTeams) !== JSON.stringify(likedTeams) && 
-        !mutation.isPending
-      ) && (
-      <button 
-        className="mt-[24px] bg-color1 text-white rounded-full px-[32px] py-[8px]"
-        onClick={() => saveLikedTeams()}
-      >
-        저장
-      </button>
-      )}
-      {mutation.isPending && <p className="mt-[16px] text-white text-[16px]">저장 중...</p>}
-      {mutation.isError && <p className="mt-[16px] text-white text-[16px]">저장 중 오류가 발생했습니다.</p>}
+      <UserAccountSettingsTeamLikesSubmitButton />
     </div>
   );
 }

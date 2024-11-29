@@ -1,5 +1,5 @@
 import { createInquiry } from "@/api/user.api";
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { InquiryCreateErrors } from "@/models/user.models";
 import { UserInquiryValidation } from "@/utils/validation.utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

@@ -29,7 +29,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
   }, [chats]);
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
+    const client = new Centrifuge(`ws://${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;

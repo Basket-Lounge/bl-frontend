@@ -30,7 +30,7 @@ const UserInquiriesContainer = ({ inquiries }: IUserInquiriesContainerProps) => 
   }, [inquiries]);
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
+    const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;
@@ -59,12 +59,6 @@ const UserInquiriesContainer = ({ inquiries }: IUserInquiriesContainerProps) => 
     subscription.on("error", (ctx) => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
-    });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
-    subscription.on("leave", (ctx) => {
-      console.log(ctx);
     });
     subscription.on("publication", (ctx) => {
       console.log(ctx);

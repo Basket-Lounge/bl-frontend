@@ -1,46 +1,27 @@
 'use client'
 
-import { getAllTeams, getMyFavoriteTeams } from "@/api/team.api";
-import { getMyInfo } from "@/api/user.api";
-import UserAccountSettingsTeamIntroduction from "@/components/my-page/UserAccountSettingsTeamIntroduction";
+import UserAccountSettingsChatBlock from "@/components/my-page/UserAccountSettingsChatBlock";
+import UserAccountSettingsIntroduction from "@/components/my-page/UserAccountSettingsIntroduction";
+import UserAccountSettingsProfile from "@/components/my-page/UserAccountSettingsProfile";
+import UserAccountSettingsSubmitButton from "@/components/my-page/UserAccountSettingsSubmitButton";
 import UserAccountSettingsTeamLikes from "@/components/my-page/UserAccountSettingsTeamLikes";
-import UserAccountSettingsTeamProfile from "@/components/my-page/UserAccountSettingsTeamProfile";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import UserAccountSettingsUsernameChange from "@/components/my-page/UserAccountSettingsUsernameChange";
 
 
 const AccountSettingsPage = () => {
-  const userInfoQuery = useSuspenseQuery({
-    queryKey: ["my-page", "user-info"], 
-    queryFn: async () => {
-      return await getMyInfo();
-    }
-  });
-
-  const teamsInfoQuery = useSuspenseQuery({
-    queryKey: ["my-page", "teams-info"], 
-    queryFn: async () => {
-      return await getAllTeams();
-    }
-  });
-
-  const userFavoriteTeamsQuery = useSuspenseQuery({
-    queryKey: ["my-page", "user-favorite-teams"],
-    queryFn: async () => {
-      return await getMyFavoriteTeams();
-    }
-  });
-
   return (
     <div className="flex flex-col gap-[32px] items-stretch">
-      <UserAccountSettingsTeamLikes teams={teamsInfoQuery.data} userTeamLikes={userFavoriteTeamsQuery.data} />
-      <div className="flex gap-[32px] items-stretch">
-        <UserAccountSettingsTeamIntroduction 
-          introduction={userInfoQuery.data.introduction} 
-        />
-        <UserAccountSettingsTeamProfile 
-          isChecked={userInfoQuery.data.is_profile_visible}
-        />
+      <UserAccountSettingsTeamLikes />
+      <div className="lg:flex gap-[32px] items-stretch">
+        <UserAccountSettingsIntroduction />
+        <div className="lg:w-1/2 tablet:mt-0 mt-[32px]">
+          <h3 className="text-white text-[20px] font-bold">계정 설정</h3>
+          <UserAccountSettingsUsernameChange />
+          <UserAccountSettingsProfile />
+          <UserAccountSettingsChatBlock />
+        </div>
       </div>
+      <UserAccountSettingsSubmitButton />
     </div>
   );
 }

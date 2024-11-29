@@ -14,13 +14,15 @@ export default function UserHeader({ user }: IUserHeaderProps) {
       {/* Team Logo */}
       <div className="flex gap-[48px] items-start">
         <div className="w-[156px] h-[156px] rounded-full bg-white relative">
-          <Image
-            className="w-auto h-[70%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
-            src={'/logos/' + 'atl' + '.svg'}
-            alt="team-logo"
-            width={20}
-            height={20}
-          />
+          { user.favorite_team && (
+            <Image
+              className="w-auto h-[70%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
+              src={'/logos/' + user.favorite_team.symbol.toLowerCase() + '.svg'}
+              alt="team-logo"
+              width={20}
+              height={20}
+            />
+          )}
         </div>
         {/* Team Name */}
         <div className="flex flex-col gap-[12px] grow">

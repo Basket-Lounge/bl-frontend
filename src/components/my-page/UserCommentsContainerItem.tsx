@@ -8,7 +8,7 @@ import UserCommentsContainerItemLikesRepliesBox from "./UserCommentsContainerIte
 import UserCommentsContainerItemInput from "./UserCommentsContainerItemInput";
 import { useQueryClient } from "@tanstack/react-query";
 import { useModalStore } from "@/stores/modal.stores";
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useStore } from "zustand";
 
 

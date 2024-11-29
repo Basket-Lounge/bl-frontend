@@ -1,4 +1,4 @@
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { InquiryType } from "@/models/user.models";
 import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
 import { useContext } from "react";

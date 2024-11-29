@@ -1,4 +1,4 @@
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import useClickOutside from "@/hooks/useClickOutside";
 import { InquiryType } from "@/models/user.models";
 import { useContext, useRef, useState } from "react";
