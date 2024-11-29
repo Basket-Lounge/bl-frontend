@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { Player } from "@/models/player.models";
 import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import Image from "next/image";

@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { TeamPostStatus } from "@/models/team.models";
 import { extractStatusKoreanName } from "@/utils/team.utils";
 import { TeamPostValidation } from "@/utils/validation.utils";

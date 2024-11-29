@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import TeamPlayersFilter from "./TeamPlayersFilter";
 import TeamPlayersContainer from "./TeamPlayersContainer";
 import { Suspense, useContext } from "react";
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import TeamPlayersPlayerDetails from "./TeamPlayersPlayerDetails";
 
@@ -21,7 +21,7 @@ export default function TeamPlayers() {
     }
   });
 
-  const selectedPlayer = teamPlayersQuery.data.find(player => player.PERSON_ID === currentPlayerId);
+  const selectedPlayer = teamPlayersQuery.data.find(player => player.id === currentPlayerId);
 
   return (
     <div className="flex flex-col gap-[24px] items-stretch">

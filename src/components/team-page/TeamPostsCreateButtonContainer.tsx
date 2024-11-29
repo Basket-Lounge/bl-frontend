@@ -5,7 +5,7 @@ import TeamPostsCreateButton from "./TeamPostsCreateButton";
 import { getTeamPostStatusForCreate, publishTeamPost } from "@/api/team.api";
 import { useParams, useRouter } from "next/navigation";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { TeamPostError } from "@/models/team.models";
 import { AxiosError } from "axios";

@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { TTeamPostsFilter } from "@/models/team.models";
 import { useContext } from "react";
 import { useStore } from "zustand";

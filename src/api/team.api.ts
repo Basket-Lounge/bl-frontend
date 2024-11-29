@@ -60,6 +60,11 @@ export const getPopularPosts = async () => {
   return response.data as TeamPostPaginationResult;
 }
 
+export const getTeamPopularPosts = async (teamId: string) => {
+  const response = await httpClient.get<TeamPost[]>(`/api/teams/${teamId}/posts/popular/`);
+  return response.data as TeamPost[];
+}
+
 export const getTeamGeneralInfo = async (teamId: string) => {
   const response = await httpClient.get<TeamWithLikes>(`/api/teams/${teamId}/`);
   return response.data as TeamWithLikes;
@@ -70,8 +75,24 @@ export const getTeamFranchiseHistory = async (teamId: string) => {
   return response.data as TeamFranchiseHistory;
 }
 
-export const getTeamPosts = async (teamId: string, page: number) => {
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/?page=${page}`);
+export const getTeamPosts = async (
+  teamId: string, 
+  page: number,
+  data: {sort?: string, search?: string}
+) => {
+  const { sort, search } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/?${searchParams.toString()}`);
   return response.data as TeamPostPaginationResult;
 }
 

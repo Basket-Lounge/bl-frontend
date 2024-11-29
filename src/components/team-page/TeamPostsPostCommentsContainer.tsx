@@ -49,13 +49,23 @@ const TeamPostsPostCommentsContainer = () => {
     return <div>로딩중...</div>;
   }
 
+  if (postCommentsQuery.isError) {
+    return (
+      <div className="bg-color3 rounded-md p-[24px] flex items-center justify-center">
+        <p className="text-white text-[16px] font-semibold">댓글을 불러오는 중 오류가 발생했습니다.</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-[16px] item-stretch">
       <TeamPostsPostCommentsFilter 
         count={postCommentsQuery.data?.count || 0} 
       />
       {postCommentsQuery.data?.results.length === 0 && (
-        <div>댓글이 없습니다.</div>
+        <div className="bg-color3 rounded-md p-[24px]">
+          <p className="text-white text-[16px] font-semibold">댓글이 없습니다.</p>
+        </div>
       )}
       {postCommentsQuery.data?.results.map((comment) => (
         <TeamPostsPostCommentsItem

@@ -1,5 +1,4 @@
-import { TSection } from "@/app/teams/[teamId]/layout";
-import Link from "next/link";
+import { TSection } from "@/models/team.models";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 

@@ -1,12 +1,19 @@
-import { PlayerCareerStats, PlayerSeasonStats } from "@/models/player.models";
+import { PlayerCareerStats } from "@/models/player.models";
 import TeamPlayersPlayerDetailsCareerStatsLine from "./TeamPlayersPlayerDetailsCareerStatsLine";
 
 
 interface ITeamPlayersPlayerDetailsCareerStatsProps {
-  stats: PlayerCareerStats[];
+  stats: PlayerCareerStats[] | undefined;
 }
 
 export default function TeamPlayersPlayerDetailsCareerStats({stats}: ITeamPlayersPlayerDetailsCareerStatsProps) {
+  if (!stats) {
+    return (
+      <div className="mt-[16px] h-[112px] bg-color3 rounded-md flex animate-pulse">
+      </div>
+    )
+  }
+
   return (
     <div
       className="mt-[16px] p-[24px] bg-color3 rounded-md flex"

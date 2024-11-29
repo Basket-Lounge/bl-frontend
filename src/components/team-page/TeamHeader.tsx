@@ -18,7 +18,7 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
   return (
     <div className="flex gap-[48px] items-start">
       {/* Team Logo */}
-      <div className="w-[156px] h-[156px] rounded-full bg-white relative">
+      <div className="w-[156px] h-[156px] rounded-full relative">
         <Image
           className="w-auto h-[70%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
           src={'/logos/' + team.symbol.toLowerCase() + '.svg'}

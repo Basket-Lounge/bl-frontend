@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { Suspense, useContext } from "react"
 import { useStore } from "zustand";
 import TeamGeneralInfo from "./TeamGeneralInfo";

@@ -2,7 +2,7 @@
 
 import TeamPlayersPlayer from "@/components/team-page/TeamPlayersPlayer";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { filterPlayersByPosition } from "@/utils/player.utils";
 import TeamPlayersFilter from "@/components/team-page/TeamPlayersFilter";

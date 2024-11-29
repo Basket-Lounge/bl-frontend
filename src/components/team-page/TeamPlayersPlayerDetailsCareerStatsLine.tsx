@@ -1,4 +1,4 @@
-import { PlayerCareerStats, PlayerSeasonStats } from "@/models/player.models";
+import { PlayerCareerStats } from "@/models/player.models";
 
 
 interface ITeamPlayersPlayerDetailsCareerStatsLineProps {

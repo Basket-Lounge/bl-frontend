@@ -1,39 +1,24 @@
-import TeamPostsFilterButton from "./TeamPostsFilterButton";
-import TeamPostsSearchBox from "./TeamPostsSearchBox";
-import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
+import { TeamStoreContext } from "@/stores/teams.stores";
+import { useContext } from "react";
+import { useStore } from "zustand";
+import FilterButton from "../common/FilterButton";
+import SearchBox from "../common/SearchBox";
+import TeamPostsSortButtonOptionsContainer from "./TeamPostsSortButtonOptionsContainer";
 
 
 const TeamPostsFilter = () => {
-  const router = useRouter();
-  const { teamId } = useParams();
-
-  const handleCreateButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    router.push("/teams/" + teamId + "/posts/create");
-  }
+  const store = useContext(TeamStoreContext);
+  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
 
   return (
     <div className="flex justify-between items-end">
       <div className="flex gap-[24px]">
-        <TeamPostsFilterButton name="전체" queryKey="all" />
-        <TeamPostsFilterButton name="최근" queryKey="recent" />
-        <TeamPostsFilterButton name="인기" queryKey="popular" />
+        <FilterButton name="정렬">
+          <TeamPostsSortButtonOptionsContainer />
+        </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <button
-          className="bg-color1 text-white rounded-full py-[12px] px-[20px] flex items-center gap-[8px]"
-          onClick={handleCreateButtonClick}
-        >
-          <Image
-            src="/icons/edit_24dp_FFFFFF.svg"
-            alt="글쓰기"
-            width={20}
-            height={20}
-          />
-          글쓰기
-        </button>
-        <TeamPostsSearchBox />
+        <SearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
       </div>
     </div>
   );

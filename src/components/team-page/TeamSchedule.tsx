@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { getLast4Games } from "@/api/team.api";
 import TeamScheduleFilter from "./TeamScheduleFilter";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { getGamesForTeam } from "@/api/game.api";
 import TeamScheduleGamesContainer from "./TeamScheduleGamesContainer";

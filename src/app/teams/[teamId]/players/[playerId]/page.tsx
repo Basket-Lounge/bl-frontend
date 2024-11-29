@@ -6,7 +6,7 @@ import TeamPlayersPlayerDetailsGameStats from "@/components/team-page/TeamPlayer
 import TeamPlayersPlayerDetailsSeasonStats from "@/components/team-page/TeamPlayersPlayerDetailsSeasonStats";
 import { Player } from "@/models/player.models";
 import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
@@ -20,21 +20,21 @@ const TeamPlayersPlayerDetails = () => {
     }
   });
 
-  const playerSeasonStatsQuery = useSuspenseQuery({
+  const playerSeasonStatsQuery = useQuery({
     queryKey: ["player", playerId, "season-stats"],
     queryFn: async () => {
       return await getPlayerSeasonStats(teamId as string, playerId as string);
     }
   });
 
-  const playerLast5GamesStatsQuery = useSuspenseQuery({
+  const playerLast5GamesStatsQuery = useQuery({
     queryKey: ["player", playerId, "last-5-games-stats"],
     queryFn: async () => {
       return await getPlayerLast5GamesStats(teamId as string, playerId as string);
     }
   });
 
-  const playerCareerStatsQuery = useSuspenseQuery({
+  const playerCareerStatsQuery = useQuery({
     queryKey: ["player", playerId, "career-stats"],
     queryFn: async () => {
       return await getPlayerCareerStats(teamId as string, playerId as string);

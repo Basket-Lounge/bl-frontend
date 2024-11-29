@@ -6,7 +6,7 @@ import UserDMsContainer from "@/components/my-page/UserDMsContainer";
 import UserDMsFilter from "@/components/my-page/UserDMsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { MyPageStoreContext } from "@/stores/myPage.stores";
-import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";

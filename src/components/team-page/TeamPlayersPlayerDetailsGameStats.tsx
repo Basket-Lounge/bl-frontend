@@ -3,10 +3,17 @@ import TeamPlayersPlayerDetailsGameStatsLine from "./TeamPlayersPlayerDetailsGam
 
 
 interface ITeamPlayersPlayerDetailsGameStatsProps {
-  stats: PlayerGameStatistics[];
+  stats: PlayerGameStatistics[] | undefined;
 }
 
 export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersPlayerDetailsGameStatsProps) {
+  if (!stats) {
+    return (
+      <div className="mt-[16px] bg-color3 animate-pulse w-full h-[112px] rounded-md">
+      </div>
+    )
+  }
+
   return (
     <div
       className="mt-[16px] p-[24px] bg-color3 rounded-md flex"

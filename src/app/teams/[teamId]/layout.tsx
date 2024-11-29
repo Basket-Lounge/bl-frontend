@@ -1,60 +1,11 @@
 'use client';
 
-import { createContext } from 'react';
-import { createStore } from 'zustand';
-
 import TeamHeader from "@/components/team-page/TeamHeader";
 import TeamSectionOptions from "@/components/team-page/TeamSectionOptions";
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { getTeamGeneralInfo } from '@/api/team.api';
-import { TTeamPostsFilter } from '@/models/team.models';
+import { TeamStore, TeamStoreContext } from "@/stores/teams.stores";
 
-
-interface ITeamStore {
-  currentScheduleFilterValue: string;
-  updateCurrentScheduleFilterValue: (value: string) => void;
-  playersFilterValue: string;
-  updatePlayersFilterValue: (value: string) => void;
-  currentPlayerId: number | null;
-  updateCurrentPlayerId: (id: number | null) => void;
-  postsFilterValue: TTeamPostsFilter;
-  updatePostsFilterValue: (value: TTeamPostsFilter) => void;
-  searchValue: string;
-  updateSearchValue: (value: string) => void;
-  postsCreateTitle: string;
-  updatePostsCreateTitle: (value: string) => void;
-  postsCreateTitleError: string | null;
-  updatePostsCreateTitleError: (value: string | null) => void;
-  postsCreateContent: string;
-  updatePostsCreateContent: (value: string) => void;
-  postsCreateContentError: string | null;
-  updatePostsCreateContentError: (value: string | null) => void;
-}
-
-export type TSection = "general-info" | "players" | "schedule" | "posts";
-
-const TeamStore = createStore<ITeamStore>((set) => ({
-  currentScheduleFilterValue: "0",
-  updateCurrentScheduleFilterValue: (value) => set({ currentScheduleFilterValue: value }),
-  playersFilterValue: "A",
-  updatePlayersFilterValue: (value) => set({ playersFilterValue: value }),
-  currentPlayerId: null,
-  updateCurrentPlayerId: (id) => set({ currentPlayerId: id }),
-  postsFilterValue: "all",
-  updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
-  searchValue: "",
-  updateSearchValue: (value) => set({ searchValue: value }),
-  postsCreateTitle: "",
-  updatePostsCreateTitle: (value) => set({ postsCreateTitle: value }),
-  postsCreateTitleError: "",
-  updatePostsCreateTitleError: (value) => set({ postsCreateTitleError: value }),
-  postsCreateContent: "",
-  updatePostsCreateContent: (value) => set({ postsCreateContent: value }),
-  postsCreateContentError: "",
-  updatePostsCreateContentError: (value) => set({ postsCreateContentError: value }),
-}));
-
-export const TeamStoreContext = createContext(TeamStore);
 
 export default function TeamsPage({ params, children }: { 
   params: { teamId: string }, 

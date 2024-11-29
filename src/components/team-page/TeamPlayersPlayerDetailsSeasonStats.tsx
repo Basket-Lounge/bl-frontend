@@ -2,10 +2,17 @@ import { PlayerSeasonStats } from "@/models/player.models"
 
 
 interface ITeamPlayersPlayerDetailsSeasonStatsProps {
-  stats: PlayerSeasonStats;
+  stats: PlayerSeasonStats | undefined;
 }
 
 const TeamPlayersPlayerDetailsSeasonStats : React.FC<ITeamPlayersPlayerDetailsSeasonStatsProps> = ({ stats }) => {
+  if (!stats) {
+    return (
+      <div className="mt-[16px] bg-color3 animate-pulse w-full h-[112px] rounded-md">
+      </div>
+    )
+  }
+
   return (
     <div className="mt-[16px] flex p-[24px] px-[48px] bg-color3 rounded-md justify-between items-center">
       <div className="text-center">
@@ -34,15 +41,15 @@ const TeamPlayersPlayerDetailsSeasonStats : React.FC<ITeamPlayersPlayerDetailsSe
       </div>
       <div className="text-center">
         <p className="text-[16px]">FG%</p>
-        <p className="text-[24px] font-medium mt-[4px]">{(stats.field_goals_percentage * 100).toFixed(1) || '0.0'}</p>
+        <p className="text-[24px] font-medium mt-[4px]">{(stats.field_goals_percentage).toFixed(1) || '0.0'}</p>
       </div>
       <div className="text-center">
         <p className="text-[16px]">3P%</p>
-        <p className="text-[24px] font-medium mt-[4px]">{(stats.three_point_field_goals_percentage * 100).toFixed(1) || '0.0'}</p>
+        <p className="text-[24px] font-medium mt-[4px]">{(stats.three_pointers_percentage).toFixed(1) || '0.0'}</p>
       </div>
       <div className="text-center">
         <p className="text-[16px]">FT%</p>
-        <p className="text-[24px] font-medium mt-[4px]">{(stats.free_throws_percentage * 100).toFixed(1) || '0.0'}</p>
+        <p className="text-[24px] font-medium mt-[4px]">{(stats.free_throws_percentage).toFixed(1) || '0.0'}</p>
       </div>
     </div>
   );

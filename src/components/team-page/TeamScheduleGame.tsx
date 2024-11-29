@@ -13,21 +13,25 @@ const TeamScheduleGame : React.FC<ITeamScheduleGameProps> = ({
   game 
 }) => {
   const { teamId } = useParams();
-  const isHome = game.home_team.id == parseInt(teamId as string);
+  const isHome = game.home_team.id == teamId as string;
   const bgColor = isHome ? "bg-color4" : "bg-color3";
 
-  const teamLineScore = game.line_scores?.find(lineScore => lineScore.team.id == parseInt(teamId as string)) as LineScore;
+  const teamLineScore = game.line_scores?.find(lineScore => lineScore.team.id == teamId as string) as LineScore;
   const teamTotalPoints = calculateTotalPoints(teamLineScore);
 
-  const opponentLineScore = game.line_scores?.find(lineScore => lineScore.team.id != parseInt(teamId as string)) as LineScore;
+  const opponentLineScore = game.line_scores?.find(lineScore => lineScore.team.id != teamId as string) as LineScore;
   const opponentTotalPoints = calculateTotalPoints(opponentLineScore);
 
   const winStatus = teamTotalPoints > opponentTotalPoints ? "승리" : "패배";
   const winStatusBgColor = teamTotalPoints > opponentTotalPoints ? " bg-[#16A34A]" : " bg-[#DC0909]";
 
-  const opponentTeamName = extractTeamEnglishName(
+  const opponentTeamNameParts = extractTeamEnglishName(
     isHome ? game.visitor_team : game.home_team
-  ).split(" ")[0];
+  ).split(" ");
+
+  const opponentTeamName = opponentTeamNameParts.length > 2 ?
+    opponentTeamNameParts[0] + " " + opponentTeamNameParts[1] :
+    opponentTeamNameParts[0];
   const opponentSymbol = isHome ? game.visitor_team.symbol : game.home_team.symbol;
 
   const gameDateTime = displayGameTimeForGameBox(

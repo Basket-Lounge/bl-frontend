@@ -1,7 +1,7 @@
 import { Player } from "@/models/player.models";
 import TeamPlayersPlayer from "./TeamPlayersPlayer";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/app/teams/[teamId]/layout";
+import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { filterPlayersByPosition } from "@/utils/player.utils";
 import TeamPlayersFilter from "./TeamPlayersFilter";
@@ -21,7 +21,7 @@ const TeamPlayersContainer : React.FC<ITeamPlayersContainerProps> = ({ players }
     <div className="flex items-start w-full gap-[32px] flex-wrap">
       <TeamPlayersFilter />
       {filteredPlayers.map(player => (
-        <TeamPlayersPlayer key={player.PERSON_ID} player={player} />
+        <TeamPlayersPlayer key={player.id} player={player} />
       ))}
     </div>
   );

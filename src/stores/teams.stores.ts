@@ -9,6 +9,10 @@ interface ITeamStore {
   updatePlayersFilterValue: (value: string) => void;
   currentPlayerId: number | null;
   updateCurrentPlayerId: (id: number | null) => void;
+
+  postsArgumentsModified: boolean;
+  setPostsArgumentsModified: (value: boolean) => void;
+
   postsFilterValue: TTeamPostsFilter;
   updatePostsFilterValue: (value: TTeamPostsFilter) => void;
   searchValue: string;
@@ -30,6 +34,9 @@ export const TeamStore = createStore<ITeamStore>((set) => ({
   updatePlayersFilterValue: (value) => set({ playersFilterValue: value }),
   currentPlayerId: null,
   updateCurrentPlayerId: (id) => set({ currentPlayerId: id }),
+
+  postsArgumentsModified: false,
+  setPostsArgumentsModified: (value) => set({ postsArgumentsModified: value }),
   postsFilterValue: "all",
   updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
   searchValue: "",
