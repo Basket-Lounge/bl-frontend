@@ -1,11 +1,19 @@
 import { Player } from "@/models/player.models";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface ISeasonTopPlayerProps {
   player: Player;
 }
 
 const SeasonTopPlayer = ({ player }: ISeasonTopPlayerProps) => {
+  const router = useRouter();
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/teams/${player.team.id}/players/${player.id}`);
+  }
+
   return (
     <div className="p-[24px] bg-color3 rounded-md flex flex-col gap-[16px]">
       {/* <div className="w-[36px] h-[36px] rounded-full relative bg-white">
@@ -24,20 +32,23 @@ const SeasonTopPlayer = ({ player }: ISeasonTopPlayerProps) => {
       <div className="flex items-center justify-between">
         <div className="text-center w-1/3">
           <p className="text-[14px] font-light">PTS</p>
-          <p className="text-[24px] mt-[8px]">{player.pts || '0.0'}</p>
+          <p className="text-[24px] mt-[8px]">{player.pts?.toFixed(1) || '0.0'}</p>
         </div>
         <div className="text-center w-1/3">
           <p className="text-[14px] font-light">AST</p>
-          <p className="text-[24px] mt-[8px]">{player.ast || '0.0'}</p>
+          <p className="text-[24px] mt-[8px]">{player.ast?.toFixed(1) || '0.0'}</p>
         </div>
         <div className="text-center w-1/3">
           <p className="text-[14px] font-light">REB</p>
-          <p className="text-[24px] mt-[8px]">{player.reb || '0.0'}</p>
+          <p className="text-[24px] mt-[8px]">{player.reb?.toFixed(1) || '0.0'}</p>
         </div>
       </div>
-      <div className="w-full bg-color1 text-[16px] font-semibold py-[12px] text-center rounded-full">
+      <button 
+        className="w-full bg-color1 text-[16px] font-semibold py-[12px] text-center rounded-full"
+        onClick={handleClick}
+      >
         선수 상세보기 
-      </div>
+      </button>
     </div>
   );
 };

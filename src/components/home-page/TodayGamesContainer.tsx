@@ -62,7 +62,7 @@ export default function TodayGamesContainer() {
         placeholder={undefined} 
         onPointerEnterCapture={undefined} 
         onPointerLeaveCapture={undefined}
-        className="mt-[16px] w-full"
+        className="mt-[16px] w-full z-10"
       >
         {divideGames(todayGamesQuery.data!).map((gamesList, index) => (
           <div key={index} className="grid grid-cols-3 gap-[16px] mx-auto">

@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import TeamGeneralInfoGameBoxTeam from "../team-page/TeamGeneralInfoGameBoxTeam";
 import { Game, LineScore } from "@/models/game.models";
+import { displayGameTimeForGameBox } from "@/utils/game.utils";
 
 
 interface ITodayGameProps {
@@ -15,6 +16,12 @@ export default function TodayGame({ game }: ITodayGameProps) {
     router.push(`/games/${game.game_id}`);
   }
 
+  const gameDateTime = displayGameTimeForGameBox(
+    game.game_date_est
+  ).split(" ");
+  const gameDate = gameDateTime[0];
+  const gameTime = gameDateTime[1] + " " + gameDateTime[2];
+
   return (
     <div className="p-[24px] bg-color3 rounded-md flex flex-col gap-[16px]">
       <TeamGeneralInfoGameBoxTeam 
@@ -27,7 +34,15 @@ export default function TodayGame({ game }: ITodayGameProps) {
         lineScore={game.home_team.linescore as LineScore} 
         gameStatusId={game.game_status_id}
       />
-      <p className="text-[16px] font-medium text-center">경기 종료</p>
+      {game.game_status_id == 1 && (
+        <p className="text-[16px] font-medium text-center">{gameDate} {gameTime}</p>
+      )}
+      {game.game_status_id == 2 && (
+        <p className="text-[16px] font-medium text-center">경기 진행중</p>
+      )}
+      {game.game_status_id == 3 && (
+        <p className="text-[16px] font-medium text-center">경기 종료</p>
+      )}
       <button 
         onClick={handleClick}
         className="bg-color1 rounded-full justify-center py-[12px] w-full font-medium"

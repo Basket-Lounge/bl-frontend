@@ -3,28 +3,48 @@
 import SeasonTopPlayersContainer from "@/components/home-page/SeasonTopPlayersContainer";
 import TodayGamesContainer from "@/components/home-page/TodayGamesContainer";
 import TodayPopularPostsContainer from "@/components/home-page/TodayPopularPostsContainer";
+import { useEffect, useRef } from "react";
+import Typed from 'typed.js';
+
 
 export default function Home() {
+  const subHeadingRef = useRef<HTMLSpanElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    const typed = new Typed(subHeadingRef.current!, {
+      strings: [
+        'NBA에 대한 모든 것을 공유하는 공간',
+        'NBA 마니아를 위한 공간',
+        'NBA Basketball?'
+      ],
+      typeSpeed: 50,
+      backDelay: 1500,
+      showCursor: false,
+      loop: true,
+    });
+
+    return () => {
+      typed.destroy();
+    }
+  }, []);
+
   return (
     <div className="w-full flex flex-col gap-[32px] items-stretch mx-auto py-[32px]">
-      {/* Greeting Section */}
-      <div className="h-[300px] bg-white w-full relative flex flex-col justify-center items-start overflow-hidden">
-        {/* <video 
-          loop muted autoPlay 
-          className="absolute z-10 left-0 top-0 w-[75%] h-auto"
+      <div className="h-[300px] w-full bg-white/10 rounded-md relative flex flex-col justify-center items-start overflow-hidden px-[128px] gap-[24px]">
+        <span
+          ref={subHeadingRef}
+          className="text-[24px] font-light h-[24px]" 
+        />
+        <h1 
+          ref={headingRef}
+          className="text-[40px] font-bold"
         >
-          <source src="/videos/intro.mp4" type="video/mp4" />
-        </video> */}
-        <div className="h-[96px] w-fit flex flex-col justify-between px-[128px] z-20 text-white">
-          <h2 className="text-[24px] font-light">NBA 마니아를 위한 공간</h2>
-          <h1 className="text-[32px] font-bold">Basket Lounge</h1>
-        </div>
+          Basket Lounge
+        </h1>
       </div>
-      {/* Today's Game Section */}
       <TodayGamesContainer />
-      {/* Top 10 Players Section */}
       <SeasonTopPlayersContainer />
-      {/* Today's Popular Posts Section */}
       <TodayPopularPostsContainer />
     </div>
   );

@@ -28,7 +28,7 @@ const TodayPopularPostsContainer = () => {
     return (
       <div>
         <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>
-        <div className="grid grid-cols-2 gap-[16px] mx-auto animate-pulse">
+        <div className="grid grid-cols-2 gap-[16px] mx-auto animate-pulse mt-[16px]">
           <TodayPopularPostSkeleton />
           <TodayPopularPostSkeleton />
         </div>

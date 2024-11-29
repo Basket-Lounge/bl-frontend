@@ -27,7 +27,7 @@ export default function SeasonTopPlayersContainer() {
   if (top10PlayersQuery.isLoading || top10PlayersQuery.isRefetching) {
     return (
       <div>
-        <h3 className="text-[20px] font-bold">2024-25시즌 TOP 10</h3>
+        <h3 className="text-[20px] font-bold">2024-25 평균 득점 TOP 10</h3>
         <div className="w-full gap-[16px] items-stretch grid grid-cols-4 animate-pulse mt-[16px]">
           <SeasonTopPlayerSkeleton />
           <SeasonTopPlayerSkeleton />
@@ -40,7 +40,7 @@ export default function SeasonTopPlayersContainer() {
 
   return (
     <div>
-      <h3 className="text-[20px] font-bold">2024-25시즌 TOP 10</h3>
+      <h3 className="text-[20px] font-bold">2024-25 평균 득점 TOP 10</h3>
       <Carousel 
         placeholder={undefined} 
         onPointerEnterCapture={undefined} 

@@ -1,5 +1,6 @@
 import { TeamPost } from "@/models/team.models";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 
 interface ITodayPopularPostProps {
@@ -7,11 +8,23 @@ interface ITodayPopularPostProps {
 }
 
 const TodayPopularPost = ({ post }: ITodayPopularPostProps) => {
+  const router = useRouter();
+
+  const handlePostClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/teams/${post.team_data.id}/posts/${post.id}`);
+  }
+
   return (
     <div className="overflow-hidden rounded-md">
       <div className="p-[24px] bg-color3 rounded-md w-full flex flex-col gap-[24px]">
         <div>
-          <h4 className="text-[16px] font-semibold">{post.title}</h4>
+          <button 
+            className="text-[16px] font-semibold"
+            onClick={handlePostClick}
+          >
+            <h4 className="text-[16px] font-semibold">{post.title}</h4>
+          </button>
           <div className="mt-[16px] flex items-center gap-[16px]">
             <div className="rounded-full bg-white w-[40px] h-[40px]">
             </div>
