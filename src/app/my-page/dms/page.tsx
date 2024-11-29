@@ -6,7 +6,7 @@ import UserDMsContainer from "@/components/my-page/UserDMsContainer";
 import UserDMsFilter from "@/components/my-page/UserDMsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { MyPageStoreContext } from "@/stores/myPage.stores";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";
@@ -16,6 +16,7 @@ const DMsPage: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
 
   const store = useContext(MyPageStoreContext);
   const chatDeleted = useStore(store, (state) => state.chatDeleted);
@@ -59,7 +60,11 @@ const DMsPage: React.FC = () => {
   useEffect(() => {
     if (chatDeleted) {
       setChatDeleted(false);
+      const userId = parseInt(searchParams.get("user") || '');
       router.push(pathname + '?' + createQueryString('user', ''));
+      queryClient.removeQueries({
+        queryKey: ['my-page', "DMs", "chat", userId]
+      })
     }
   }, [userToChatWith, chatDeleted]);
 
