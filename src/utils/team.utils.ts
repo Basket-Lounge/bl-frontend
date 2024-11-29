@@ -64,31 +64,3 @@ export const getThreeNearestTeamsFromStandings = (standings: ConferenceStandings
 
   return returnData;
 };
-
-export const getBestPlayerFromList = (players: Player[]) => {
-  let bestPlayer = null;
-  const promise = new Promise<Player>((resolve, reject) => {
-    if (players.length === 0) {
-      reject("No players found");
-    }
-
-    let bestPlayer = players[0];
-    players.forEach(player => {
-      if ((player.pts || 0) > (bestPlayer.pts || 0)) {
-        bestPlayer = player;
-      }
-    });
-
-    resolve(bestPlayer);
-  });
-
-  return {
-    read() {
-      if (!bestPlayer) {
-        throw promise;
-      } else {
-        return bestPlayer;
-      }
-    }
-  };
-}

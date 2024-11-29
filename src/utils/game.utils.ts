@@ -166,7 +166,7 @@ export const getTop4PlayersFromGame = (playersStats: PlayerStatistics[]) => {
   ).slice(0, 4);
 }
 
-export const filterPlayerStatsByTeam = (playersStats: PlayerStatistics[], teamId: number) => {
+export const filterPlayerStatsByTeam = (playersStats: PlayerStatistics[], teamId: string) => {
   return playersStats.filter(playerStat => playerStat.team.id === teamId);
 };
 
