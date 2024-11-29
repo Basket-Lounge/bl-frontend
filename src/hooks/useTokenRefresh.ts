@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { refreshAccessToken } from "@/api/login.api";
 import { useAuthStore } from "@/stores/auth.stores";
 import { useStore } from "zustand";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 
 const useTokenRefresh = () => {
@@ -19,7 +19,7 @@ const useTokenRefresh = () => {
     queryFn: async () => {
       return await refreshAccessToken();
     },
-    retry: 2,
+    retry: 1,
   });
 
   useEffect(() => {

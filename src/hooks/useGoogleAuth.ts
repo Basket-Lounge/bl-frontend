@@ -6,9 +6,9 @@ import { useStore } from "zustand";
 
 
 const useGoogleAuth = () => {
-  const [isSignedIn, setIsSignedIn] = useState<Boolean | null>(null);
+  const [isSignedIn, setIsSignedIn] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState<Boolean | null>(null);
+  const [isError, setIsError] = useState<boolean | null>(null);
 
   const { 
     setUsername, 
