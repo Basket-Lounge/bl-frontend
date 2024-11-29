@@ -1,6 +1,5 @@
 'use client'
 
-import { AxiosError } from "axios"
 import { useRouter } from "next/navigation";
 
 interface IError {

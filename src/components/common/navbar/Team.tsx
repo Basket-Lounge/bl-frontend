@@ -1,33 +1,32 @@
-import useClickOutside from "@/hooks/useClickOutside";
-import { useRef, useState } from "react";
+import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
+import TeamContainer from "./TeamContainer";
+import { Suspense } from "react";
 
 
 const Team = () => {
-  const [isTeamMenuOpen, setIsTeamMenuOpen] = useState<boolean>(false);
-  const teamMenuButtonRef = useRef<HTMLButtonElement>(null);
-
-  useClickOutside(teamMenuButtonRef, setIsTeamMenuOpen);
-
-  const handleTeamMenuClick = () => {
-    setIsTeamMenuOpen(!isTeamMenuOpen);
-  }
-
   return (
     <div>
-      <button 
-        className="relative"
-        ref={teamMenuButtonRef}
-        onClick={handleTeamMenuClick}
+      <Popover 
+        placement="bottom"
       >
-        팀
-        {isTeamMenuOpen && (
-        <div 
-          className="absolute top-[40px] left-0 w-[300px] bg-color3 rounded-md p-[24px] z-10"
+        <PopoverHandler>
+          <button 
+            className="relative"
+          >
+            팀
+          </button>
+        </PopoverHandler>
+        <PopoverContent 
+          placeholder={undefined} 
+          onPointerEnterCapture={undefined} 
+          onPointerLeaveCapture={undefined}
+          className="p-0 border-none z-50"
         >
-
-        </div>
-        )}
-      </button>
+          <Suspense fallback={<div>로딩중...</div>}>
+            <TeamContainer />
+          </Suspense>
+        </PopoverContent>
+      </Popover>
     </div>
   )
 }

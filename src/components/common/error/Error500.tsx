@@ -1,7 +1,5 @@
 'use client'
 
-import { AxiosError } from "axios"
-
 interface IError {
   reset: () => void
 }

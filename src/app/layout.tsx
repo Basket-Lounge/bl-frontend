@@ -6,6 +6,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { QueryProvider } from "@/components/common/QueryProvider";
 import ModalController from "@/components/common/modal/ModalController";
 import PageSizeController from "@/components/common/PageSizeController";
+import { ErrorRenderer } from "@/components/common/ErrorRenderer";
+import { ErrorBoundaryHandler } from "@/components/common/ErrorBoundaryHandler";
 
 
 const pretendard = localFont({
@@ -32,11 +34,11 @@ export default function RootLayout({
         <QueryProvider>
           <PageSizeController>
             <ModalController />
-            <ErrorBoundary fallback={<div>Something went wrong</div>}>
+            <ErrorBoundaryHandler>
               <Suspense fallback={<div>Loading...</div>}>
                 {children}
               </Suspense>
-            </ErrorBoundary>
+            </ErrorBoundaryHandler>
           </PageSizeController>
         </QueryProvider>
       </body>
