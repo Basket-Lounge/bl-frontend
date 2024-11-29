@@ -10,8 +10,8 @@ import AdminUsersDetailsPostsCommentsContainerItemInput from "./AdminUsersDetail
 import UserCommentsContainerEditDeleteButtonsContainer from "../my-page/UserCommentsContainerItemEditDeleteButtonsContainer";
 import UserCommentsContainerItemLikesRepliesBox from "../my-page/UserCommentsContainerItemLikesRepliesBox";
 import { useParams } from "next/navigation";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 interface IAdminUsersDetailsPostsCommentsContainerItemProps {

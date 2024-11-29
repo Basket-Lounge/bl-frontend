@@ -4,8 +4,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getTeamPostStatus } from "@/api/team.api";
 import { extractPostStatusKoreanName } from "@/utils/admin.utils";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const AdminUsersDetailsPostsStatusFilterButtonOptionsContainer = () => {

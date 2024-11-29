@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, useContext, useEffect, useState } from "react";
 import { Switch } from "@material-tailwind/react";
-import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { UserManagementStoreContext } from '@/stores/admin.stores';
 import { useStore } from "zustand";
 
 

@@ -1,8 +1,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useState } from "react";
-import AdminUsersSortButtonOption from "./AdminUsersSortButtonOption";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
+import SortButtonOption from "../common/SortButtonOption";
 
 
 const AdminUsersDetailsDMsSortButtonOptionsContainer = () => {
@@ -117,17 +117,17 @@ const AdminUsersDetailsDMsSortButtonOptionsContainer = () => {
       className="absolute w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%] left-0"
     >
       <div className="flex flex-col gap-[16px]">
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="생성 날짜"
           sortValue={handleCreatedAtSortClick}
           currentValue={createdAtSort}
         />
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="업데이트 날짜"
           sortValue={handleUpdatedAtSortClick}
           currentValue={updatedAtSort}
         />
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="유저 이름"
           sortValue={handleUsernameSortClick}
           currentValue={usernameSort}

@@ -1,9 +1,8 @@
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useState } from "react";
-import AdminUsersSortButtonOption from "./AdminUsersSortButtonOption";
-import { useQueryClient } from "@tanstack/react-query";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
+import SortButtonOption from "../common/SortButtonOption";
 
 
 const AdminUsersDetailsPostsCommentsSortButtonOptionsContainer = () => {
@@ -137,22 +136,22 @@ const AdminUsersDetailsPostsCommentsSortButtonOptionsContainer = () => {
       className="absolute w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%] left-0"
     >
       <div className="flex flex-col gap-[16px]">
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="생성 날짜"
           sortValue={handleCreatedAtSortClick}
           currentValue={createdAtSort}
         />
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="제목"
           sortValue={handleTitleSortClick}
           currentValue={titleSort}
         />
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="팀"
           sortValue={handleTeamsSortClick}
           currentValue={teamsSort}
         />
-        <AdminUsersSortButtonOption
+        <SortButtonOption
           name="상태"
           sortValue={handleStatusSortClick}
           currentValue={statusSort}

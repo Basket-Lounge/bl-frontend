@@ -1,6 +1,5 @@
 import { updatePost } from "@/api/admin.api";
 import { getTeamPostStatus } from "@/api/team.api";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import useClickOutside from "@/hooks/useClickOutside";
 import { TeamPost } from "@/models/team.models";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
@@ -8,6 +7,7 @@ import Image from "next/image";
 import { useContext, useRef, useState } from "react";
 import { useStore } from "zustand";
 import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 interface IAdminUsersDetailsPostsContainerOptionsProps {

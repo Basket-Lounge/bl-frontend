@@ -1,5 +1,5 @@
-import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
-import { useContext, useEffect, useState } from "react";
+import { UserManagementStoreContext } from '@/stores/admin.stores';
+import { useContext } from "react";
 import { useStore } from "zustand";
 
 

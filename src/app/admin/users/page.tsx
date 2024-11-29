@@ -4,10 +4,10 @@ import { getAllRoles, getAllUsers } from "@/api/admin.api";
 import AdminUsersContainer from "@/components/admin-page/AdminUsersContainer";
 import AdminUsersFilter from "@/components/admin-page/AdminUsersFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useEffect } from "react";
-import { AdminPageStoreContext } from "../layout";
 import { useStore } from "zustand";
 
 

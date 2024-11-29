@@ -1,5 +1,5 @@
 import { getAllRoles } from "@/api/user.api";
-import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { UserManagementStoreContext } from '@/stores/admin.stores';
 import { translateRoleNameToKorean } from "@/utils/user.utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import React, { useContext, useEffect, useRef, useState } from "react";

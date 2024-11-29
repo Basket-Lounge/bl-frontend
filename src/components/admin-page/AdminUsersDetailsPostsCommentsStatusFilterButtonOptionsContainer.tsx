@@ -4,8 +4,8 @@ import { useParams, usePathname, useRouter, useSearchParams } from "next/navigat
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getTeamPostCommentStatus } from "@/api/team.api";
 import { extractPostCommentStatusKoreanName } from "@/utils/admin.utils";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const AdminUsersDetailsPostsCommentsStatusFilterButtonOptionsContainer = () => {

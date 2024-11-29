@@ -1,5 +1,5 @@
 import { blockUserChat, deleteUserChat } from "@/api/user.api";
-import { MyPageStoreContext } from "@/app/my-page/layout";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useContext } from "react";

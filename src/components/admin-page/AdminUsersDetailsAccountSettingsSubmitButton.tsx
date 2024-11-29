@@ -1,7 +1,8 @@
 'use client'
 
 import { updateUser } from "@/api/admin.api";
-import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { UserManagementStoreContext } from '@/stores/admin.stores';
+import { useAuthStore } from "@/stores/auth.stores";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useContext } from "react";
@@ -28,6 +29,10 @@ const AdminUsersDetailsAccountSettingsSubmitButton = () => {
   const role = useStore(store, (state) => state.role);
   const prevRole = useStore(store, (state) => state.prevRole);
 
+  const {
+    setUsername
+  } = useStore(useAuthStore);
+
   const userMutation = useMutation({
     mutationFn: (data: {
       introduction: string, 
@@ -47,6 +52,7 @@ const AdminUsersDetailsAccountSettingsSubmitButton = () => {
         queryKey: ["admin", "my-info"],
         exact: true,
       });
+      setUsername(data.username);
     }
   });
 

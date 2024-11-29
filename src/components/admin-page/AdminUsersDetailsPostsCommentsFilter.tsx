@@ -3,9 +3,9 @@ import AdminUsersDetailsPostsCommentsStatusFilterButtonOptionsContainer from "./
 import AdminUsersDetailsPostsCommentsSortButtonOptionsContainer from "./AdminUsersDetailsPostsCommentsSortButtonOptionsContainer";
 import AdminUsersDetailsPostsCommentsTeamsFilterButtonOptionsContainer from "./AdminUsersDetailsPostsCommentsTeamsFilterButtonOptionsContainer";
 import AdminUsersSearchBox from "./AdminUsersSearchBox";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useContext } from "react";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 const AdminUsersDetailsPostsCommentsFilter = () => {
   const store = useContext(AdminPageStoreContext);

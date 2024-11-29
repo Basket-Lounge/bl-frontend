@@ -1,10 +1,10 @@
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useCallback, useContext, useState } from "react";
-import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getAllTeams } from "@/api/team.api";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const AdminUsersDetailsPostsCommentsTeamsFilterButtonOptionsContainer = () => {

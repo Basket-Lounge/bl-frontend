@@ -1,4 +1,4 @@
-import { UserManagementStoreContext } from "@/app/admin/users/[userId]/layout";
+import { UserManagementStoreContext } from '@/stores/admin.stores';
 import React, { ChangeEventHandler, useContext, useEffect, useRef, useState } from "react";
 import { useStore } from "zustand";
 

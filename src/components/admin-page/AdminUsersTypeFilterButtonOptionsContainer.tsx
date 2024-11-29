@@ -4,8 +4,8 @@ import { translateRoleNameToKorean } from "@/utils/user.utils";
 import { useCallback, useContext, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { useStore } from "zustand";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const AdminUsersTypeFilterButtonOptionsContainer = () => {

@@ -1,12 +1,12 @@
 'use client'
 
 import { getUserChat, getUserChats } from "@/api/admin.api";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import AdminUsersDetailsDMsChat from "@/components/admin-page/AdminUsersDetailsDMsChat";
 import AdminUsersDetailsDMsContainer from "@/components/admin-page/AdminUsersDetailsDMsContainer";
 import AdminUsersDetailsDMsFilter from "@/components/admin-page/AdminUsersDetailsDMsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
+import { useQuery  } from "@tanstack/react-query";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";

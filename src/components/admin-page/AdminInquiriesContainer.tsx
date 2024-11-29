@@ -3,11 +3,6 @@ import { useEffect, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { 
   getConnectionToken, 
-  getSubscriptionTokenForLiveAdminInquiriesAssignedUpdate, 
-  getSubscriptionTokenForLiveAdminInquiriesMineUpdate, 
-  getSubscriptionTokenForLiveAdminInquiriesSolvedUpdate, 
-  getSubscriptionTokenForLiveAdminInquiriesUnassignedUpdate, 
-  getSubscriptionTokenForLiveAdminInquiriesUnsolvedUpdate, 
   getSubscriptionTokenForLiveAdminInquiriesUpdate 
 } from "@/api/webSocket.api";
 import { useAuthStore } from "@/stores/auth.stores";
@@ -45,7 +40,7 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
   }, [inquiries]);
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
+    const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;
@@ -63,25 +58,8 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
 
     const subscription = client.newSubscription(subscriptionChannelName, {
       getToken: async () => {
-        if (inquiryType === "unassigned") {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesUnassignedUpdate();
-          return data.token;
-        } else if (inquiryType === "assigned") {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesAssignedUpdate();
-          return data.token;
-        } else if (inquiryType === "solved") {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesSolvedUpdate();
-          return data.token;
-        } else if (inquiryType === "unsolved") {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesUnsolvedUpdate();
-          return data.token;
-        } else if (inquiryType === "mine") {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesMineUpdate();
-          return data.token;
-        } else {
-          const data = await getSubscriptionTokenForLiveAdminInquiriesUpdate();
-          return data.token;
-        }
+        const data = await getSubscriptionTokenForLiveAdminInquiriesUpdate(inquiryType);
+        return data.token;
       }
     });
     subscription.on("subscribed", (ctx) => {
@@ -92,14 +70,7 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
-    subscription.on("leave", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
       queryClient.removeQueries({
         queryKey: ['admin', "inquiries", "pagination"],
       });
@@ -126,7 +97,7 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
           (つ╥﹏╥)つ
         </p>
         <p className="font-bold text-[24px]">
-          포스트가 없습니다.
+          문의가 없습니다.
         </p>
       </div>
     );

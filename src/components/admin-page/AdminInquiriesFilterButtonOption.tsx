@@ -1,5 +1,7 @@
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
+import { useStore } from "zustand";
 
 
 interface IAdminInquiriesFilterButtonOptionProps<CustomType> {
@@ -14,24 +16,15 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
   const router = useRouter();
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  const store = useContext(AdminPageStoreContext);
+  const setInquiriesArgumentsModified = useStore(store, (state) => state.setInquiriesArgumentsModified);
  
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value);
 
-      const currentValue = params.get(name)?.split(',')
-      if (currentValue) {
-        if (currentValue.includes(value)) {
-          currentValue.splice(currentValue.indexOf(value), 1)
-          params.set(name, currentValue.join(','))
-        } else {
-          currentValue.push(value)
-          params.set(name, currentValue.join(','))
-        }
-      } else {
-        params.set(name, value)
-      }
- 
       return params.toString()
     },
     [searchParams]
@@ -52,6 +45,7 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setInquiriesArgumentsModified(true);
     router.push(pathname + "?" + createQueryString(queryKey, queryValue))
   }
 

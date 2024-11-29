@@ -83,9 +83,6 @@ const AdminInquiriesLiveChatHistory = ({
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
       console.log(ctx);
       if (ctx.data.type === "message") {

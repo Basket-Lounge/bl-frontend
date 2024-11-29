@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import AdminUsersFilterButtonOption from "./AdminUsersFilterButtonOption";
 import { getAllTeams } from "@/api/team.api";
 import { useStore } from "zustand";
-import { AdminPageStoreContext } from "@/app/admin/layout";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer = () => {

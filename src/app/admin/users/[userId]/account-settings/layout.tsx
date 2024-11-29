@@ -1,12 +1,11 @@
 'use client';
 
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { getAllRoles, getUser } from '@/api/admin.api';
-import { getAllTeams, getUserFavoriteTeams } from '@/api/team.api';
 import { useContext, useEffect, useState } from 'react';
-import { UserManagementStoreContext } from '../layout';
 import { useStore } from 'zustand';
+import { UserManagementStoreContext } from '@/stores/admin.stores';
 
 
 export default function UserPage({ children }: { 
@@ -25,9 +24,6 @@ export default function UserPage({ children }: {
   const setRole = useStore(store, (state) => state.setRole);
   const setPrevRole = useStore(store, (state) => state.setPrevRole);
 
-  const setTeamLikes = useStore(store, (state) => state.setTeamLikes);
-  const setPrevTeamLikes = useStore(store, (state) => state.setPrevTeamLikes);
-
   const setIntroduction = useStore(store, (state) => state.setIntroduction);
   const setPrevIntroduction = useStore(store, (state) => state.setPrevIntroduction);
 
@@ -45,23 +41,9 @@ export default function UserPage({ children }: {
   });
 
   useSuspenseQuery({
-    queryKey: ['admin', 'users', 'teams-info'],
-    queryFn: async () => {
-      return await getAllTeams();
-    }
-  });
-
-  useSuspenseQuery({
     queryKey: ['admin', 'users', 'roles'],
     queryFn: async () => {
       return await getAllRoles();
-    }
-  });
-
-  const userFavoriteTeamsQuery = useSuspenseQuery({
-    queryKey: ['admin', 'users', 'details', userId as string, 'favorite-teams'],
-    queryFn: async () => {
-      return await getUserFavoriteTeams(parseInt(userId as string));
     }
   });
 
@@ -69,6 +51,9 @@ export default function UserPage({ children }: {
     return () => {
       queryClient.invalidateQueries({
         queryKey: ['admin', 'users', 'details', userId as string]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'users', 'roles']
       });
     }
   }, []);
@@ -80,9 +65,6 @@ export default function UserPage({ children }: {
 
       setRole(userQuery.data.role_data.id);
       setPrevRole(userQuery.data.role_data.id);
-
-      setTeamLikes(userFavoriteTeamsQuery.data);
-      setPrevTeamLikes(userFavoriteTeamsQuery.data);
 
       setIntroduction(userQuery.data.introduction);
       setPrevIntroduction(userQuery.data.introduction);
@@ -100,7 +82,7 @@ export default function UserPage({ children }: {
     if (userQuery.error) {
       setError(true);
     }
-  }, [userQuery.data, userFavoriteTeamsQuery.data]);
+  }, [userQuery.data]);
 
   if (error) {
     return <div>에러가 발생했습니다.</div>;

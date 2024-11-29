@@ -2,10 +2,10 @@
 
 import { getUserPosts } from "@/api/admin.api";
 import { getTeamPostStatus } from "@/api/team.api";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import AdminUsersDetailsPostsContainer from "@/components/admin-page/AdminUsersDetailsPostsContainer";
 import AdminUsersDetailsPostsFilter from "@/components/admin-page/AdminUsersDetailsPostsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useEffect } from "react";

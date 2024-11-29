@@ -1,21 +1,18 @@
 'use client'
 
 import { 
-  getAllInquiries, 
-  getAssignedInquiries, 
-  getMyInquiries, 
-  getSolvedInquiries, 
-  getUnassignedInquiries, 
-  getUnsolvedInquiries 
+  getInquiries, 
 } from "@/api/admin.api";
 import AdminInquiriesContainer from "@/components/admin-page/AdminInquiriesContainer";
 import AdminInquiriesFilter from "@/components/admin-page/AdminInquiriesFilter";
 import AdminInquiriesLiveChat from "@/components/admin-page/AdminInquiriesLiveChat";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { TInquiryChannelType } from "@/models/admin.models";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
+import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useRef } from "react";
+import { Suspense, useCallback, useContext, useEffect } from "react";
+import { useStore } from "zustand";
 
 
 const AdminInquiriesPage = () => {
@@ -23,28 +20,19 @@ const AdminInquiriesPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const initialFetch = useRef<boolean>(true);
-
   const page = parseInt(searchParams.get("page") || '1');
   const filter : TInquiryChannelType = searchParams.get("filter") as TInquiryChannelType || 'all';
+  const search = searchParams.get('search') || '';
   const inquiry = searchParams.get("inquiry") || '';
 
-  const adminInquiriesQuery = useSuspenseQuery({
+  const store = useContext(AdminPageStoreContext);
+  const inquiriesArgumentsModified = useStore(store, (state) => state.inquiriesArgumentsModified);
+  const setInquiriesArgumentsModified = useStore(store, (state) => state.setInquiriesArgumentsModified);
+
+  const adminInquiriesQuery = useQuery({
     queryKey: ['admin', "inquiries", "pagination", page],
     queryFn: async () => {
-      if (filter === 'unassigned') {
-        return await getUnassignedInquiries(page);
-      } else if (filter === 'assigned') {
-        return await getAssignedInquiries(page);
-      } else if (filter === 'unsolved') {
-        return await getUnsolvedInquiries(page);
-      } else if (filter === 'solved') {
-        return await getSolvedInquiries(page);
-      } else if (filter === 'mine') {
-        return await getMyInquiries(page);
-      } else {
-        return await getAllInquiries(page);
-      }
+      return await getInquiries(page, filter, search);
     },
   });
 
@@ -59,6 +47,7 @@ const AdminInquiriesPage = () => {
   )
 
   const handlePageChange = (newPage: number) => {
+    setInquiriesArgumentsModified(true);
     router.push(pathname + '?' + createQueryString('page', newPage.toString()));
   }
 
@@ -66,16 +55,19 @@ const AdminInquiriesPage = () => {
     "desktop-1:grid grid-cols-2 item-start gap-[32px]" : "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
-    if (initialFetch.current) {
-      initialFetch.current = false;
-      return;
+    if (inquiriesArgumentsModified) {
+      setInquiriesArgumentsModified(false);
+      adminInquiriesQuery.refetch();
     }
+  }, [filter, page, search]);
 
-    adminInquiriesQuery.refetch();
-  }, [filter, page]);
-
-  if (adminInquiriesQuery.isRefetching) {
-    return <div>Loading...</div>
+  if (adminInquiriesQuery.isRefetching || adminInquiriesQuery.isLoading) {
+    return (
+      <div className="flex flex-col gap-[24px] items-stretch">
+        <AdminInquiriesFilter />
+        <div className="h-[120px] w-[100%] flex items-center justify-center animate-pulse bg-color3 rounded-md" />
+      </div>
+    )
   }
 
   return (
@@ -83,7 +75,7 @@ const AdminInquiriesPage = () => {
       <AdminInquiriesFilter />
       <div className={divClassName}>
         <AdminInquiriesContainer 
-          inquiries={adminInquiriesQuery.data.results} 
+          inquiries={adminInquiriesQuery.data!.results} 
           inquiryType={filter}
         />
         {inquiry ? (
@@ -95,10 +87,10 @@ const AdminInquiriesPage = () => {
       <TeamPostsPagination 
         currentPageNumber={page}
         previousCallback={
-          adminInquiriesQuery.data.previous ? () => handlePageChange(page - 1) : undefined
+          adminInquiriesQuery.data!.previous ? () => handlePageChange(page - 1) : undefined
         }
         nextCallback={
-          adminInquiriesQuery.data.next ? () => handlePageChange(page + 1) : undefined
+          adminInquiriesQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
     </div>

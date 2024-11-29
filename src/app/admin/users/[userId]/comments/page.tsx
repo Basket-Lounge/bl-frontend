@@ -3,14 +3,14 @@
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import { getTeamPostCommentStatus } from "@/api/team.api";
 import { getUserPostComments } from "@/api/admin.api";
 import AdminUsersDetailsPostsCommentsFilter from "@/components/admin-page/AdminUsersDetailsPostsCommentsFilter";
 import UserCommentsContainer from "@/components/common/UserCommentsContainer";
 import AdminUsersDetailsPostsCommentsContainerItem from "@/components/admin-page/AdminUsersDetailsPostsCommentsContainerItem";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 
 
 const CommentsPage = () => {
