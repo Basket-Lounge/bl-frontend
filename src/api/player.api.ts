@@ -1,4 +1,4 @@
-import { Player, PlayerCareerStats, PlayerGameStatistics, PlayerGameStats, PlayerSeasonStats } from "@/models/player.models";
+import { Player, PlayerCareerStats, PlayerGameStatistics, PlayerSeasonStats } from "@/models/player.models";
 import { httpClient } from "./http";
 
 

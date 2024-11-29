@@ -33,9 +33,12 @@ export const getUserFavoriteTeams = async (userId: number) => {
 }
 
 export const updateUserFavoriteTeams = async (teams: Team[]) => {
-  const teamIds : {id: number}[] = [];
+  const teamIds : {id: string, favorite?: boolean}[] = [];
   for (let i = 0; i < teams.length; i++) {
     teamIds.push({id: teams[i].id});
+    if (teams[i].favorite) {
+      teamIds[i].favorite = true;
+    }
   };
 
   const response = await httpClient.put<typeof teamIds>(`/api/users/me/favorite-teams/`, teamIds);

@@ -1,3 +1,4 @@
+import { TInquiryChannelType } from "@/models/admin.models";
 import { httpClient } from "./http";
 
 
@@ -37,11 +38,6 @@ export const getSubscriptionTokenForLiveInquiriesUpdate = async () => {
   return response.data;
 }
 
-export const getSubscriptionTokenForLiveAdminInquiriesUpdate = async () => {
-  const response = await httpClient.get("/api/token/subscription/admin/inquiry-updates/");
-  return response.data;
-}
-
 export const getSubscriptionTokenForLiveAdminInquiriesUnassignedUpdate = async () => {
   const response = await httpClient.get("/api/token/subscription/admin/inquiry-updates/unassigned/");
   return response.data;
@@ -65,6 +61,23 @@ export const getSubscriptionTokenForLiveAdminInquiriesSolvedUpdate = async () =>
 export const getSubscriptionTokenForLiveAdminInquiriesMineUpdate = async () => {
   const response = await httpClient.get("/api/token/subscription/admin/inquiry-updates/mine/");
   return response.data;
+}
+
+export const getSubscriptionTokenForLiveAdminInquiriesUpdate = async (filter?: TInquiryChannelType) => {
+  if (filter === "unassigned") {
+    return await getSubscriptionTokenForLiveAdminInquiriesUnassignedUpdate();
+  } else if (filter === "assigned") {
+    return await getSubscriptionTokenForLiveAdminInquiriesAssignedUpdate();
+  } else if (filter === "solved") {
+    return await getSubscriptionTokenForLiveAdminInquiriesSolvedUpdate();
+  } else if (filter === "unsolved") {
+    return await getSubscriptionTokenForLiveAdminInquiriesUnsolvedUpdate();
+  } else if (filter === "mine") {
+    return await getSubscriptionTokenForLiveAdminInquiriesMineUpdate();
+  } else {
+    const response = await httpClient.get("/api/token/subscription/admin/inquiry-updates/");
+    return response.data;
+  }
 }
 
 export const getSubscriptionTokenForLiveAdminInquiryChat = async (inquiryId: string) => {

@@ -89,8 +89,6 @@ export const getUserPostComments = async (
     searchParams.set('search', search);
   }
 
-  console.log(searchParams.toString());
-
   const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/admin/users/${userId}/comments/?${searchParams.toString()}`);
   return response.data as MyPageCommentsPaginationResult;
 }
@@ -128,34 +126,80 @@ export const getUser = async (userId: string) => {
   return response.data as IUser;
 }
 
-export const getAllInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/?page=${page}`);
+export const getAllInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
 }
 
-export const getUnassignedInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/unassigned/?page=${page}`);
+export const getUnassignedInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/unassigned/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
 }
 
-export const getAssignedInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/assigned/?page=${page}`);
+export const getAssignedInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/assigned/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
 }
 
-export const getSolvedInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/solved/?page=${page}`);
+export const getSolvedInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/solved/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
 }
 
-export const getUnsolvedInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/unsolved/?page=${page}`);
+export const getUnsolvedInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/unsolved/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
 }
 
-export const getMyInquiries = async (page: number) => {
-  const response = await httpClient.get<UserInquiriesPaginationResult>(`/api/admin/inquiries/mine/?page=${page}`);
+export const getMyInquiries = async (page: number, search?: string) => {
+  let url = `/api/admin/inquiries/mine/?page=${page}`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+
+  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
   return response.data as UserInquiriesPaginationResult;
+}
+
+export const getInquiries = async (page: number, filter?: string, search?: string) => {
+  if (filter === 'unassigned') {
+    return await getUnassignedInquiries(page, search);
+  } else if (filter === 'assigned') {
+    return await getAssignedInquiries(page, search);
+  } else if (filter === 'unsolved') {
+    return await getUnsolvedInquiries(page, search);
+  } else if (filter === 'solved') {
+    return await getSolvedInquiries(page, search);
+  } else if (filter === 'mine') {
+    return await getMyInquiries(page, search);
+  } else {
+    return await getAllInquiries(page, search);
+  }
 }
 
 export const createInquiryMessage = async (inquiryId: string, message: string) => {
@@ -231,7 +275,7 @@ export const getReport = async (reportId: string) => {
 }
 
 export const updateUserFavoriteTeams = async (userId: number, teams: Team[]) => {
-  const teamIds : {id: number}[] = [];
+  const teamIds : {id: string}[] = [];
   for (let i = 0; i < teams.length; i++) {
     teamIds.push({id: teams[i].id});
   };

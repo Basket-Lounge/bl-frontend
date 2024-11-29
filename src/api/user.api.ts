@@ -11,9 +11,22 @@ import {
   UserInquiryWithUserData, 
   UserLikes 
 } from "@/models/user.models";
-import { httpClient } from "./http";
+import { httpClient, httpClientFormData } from "./http";
 import { TeamPostPaginationResult } from "@/models/team.models";
+import { IInitialLoginResponse, IRefreshTokenResponse } from "@/models/auth.models";
 
+
+export const getAuthTokens = async (
+  code: string
+) => {
+  const response = await httpClientFormData.post<IInitialLoginResponse>("/dj-rest-auth/google/", { code });
+  return response.data as IInitialLoginResponse;
+}
+
+export const removeAuthTokens = async () => {
+  const response = await httpClient.delete('/api/token/refresh/');
+  return response;
+}
 
 export const getAllRoles = async () => {
   const response = await httpClient.get<IRole[]>('/api/users/roles/');
@@ -25,18 +38,72 @@ export const getMyInfo = async () => {
   return response.data;
 }
 
-export const getMyPosts = async (page: number) => {
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/me/posts/?page=${page}`);
+export const getMyPosts = async (
+  page: number,
+  data: {
+    search?: string,
+    sort?: string,
+  }
+) => {
+  const { search, sort } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/me/posts/?${searchParams.toString()}`);
   return response.data as TeamPostPaginationResult;
 }
 
-export const getMyComments = async (page: number) => {
-  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/me/comments/?page=${page}`);
+export const getMyComments = async (
+  page: number,
+  data: {
+    search?: string,
+    sort?: string,
+  }
+) => {
+  const { search, sort } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/me/comments/?${searchParams.toString()}`);
   return response.data as MyPageCommentsPaginationResult;
 }
 
-export const getMyChats = async (page: number) => {
-  const response = await httpClient.get<UserChatsPaginationResult>(`/api/users/me/chats/?page=${page}`);
+export const getMyChats = async (
+  page: number,
+  data: {
+    search?: string,
+    sort?: string,
+  }
+) => {
+  const { search, sort } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<UserChatsPaginationResult>(`/api/users/me/chats/?${searchParams.toString()}`);
   return response.data as UserChatsPaginationResult;
 }
 
@@ -60,8 +127,27 @@ export const getUserInfo = async (userId: number) => {
   return response.data;
 }
 
-export const getUserPosts = async (userId: number, page: number) => {
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/${userId}/posts/?page=${page}`);
+export const getUserPosts = async (
+  userId: number, 
+  page: number, 
+  data: {
+    search?: string,
+    sort?: string,
+  }
+) => {
+  const { search, sort } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/${userId}/posts/?${searchParams.toString()}`);
   return response.data as TeamPostPaginationResult;
 }
 
@@ -95,8 +181,27 @@ export const createInquiryMessage = async (inquiryId: string, message: string) =
   return response.data;
 }
 
-export const getUserComments = async (userId: number, page: number) => {
-  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/${userId}/comments/?page=${page}`);
+export const getUserComments = async (
+  userId: number, 
+  page: number, 
+  data: { 
+    sort?: string, 
+    search?: string 
+  }
+) => {
+  const { sort, search } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/${userId}/comments/?${searchParams.toString()}`);
   return response.data as MyPageCommentsPaginationResult;
 }
 
@@ -167,4 +272,30 @@ export const createReport = async (
     }
   );
   return response.data;
+}
+
+export const updateUser = async (
+  data: {
+    introduction?: string,
+    is_profile_visible?: boolean,
+    username?: string,
+    chat_blocked?: boolean,
+  }
+) => {
+  const { introduction, is_profile_visible, chat_blocked, username } = data;
+  if (
+    !introduction && 
+    is_profile_visible === undefined && 
+    chat_blocked === undefined &&
+    !username
+  ) {
+    throw new Error('At least one of the parameters should be provided');
+  }
+
+  const response = await httpClient.patch<IUser>(
+    `/api/users/me/`, 
+    { introduction, is_profile_visible, chat_blocked, username }
+  );
+
+  return response.data as IUser;
 }
