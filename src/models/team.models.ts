@@ -1,5 +1,7 @@
 import { LineScore } from "./game.models";
 
+export type TSection = "general-info" | "players" | "schedule" | "posts";
+
 export interface TeamNameSet {
     language: {
         name: string;
@@ -103,11 +105,12 @@ interface Stats {
 }
 
 export interface Team {
-    id: number;
+    id: string;
     teamname_set: TeamNameSet[];
     symbol: string;
     stats?: Stats;
     linescore?: LineScore;
+    favorite?: boolean;
 }
 
 export interface TeamWithLikes extends Team {

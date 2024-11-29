@@ -1,4 +1,3 @@
-
 export interface IRole {
   id: number;
   name: string;
@@ -25,6 +24,7 @@ export interface IUser {
   likes_count: number;
   liked?: boolean;
   chat_blocked: boolean;
+  favorite_team: {id: string, symbol: string};
 }
 
 export interface IUpdateUserIntroduction {

@@ -2,6 +2,8 @@ import { Team } from "./team.models";
 
 type TTeamWithoutStats = Omit<Team, "stats">;
 
+export type TSection = "summary" | "box-score" | "play-by-play" | "live-chat";
+
 export interface Game {
     game_id: string;
     line_scores?: LineScore[];
@@ -139,7 +141,7 @@ export interface PlayerStatistics {
         last_name: string;
     },
     team: {
-        id: number;
+        id: string;
     };
     status: string;
     order: number;

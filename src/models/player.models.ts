@@ -80,29 +80,14 @@ export interface PlayerCareerStats {
 // }
 
 export interface PlayerSeasonStats {
-  id: number;
-  season_id: string;
-  player_age: number;
   games_played: number;
-  games_started: number;
-  minutes: number;
-  field_goals_made: number;
-  field_goals_attempted: number;
   field_goals_percentage: number;
-  three_point_field_goals_made: number;
-  three_point_field_goals_attempted: number;
-  three_point_field_goals_percentage: number;
-  free_throws_made: number;
-  free_throws_attempted: number;
+  three_pointers_percentage: number;
   free_throws_percentage: number;
-  rebounds_offensive: number;
-  rebounds_defensive: number;
   rebounds_total: number;
   assists: number;
   steals: number;
   blocks: number;
-  turnovers: number;
-  personal_fouls: number;
   points: number;
 }
 
