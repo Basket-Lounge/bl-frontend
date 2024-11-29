@@ -4,6 +4,7 @@ import Image from "next/image";
 import UserHeaderLikeButton from "./UserHeaderLikeButton";
 import UserHeaderChatButton from "./UserHeaderChatButton";
 import UserHeaderReportButton from "./UserHeaderReportButton";
+import { useAuthStore } from "@/stores/auth.stores";
 
 
 interface IUserHeaderProps {
@@ -11,6 +12,10 @@ interface IUserHeaderProps {
 }
 
 export default function UserHeader({ user }: IUserHeaderProps) {
+  const {
+    userId
+  } = useAuthStore();
+
   return (
     <div className="flex gap-[48px] items-start justify-between">
       {/* Team Logo */}
@@ -40,10 +45,12 @@ export default function UserHeader({ user }: IUserHeaderProps) {
       </div>
       <div className="flex flex-col items-end gap-[16px]">
         <UserHeaderLikeButton liked={user.liked || false} likesCount={user.likes_count} />
-        <div className="flex gap-[16px] items-center">
-          <UserHeaderChatButton />
-          <UserHeaderReportButton />
-        </div>
+        {userId && (
+          <div className="flex gap-[16px] items-center">
+            { (user.id === userId || user.chat_blocked) ? null : <UserHeaderChatButton /> }
+            { user.id === userId ? null : <UserHeaderReportButton /> }
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,17 +1,24 @@
-import UserPostsFilterButton from "./UserPostsFilterButton";
-import UserPostsSearchBox from "./UserPostsSearchBox";
+import { useContext } from "react";
+import FilterButton from "../common/FilterButton";
+import SearchBox from "../common/SearchBox";
+import UserPostsSortButtonOptionsContainer from "./UserPostsSortButtonOptionsContainer";
+import { UserStoreContext } from "@/stores/users.stores";
+import { useStore } from "zustand";
 
 
 const UserPostsFilter = () => {
+  const store = useContext(UserStoreContext);
+  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+
   return (
     <div className="flex justify-between items-end">
       <div className="flex gap-[24px]">
-        <UserPostsFilterButton name="전체" queryKey="all" />
-        <UserPostsFilterButton name="최근" queryKey="recent" />
-        <UserPostsFilterButton name="인기" queryKey="popular" />
+        <FilterButton name="정렬">
+          <UserPostsSortButtonOptionsContainer />
+        </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <UserPostsSearchBox />
+        <SearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
       </div>
     </div>
   );

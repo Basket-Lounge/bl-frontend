@@ -2,7 +2,7 @@
 
 import { getReportTypes } from "@/api/user.api";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { UserStoreContext } from "../layout";
+import { UserStoreContext } from '@/stores/users.stores';
 import { useContext } from "react";
 import { useStore } from "zustand";
 import UserReportCreateTitle from "@/components/my-page/UserReportCreateTitle";
