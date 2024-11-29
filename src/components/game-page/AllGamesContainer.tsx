@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import AllGamesFilter from "./AllGamesFilter";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AllGamesStoreContext } from "@/app/games/layout";
 import { useStore } from "zustand";
 import { useCallback, useContext, useEffect } from "react";
 import { getGames } from "@/api/game.api";
 import TeamPostsPagination from "../team-page/TeamPostsPagination";
 import { sortGamesByDate } from "@/utils/game.utils";
 import AllGamesContainerPerDate from "./AllGamesContainerPerDate";
+import { AllGamesStoreContext } from "@/stores/games.stores";
 
 
 const AllGamesContainer = () => {
@@ -69,7 +69,11 @@ const AllGamesContainer = () => {
       <div className="flex flex-col items-stretch gap-[16px]">
         <h3 className="text-[20px] font-bold">2024-25시즌 전체 스케쥴 📅</h3>
         <AllGamesFilter />
-        <div>Loading...</div>
+        <div className="grid grid-cols-4 gap-[16px] w-full animate-pulse">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="bg-color3 rounded-md h-[300px]" />
+          ))}
+        </div>
       </div>
     )
   }

@@ -3,28 +3,9 @@
 import { getGameGeneralInfo } from "@/api/game.api";
 import GameHeader from "@/components/game-page/GameHeader";
 import GameSectionOptions from "@/components/game-page/GameSectionOptions";
+import { GameStore, GameStoreContext } from "@/stores/games.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createContext } from "react";
-import { createStore } from "zustand";
 
-
-interface IGameStore {
-  boxScoreTeamId: number | null;
-  setBoxScoreTeamId: (teamName: number | null) => void;
-  subscriptionToken: string | null;
-  setSubscriptionToken: (token: string | null) => void;
-}
-
-export type TSection = "summary" | "box-score" | "play-by-play" | "live-chat";
-
-const GameStore = createStore<IGameStore>((set) => ({
-  boxScoreTeamId: null,
-  setBoxScoreTeamId: (teamName) => set({ boxScoreTeamId: teamName }),
-  subscriptionToken: null,
-  setSubscriptionToken: (token) => set({ subscriptionToken: token }),
-}));
-
-export const GameStoreContext = createContext(GameStore);
 
 export default function GamePage({ params, children }: {
   params: { gameId: string },

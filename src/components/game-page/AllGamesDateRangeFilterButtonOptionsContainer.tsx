@@ -3,8 +3,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
 import { DateRange, DayPicker } from "react-day-picker";
 import 'react-day-picker/dist/style.css';
-import { AllGamesStoreContext } from "@/app/games/layout";
 import { useStore } from "zustand";
+import { AllGamesStoreContext } from "@/stores/games.stores";
 
 
 const AllGamesDateRangeFilterButtonOptionsContainer = () => {
@@ -29,12 +29,12 @@ const AllGamesDateRangeFilterButtonOptionsContainer = () => {
   const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     if (range.from) {
-      params.set(queryKey + "-start", range.from.toUTCString())
+      params.set(queryKey + "-start", range.from.toISOString())
     } else {
       params.delete(queryKey + "-start")
     }
     if (range.to) {
-      params.set(queryKey + "-end", range.to.toUTCString())
+      params.set(queryKey + "-end", range.to.toISOString())
     } else {
       params.delete(queryKey + "-end")
     }
@@ -68,7 +68,7 @@ const AllGamesDateRangeFilterButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="w-[350px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[150%] left-0"
+      className="w-[350px] bg-color3 rounded-md p-[24px] z-20 flex gap-[16px] flex-wrap top-[150%] left-0"
     >
       <Popover 
         placement="bottom"
@@ -97,6 +97,7 @@ const AllGamesDateRangeFilterButtonOptionsContainer = () => {
           placeholder={undefined} 
           onPointerEnterCapture={undefined} 
           onPointerLeaveCapture={undefined}
+          className="z-30"
         >
           <DayPicker
             mode="range"

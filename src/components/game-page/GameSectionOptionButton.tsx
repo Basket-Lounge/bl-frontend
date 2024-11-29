@@ -1,4 +1,4 @@
-import { TSection } from "@/app/games/[gameId]/layout";
+import { TSection } from "@/models/game.models";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
 

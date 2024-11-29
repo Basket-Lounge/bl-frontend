@@ -43,7 +43,11 @@ const AllGamesContainerPerDateItem = ({ game }: IAllGamesContainerPerDateItemPro
             height={40}
           />
           <p className="text-[20px]">{game.visitor_team.symbol}</p>
-          <p className="text-[24px] font-semibold">{visitorTeamTotalPoints}</p>
+          {game.game_status_id === 1 ? (
+            <p className="text-[24px]">-</p>
+          ) : (
+            <p className="text-[24px] font-semibold">{visitorTeamTotalPoints}</p>
+          )}
         </div>
         <p className="text-[16px] font-semibold w-1/3 text-center">VS</p>
         <div className="flex flex-col items-center gap-[16px] w-1/3">
@@ -58,11 +62,23 @@ const AllGamesContainerPerDateItem = ({ game }: IAllGamesContainerPerDateItemPro
             height={40}
           />
           <p className="text-[20px]">{game.home_team.symbol}</p>
-          <p className="text-[24px] font-semibold">{homeTeamTotalPoints}</p>
+          {game.game_status_id === 1 ? (
+            <p className="text-[24px]">-</p>
+          ) : (
+            <p className="text-[24px] font-semibold">{homeTeamTotalPoints}</p>
+          )}
         </div>
       </div>
       <div className="flex items-center justify-center">
-        <p className="text-[16px]">{gameDate} {gameTime}</p>
+        {game.game_status_id === 1 && (
+          <p className="text-[16px]">{gameDate} {gameTime}</p>
+        )}
+        {game.game_status_id === 2 && (
+          <p className="text-[16px]">진행중</p>
+        )}
+        {game.game_status_id === 3 && (
+          <p className="text-[16px]">경기종료</p>
+        )}
       </div>
       <button 
         className="py-[8px] bg-color1 text-white font-bold text-[16px] rounded-full"

@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import GameLiveChatBoxMessage from "./GameLiveChatBoxMessage";
 import GameLiveChatBoxInput from "./GameLiveChatBoxInput";
 import { useStore } from "zustand";
-import { GameStoreContext } from "@/app/games/[gameId]/layout";
+import { GameStoreContext } from "@/stores/games.stores";
 
 
 const GameLiveChatBox = () => {
@@ -27,12 +27,15 @@ const GameLiveChatBox = () => {
   };
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
-      getToken: async () => {
-        const data = await getConnectionToken();
-        return data.token;
+    const client = new Centrifuge(
+      `${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, 
+      {
+        getToken: async () => {
+          const data = await getConnectionToken();
+          return data.token;
+        }
       }
-    });
+    );
     client.on('connecting', (ctx) => {
       setIsLoading(true);
       setConnected(false);

@@ -1,4 +1,4 @@
-import { GameStoreContext } from "@/app/games/[gameId]/layout";
+import { GameStoreContext } from "@/stores/games.stores";
 import { PlayerStatistics } from "@/models/game.models";
 import { useContext } from "react";
 import { useStore } from "zustand";
@@ -6,7 +6,7 @@ import GameBoxScorePlayerStatsLine from "./GameBoxScorePlayerStatsLine";
 
 
 const GameBoxScorePlayerStats = (
-  { teamId, teamName, players }: { teamId: number, teamName: string, players: PlayerStatistics[] }
+  { teamId, teamName, players }: { teamId: string, teamName: string, players: PlayerStatistics[] }
 ) => {
   const store = useContext(GameStoreContext);
   const currentBoxScoreTeamId = useStore(store, (state) => state.boxScoreTeamId);

@@ -1,11 +1,11 @@
-import { GameStoreContext } from "@/app/games/[gameId]/layout";
+import { GameStoreContext } from "@/stores/games.stores";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
 
 interface IGameBoxScoreTeamFilterButtonProps {
   name: string;
-  queryKey: number | null;
+  queryKey: string | null;
 };
 
 const GameBoxScoreTeamFilterButton: React.FC<IGameBoxScoreTeamFilterButtonProps> = ({ name, queryKey }) => {

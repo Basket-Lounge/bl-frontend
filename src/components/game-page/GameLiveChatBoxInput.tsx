@@ -1,5 +1,5 @@
 import { sendGameChatMessage } from "@/api/game.api";
-import { GameStoreContext } from "@/app/games/[gameId]/layout";
+import { GameStoreContext } from "@/stores/games.stores";
 import { useParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { useStore } from "zustand";

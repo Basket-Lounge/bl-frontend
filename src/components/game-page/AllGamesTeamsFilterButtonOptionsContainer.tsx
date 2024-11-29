@@ -3,9 +3,8 @@ import { useCallback, useContext, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getAllTeams } from "@/api/team.api";
 import { useStore } from "zustand";
-import { AdminPageStoreContext } from "@/app/admin/layout";
 import AdminUsersFilterButtonOption from "../admin-page/AdminUsersFilterButtonOption";
-import { AllGamesStoreContext } from "@/app/games/layout";
+import { AllGamesStoreContext } from "@/stores/games.stores";
 
 
 const AllGamesTeamsFilterButtonOptionsContainer = () => {
