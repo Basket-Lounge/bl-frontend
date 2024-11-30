@@ -1,14 +1,14 @@
 'use client'
 
-import { useCallback, useEffect } from "react";
-
-import { createContext } from 'react';
+import { createContext, useEffect } from 'react';
 import { createStore, useStore } from 'zustand';
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import { useAuthStore } from "@/stores/auth.stores";
 
 import { ThemeProvider } from "@material-tailwind/react";
+import useDebounce from '@/hooks/useDebounce';
+
 
 interface IPageSizeControllerStore {
   pageWidth: number;
@@ -27,6 +27,27 @@ const PageSizeController = ({ children }: { children: React.ReactNode }) => {
   const {
     authenticationAttempted
   } = useStore(useAuthStore);
+  const { setPageWidth } = useStore(pageSizeControllerStore);
+
+  const setWidthDebounceCallback = useDebounce(() => {
+    setPageWidth(window.innerWidth);
+  }, 100);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWidthDebounceCallback();
+    }
+
+    setPageWidth(window.innerWidth);
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  }, []);
 
   return (
     <ThemeProvider>

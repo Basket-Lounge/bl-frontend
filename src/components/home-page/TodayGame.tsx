@@ -13,7 +13,7 @@ export default function TodayGame({ game }: ITodayGameProps) {
   
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push(`/games/${game.game_id}`);
+    router.push(`/games/${game.game_id}/summary`);
   }
 
   const gameDateTime = displayGameTimeForGameBox(

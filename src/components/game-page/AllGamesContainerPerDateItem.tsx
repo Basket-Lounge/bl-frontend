@@ -46,7 +46,7 @@ const AllGamesContainerPerDateItem = ({ game }: IAllGamesContainerPerDateItemPro
           {game.game_status_id === 1 ? (
             <p className="text-[24px]">-</p>
           ) : (
-            <p className="text-[24px] font-semibold">{visitorTeamTotalPoints}</p>
+            <p className="text-[24px] font-medium">{visitorTeamTotalPoints}</p>
           )}
         </div>
         <p className="text-[16px] font-semibold w-1/3 text-center">VS</p>
@@ -65,7 +65,7 @@ const AllGamesContainerPerDateItem = ({ game }: IAllGamesContainerPerDateItemPro
           {game.game_status_id === 1 ? (
             <p className="text-[24px]">-</p>
           ) : (
-            <p className="text-[24px] font-semibold">{homeTeamTotalPoints}</p>
+            <p className="text-[24px] font-medium">{homeTeamTotalPoints}</p>
           )}
         </div>
       </div>

@@ -56,12 +56,11 @@ const AllGamesTeamsFilterButtonOptionsContainer = () => {
   const handleResetClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setTeams([]);
-    e.stopPropagation();
   }
 
   if (allTeamsQuery.isLoading) {
     return (
-      <div className="w-[350px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[150%] left-0">
+      <div className="w-[350px] bg-color3 rounded-md p-[24px] z-30 flex gap-[16px] flex-wrap top-[150%] left-0">
         로딩중...
       </div>
     )
@@ -69,7 +68,7 @@ const AllGamesTeamsFilterButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="w-[500px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[150%] left-0"
+      className="w-[500px] bg-color3 rounded-md p-[24px] z-30 flex gap-[16px] flex-wrap top-[150%] left-0"
     >
       {allTeamsQuery.data?.map((team) => (
         <AdminUsersFilterButtonOption

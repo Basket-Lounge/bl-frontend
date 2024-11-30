@@ -1,9 +1,8 @@
 import { getPopularPosts } from "@/api/team.api";
 import { useQuery } from "@tanstack/react-query";
-import TodayPopularPost from "./TodayPopularPost";
 import TodayPopularPostSkeleton from "./TodayPopularPostSkeleton";
-import { Carousel } from "@material-tailwind/react";
 import { TeamPost } from "@/models/team.models";
+import TodayPopularPostsListController from "./TodayPopularPostsListController";
 
 
 const TodayPopularPostsContainer = () => {
@@ -13,16 +12,6 @@ const TodayPopularPostsContainer = () => {
       return await getPopularPosts();
     }
   });
-
-  // divide the games into lists of 3
-  const dividePosts = (posts: TeamPost[]) => {
-    const postLists = [];
-    for (let i = 0; i < posts.length; i += 2) {
-      postLists.push(posts.slice(i, i + 2));
-    }
-
-    return postLists;
-  };
 
   if (popularPostsQuery.isLoading || popularPostsQuery.isRefetching) {
     return (
@@ -55,23 +44,7 @@ const TodayPopularPostsContainer = () => {
   return (
     <div>
       <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>
-      <Carousel
-        placeholder={undefined} 
-        onPointerEnterCapture={undefined} 
-        onPointerLeaveCapture={undefined}
-        className="mt-[16px] w-full"
-      >
-        {dividePosts(popularPostsQuery.data!.results).map((postsList, index) => (
-          <div key={index} className="grid grid-cols-2 gap-[16px] mx-auto">
-            {postsList.map((post) => (
-              <TodayPopularPost 
-                key={post.id}
-                post={post}
-              />
-            ))}
-          </div>
-        ))}
-      </Carousel>
+      <TodayPopularPostsListController posts={popularPostsQuery.data!.results} />
     </div>
   )
 }
