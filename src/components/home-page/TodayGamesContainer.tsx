@@ -32,10 +32,10 @@ export default function TodayGamesContainer() {
       <div>
         <h3 className="text-[20px] font-bold">오늘의 경기</h3>
         <div className="h-[200px] flex flex-col gap-[16px] items-center justify-center">
-          <p className="font-bold text-[32px]">
+          <p className="font-bold text-[24px] lg:text-[32px]">
             (つ╥﹏╥)つ
           </p>
-          <p className="font-bold text-[24px]">
+          <p className="font-bold text-[16px] lg:text-[24px]">
             오늘은 경기가 없습니다.
           </p>
         </div>

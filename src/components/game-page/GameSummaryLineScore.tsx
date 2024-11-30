@@ -15,7 +15,7 @@ const GameSummaryLineScore = ({homeTeam, awayTeam}: IGameSummaryLineScoreProps) 
 
   return (
     <div className="flex flex-col gap-[16px] item-stretch">
-      <h3 className="text-white text-[16px] lg:text-[20px] font-bold">라인스코어</h3>
+      <h3 className="text-white text-[20px] font-bold">라인스코어</h3>
       <div
         className="p-[24px] bg-color3 rounded-md flex"
       >

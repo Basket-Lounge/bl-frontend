@@ -22,8 +22,8 @@ export default function GameSectionOptionButton(
   return (
     <button
       className={pathname.includes(designatedSection) ? 
-        "font-extrabold lg:text-[16px] text-[14px]" : 
-        "font-medium lg:text-[16px] text-[14px]"
+        "font-extrabold text-[16px]" : 
+        "font-medium text-[16px]"
       }
       onClick={handleClick}
     >

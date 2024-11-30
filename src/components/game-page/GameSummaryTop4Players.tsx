@@ -44,7 +44,7 @@ const GameSummaryTop4Players = () => {
 
   return (
     <div className="flex flex-col gap-[16px] lg:gap-[16px] item-stretch">
-      <h3 className="text-white text-[16px] lg:text-[20px] font-bold">해당 경기 TOP 4 🔥</h3>
+      <h3 className="text-white text-[20px] font-bold">해당 경기 TOP 4 🔥</h3>
       <div className="flex gap-[32px]">
         <GameSummaryTop4PlayersCarousel stats={playersStatsQuery.data!} />
         {/* Top 4 Players

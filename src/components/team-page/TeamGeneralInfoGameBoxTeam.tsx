@@ -20,9 +20,9 @@ const TeamGeneralInfoGameBoxTeam : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
     <div className="flex items-center justify-between">
       {/* 사진 */}
       <div className="flex items-center gap-[16px]">
-        <div className="w-[48px] h-[48px] bg-transparent rounded-full relative">
+        <div className="w-[48px] bg-transparent rounded-full relative">
           <Image
-            className="w-auto h-[100%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
+            className="w-full h-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
             src={'/logos/' + team.symbol.toLowerCase() + '.svg'}
             alt="team-logo"
             width={20}

@@ -24,7 +24,7 @@ const GameBoxScoreTeamFilterButton: React.FC<IGameBoxScoreTeamFilterButtonProps>
   return (
     <button
       onClick={handleClick}
-      className={"text-[14px] font-semibold px-[32px] py-[2px] rounded-full " + bgColor + " " + textColor}
+      className={"w-fit text-[14px] font-semibold px-[32px] py-[2px] rounded-full " + bgColor + " " + textColor}
     >
       {name}
     </button>

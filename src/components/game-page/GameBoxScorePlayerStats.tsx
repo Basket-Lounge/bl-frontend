@@ -19,17 +19,17 @@ const GameBoxScorePlayerStats = (
         className="p-[24px] bg-color3 rounded-md flex"
       >
         <div className="divide-y divide-white">
-          <div className="py-[16px]"> 
+          <div className="py-[16px] text-[14px] lg:text-[16px]">
             <p className="w-[200px] font-semibold">선수 이름</p>
           </div>
           { players.length > 0 && players.map((player, index) => (
-            <div className="py-[16px]">
+            <div className="py-[16px] flex">
               <p className="w-[200px] font-semibold">{player.player.first_name} {player.player.last_name}</p>
             </div>
           ))}
         </div>
         <div className="overflow-x-auto w-[1330px] divide-y divide-white">
-          <div className="py-[16px] w-[1330px] flex">
+          <div className="py-[16px] w-[1330px] flex text-[14px] lg:text-[16px]">
             <p className="w-[70px] font-semibold text-right">MIN</p>
             <p className="w-[70px] font-semibold text-right">FGM</p>
             <p className="w-[70px] font-semibold text-right">FGA</p>

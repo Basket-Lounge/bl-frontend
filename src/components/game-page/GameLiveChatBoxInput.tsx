@@ -1,5 +1,6 @@
 import { sendGameChatMessage } from "@/api/game.api";
 import { GameStoreContext } from "@/stores/games.stores";
+import { useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { useStore } from "zustand";
@@ -7,34 +8,31 @@ import { useStore } from "zustand";
 
 const GameLiveChatBoxInput = () => {
   const { gameId } = useParams();
-
   const [ message, setMessage ] = useState<string>('');
-  const [ isSending, setIsSending ] = useState<boolean>(false);
-  const [ error, setError ] = useState<string | null>(null);
 
   const store = useContext(GameStoreContext);
   const subscriptionToken = useStore(store, (state) => state.subscriptionToken);
 
-  const handleSendMessageClick = async () => {
-    setIsSending(true);
-    setError(null);
-    
-    const status = await sendGameChatMessage(
-      gameId as string, 
-      message,
-      subscriptionToken as string
-    );
-
-    if (status !== 201) {
-      setError("메시지 전송에 실패했습니다.");
+  const sendMessageMutation = useMutation({
+    mutationFn: () => {
+      return sendGameChatMessage(
+        gameId as string, 
+        message,
+        subscriptionToken as string
+      );
+    },
+    onSuccess: () => {
+      setMessage('');
     }
+  });
 
-    setMessage('');
-    setIsSending(false);
+  const handleSendMessageClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    sendMessageMutation.mutate();
   }
 
   return (
-    <div className="border border-white rounded-full py-[12px] px-[20px] flex items-center">
+    <div className="border border-white rounded-full py-[8px] lg:py-[12px] px-[20px] flex items-center">
       <input
         type="text"
         placeholder="메시지를 입력하세요"
@@ -44,9 +42,10 @@ const GameLiveChatBoxInput = () => {
       />
       <button 
         className="bg-color1 text-white rounded-full px-[16px] py-[8px] ml-[16px]"
-        onClick={(e) => handleSendMessageClick()}
+        onClick={handleSendMessageClick}
+        disabled={sendMessageMutation.isPending}
       >
-        전송
+        {sendMessageMutation.isPending ? '전송중...' : '전송'}
       </button>
     </div>
   )

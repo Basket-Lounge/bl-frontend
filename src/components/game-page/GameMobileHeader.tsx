@@ -52,11 +52,11 @@ export default function GameMobileHeader({ game }: { game: IGameWithTeamStats })
       <div className="flex justify-between items-center mt-[20px]">
         <div className="flex flex-col items-start gap-[12px]">
           <p className="text-[16px] font-bold">{visitorTeamEnglishName}</p>
-          <p className="text-[14px] font-medium">{visitorTeamKoreanName}</p>
+          <p className="text-[16px] font-medium">{visitorTeamKoreanName}</p>
         </div>
         <div className="flex flex-col items-end gap-[12px]">
           <p className="text-[16px] font-bold">{homeTeamEnglishName}</p>
-          <p className="text-[14px] font-medium">{homeTeamKoreanName}</p>
+          <p className="text-[16px] font-medium">{homeTeamKoreanName}</p>
         </div>
       </div>
     </div>

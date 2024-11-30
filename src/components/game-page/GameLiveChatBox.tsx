@@ -22,9 +22,9 @@ const GameLiveChatBox = () => {
   const store = useContext(GameStoreContext);
   const setSubscriptionToken = useStore(store, (state) => state.setSubscriptionToken);
 
-  const reconnect = () => {
-    setConnectionAttempt(attempt => attempt + 1);
-  };
+  // const reconnect = () => {
+  //   setConnectionAttempt(attempt => attempt + 1);
+  // };
 
   useEffect(() => {
     const client = new Centrifuge(
@@ -61,9 +61,6 @@ const GameLiveChatBox = () => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
       console.log(ctx);
       setMessages((prevMessages) => [...prevMessages, ctx.data]);
@@ -87,16 +84,16 @@ const GameLiveChatBox = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[16px] item-stretch">
-      <h3 className="text-white text-[20px] font-bold">실시간 채팅방 🗣️</h3>
-      <div className="rounded-md bg-color3 p-[24px] h-[700px] flex flex-col items-stretch gap-[24px]">
-        <div className="flex flex-col items-stretch gap-[16px] justify-end grow">
-          {/* Chat Messages */}
-          {messages.map((message, index) => (
-            <GameLiveChatBoxMessage key={index} message={message} />
-          ))}
+    <div className="flex flex-col gap-[16px] items-stretch h-screen">
+      <h3 className="text-white text-[20px] font-bold w-full">실시간 채팅방 🗣️</h3>
+      <div className="rounded-md bg-color3 p-[24px] flex flex-col items-stretch gap-[24px] grow overflow-y-auto">
+        <div className="grow overflow-auto flex flex-col items-stretch">
+          <div className="flex flex-col items-stretch gap-[16px] justify-end w-full">
+            {messages.map((message, index) => (
+              <GameLiveChatBoxMessage key={index} message={message} />
+            ))}
+          </div>
         </div>
-        {/* Chat Input */}
         <GameLiveChatBoxInput />
       </div>
     </div>
