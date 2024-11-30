@@ -15,23 +15,23 @@ const GameSummaryLineScore = ({homeTeam, awayTeam}: IGameSummaryLineScoreProps) 
 
   return (
     <div className="flex flex-col gap-[16px] item-stretch">
-      <h3 className="text-white text-[20px] font-bold">라인스코어</h3>
+      <h3 className="text-white text-[16px] lg:text-[20px] font-bold">라인스코어</h3>
       <div
         className="p-[24px] bg-color3 rounded-md flex"
       >
-        <div className="divide-y divide-white">
-          <div className="pb-[16px]"> 
-            <p className="w-[50px] font-semibold">팀</p>
+        <div className="divide-y divide-white w-fit lg:w-[50px]">
+          <div className="pb-[16px] text-[14px] lg:text-[16px]"> 
+            <p className="font-semibold">팀</p>
           </div>
           <div className="py-[16px]">
-            <p className="w-[50px] font-semibold">{awayTeam.symbol}</p>
+            <p className="font-semibold">{awayTeam.symbol}</p>
           </div>
           <div className="pt-[16px]">
-            <p className="w-[50px] font-semibold">{homeTeam.symbol}</p>
+            <p className="font-semibold">{homeTeam.symbol}</p>
           </div>
         </div>
         <div className="overflow-x-auto flex-grow divide-y divide-white">
-          <div className={`pb-[16px] flex grow`}>
+          <div className='pb-[16px] flex grow text-[14px] lg:text-[16px]'>
             { awayTeamScoresPerPeriod.map((score, index) => (
               <p key={index} className="grow font-semibold text-right">{GAME_PERIODS[index]}</p>
             ))}

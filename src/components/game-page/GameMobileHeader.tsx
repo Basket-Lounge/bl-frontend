@@ -2,16 +2,9 @@ import { IGameWithTeamStats, LineScore } from "@/models/game.models";
 import { calculateTotalPoints } from "@/utils/game.utils";
 import { extractTeamEnglishName, extractTeamKoreanName } from "@/utils/team.utils";
 import Image from "next/image";
-import { useContext } from "react";
-import { pageSizeControllerStoreContext } from "../common/PageSizeController";
-import { useStore } from "zustand";
-import GameMobileHeader from "./GameMobileHeader";
 
 
-export default function GameHeader({ game }: { game: IGameWithTeamStats }) {
-  const store = useContext(pageSizeControllerStoreContext);
-  const { pageWidth } = useStore(store);
-
+export default function GameMobileHeader({ game }: { game: IGameWithTeamStats }) {
   const homeTeamScore = calculateTotalPoints(game.home_team.linescore as LineScore);
   const visitorTeamScore = calculateTotalPoints(game.visitor_team.linescore as LineScore);
   
@@ -20,10 +13,6 @@ export default function GameHeader({ game }: { game: IGameWithTeamStats }) {
 
   const visitorTeamEnglishName = extractTeamEnglishName(game.visitor_team);
   const visitorTeamKoreanName = extractTeamKoreanName(game.visitor_team);
-
-  if (pageWidth < 768) {
-    return <GameMobileHeader game={game} />
-  }
 
   return (
     <div className="">
@@ -34,27 +23,27 @@ export default function GameHeader({ game }: { game: IGameWithTeamStats }) {
       {/* Team Logos and Scores */}
       <div className="flex justify-between items-center mt-[16px]">
         <div className="flex justify-between items-center gap-[48px]">
-          <div className="flex items-center w-[200px]">
+          <div className="flex items-center w-[64px]">
             <Image
               src={`/logos/${game.visitor_team.symbol.toLowerCase()}.svg`}
               alt="visitor-team-logo"
-              width={128}
+              width={48}
               height={24}
-              className="w-auto h-[128px]"
+              className="w-auto h-[64px]"
             />
           </div>
-          <h1 className="text-white text-[48px] font-medium w-1/2 text-center">{visitorTeamScore}</h1>
+          <h1 className="text-white text-[32px] font-medium text-center">{visitorTeamScore}</h1>
         </div>
-        <h4 className="text-white text-[16px] font-medium rounded-full py-[12px] px-[16px] border border-white">{game.game_status_text}</h4>
+        <h4 className="text-white text-[14px] font-medium rounded-full py-[8px] px-[16px] border border-white">{game.game_status_text}</h4>
         <div className="flex justify-between items-center gap-[48px]">
-          <h1 className="text-white text-[48px] font-medium w-1/2 text-center">{homeTeamScore}</h1>
-          <div className="flex items-center w-[200px] justify-end">
+          <h1 className="text-white text-[32px] font-medium text-center">{homeTeamScore}</h1>
+          <div className="flex items-center justify-end">
             <Image
               src={`/logos/${game.home_team.symbol.toLowerCase()}.svg`}
               alt="home-team-logo"
-              width={128}
+              width={48}
               height={24}
-              className="w-auto h-[128px]"
+              className="w-auto h-[64px]"
             />
           </div>
         </div>
@@ -62,12 +51,12 @@ export default function GameHeader({ game }: { game: IGameWithTeamStats }) {
       {/* Team Names */}
       <div className="flex justify-between items-center mt-[20px]">
         <div className="flex flex-col items-start gap-[12px]">
-          <p className="text-[20px] font-bold">{visitorTeamEnglishName}</p>
-          <p className="text-[16px] font-medium">{visitorTeamKoreanName}</p>
+          <p className="text-[16px] font-bold">{visitorTeamEnglishName}</p>
+          <p className="text-[14px] font-medium">{visitorTeamKoreanName}</p>
         </div>
         <div className="flex flex-col items-end gap-[12px]">
-          <p className="text-[20px] font-bold">{homeTeamEnglishName}</p>
-          <p className="text-[16px] font-medium">{homeTeamKoreanName}</p>
+          <p className="text-[16px] font-bold">{homeTeamEnglishName}</p>
+          <p className="text-[14px] font-medium">{homeTeamKoreanName}</p>
         </div>
       </div>
     </div>

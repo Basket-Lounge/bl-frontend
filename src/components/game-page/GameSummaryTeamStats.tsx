@@ -8,12 +8,12 @@ interface IGameSummaryTeamStatsProps {
 export default function GameSummaryTeamStats({game}: IGameSummaryTeamStatsProps) {
   return (
     <div className="flex flex-col gap-[16px] item-stretch mt-[24px]">
-      <h3 className="text-white text-[20px] font-bold">각종 스탯</h3>
+      <h3 className="text-white text-[16px] lg:text-[20px] font-bold">각종 스탯</h3>
       <div
         className="p-[24px] bg-color3 rounded-md flex"
       >
         <div className="divide-y divide-white">
-          <div className="pb-[16px]"> 
+          <div className="pb-[16px] text-[14px] lg:text-[16px]"> 
             <p className="w-[50px] font-semibold">팀</p>
           </div>
           <div className="py-[16px]">
@@ -24,7 +24,7 @@ export default function GameSummaryTeamStats({game}: IGameSummaryTeamStatsProps)
           </div>
         </div>
         <div className="overflow-x-auto w-[1050px] divide-y divide-white">
-          <div className="pb-[16px] w-[1050px] flex">
+          <div className="pb-[16px] w-[1050px] flex text-[14px] lg:text-[16px]">
             <p className="w-[70px] font-semibold text-right">FGM</p>
             <p className="w-[70px] font-semibold text-right">FGA</p>
             <p className="w-[70px] font-semibold text-right">FG%</p>

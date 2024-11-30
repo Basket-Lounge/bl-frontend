@@ -68,7 +68,7 @@ const AllGamesTeamsFilterButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="w-[500px] bg-color3 rounded-md p-[24px] z-30 flex gap-[16px] flex-wrap top-[150%] left-0"
+      className="w-full lg:w-[500px] bg-color3 rounded-md p-[24px] z-30 flex gap-[16px] flex-wrap top-[150%] left-0"
     >
       {allTeamsQuery.data?.map((team) => (
         <AdminUsersFilterButtonOption

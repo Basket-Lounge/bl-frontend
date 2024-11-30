@@ -23,7 +23,7 @@ export default function GamePage({ params, children }: {
   return (
     <GameStoreContext.Provider value={GameStore}>
       <div className="my-[32px] flex flex-col items-stretch gap-[24px]">
-        <h1 className="text-white text-[32px] font-bold">게임 페이지</h1>
+        <h1 className="text-white text-[24px] lg:text-[32px] font-bold">게임 페이지</h1>
         <GameHeader game={headerQuery.data} />
         <GameSectionOptions />
         {children}

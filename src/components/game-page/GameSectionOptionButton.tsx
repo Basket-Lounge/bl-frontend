@@ -7,7 +7,9 @@ interface IGameSectionOptionButtonProps {
   name: string;
 };
 
-export default function GameSectionOptionButton({ name, designatedSection }: IGameSectionOptionButtonProps) {
+export default function GameSectionOptionButton(
+  { name, designatedSection }: IGameSectionOptionButtonProps
+) {
   const router = useRouter();
   const {gameId} = useParams();
   const pathname = usePathname();
@@ -19,7 +21,10 @@ export default function GameSectionOptionButton({ name, designatedSection }: IGa
 
   return (
     <button
-      className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
+      className={pathname.includes(designatedSection) ? 
+        "font-extrabold lg:text-[16px] text-[14px]" : 
+        "font-medium lg:text-[16px] text-[14px]"
+      }
       onClick={handleClick}
     >
       {name}

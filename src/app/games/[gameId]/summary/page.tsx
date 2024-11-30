@@ -20,13 +20,13 @@ export default function SummaryPage() {
   });
 
   return (
-    <div className="flex flex-col gap-[32px] items-stretch">
+    <div className="flex flex-col gap-[24px] lg:gap-[32px] items-stretch">
       { headerQuery.data.game_status_id > 1 && (
         <GameSummaryTop4Players />
       )}
-      <div className="flex gap-[32px]">
+      <div className="lg:flex gap-[32px]">
         { headerQuery.data.game_status_id > 1 && (
-        <div className="w-1/2">
+        <div className="lg:w-1/2">
           <GameSummaryLineScore
             homeTeam={headerQuery.data.home_team}
             awayTeam={headerQuery.data.visitor_team}
@@ -36,7 +36,7 @@ export default function SummaryPage() {
           />
         </div>
         )}
-        <div className="w-1/2">
+        <div className="mt-[24px] lg:mt-0 lg:w-1/2">
           <GameSummaryGeneralInfo game={headerQuery.data} />
         </div>
       </div>
