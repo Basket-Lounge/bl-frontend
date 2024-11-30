@@ -1,11 +1,12 @@
 import { createStore, useStore } from "zustand";
 import TeamPostsPostCommentsFilter from "./TeamPostsPostCommentsFilter";
-import { createContext } from "react";
-import { useParams } from "next/navigation";
+import { createContext, useCallback, useEffect } from "react";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeamPostComments } from "@/api/team.api";
 import TeamPostsPostCommentsItem from "./TeamPostsPostCommentsItem";
-import TeamPostsPostCommentsPagination from "./TeamPostsPostCommentsPagination";
+import TeamHeaderLikeButtonSpinner from "./TeamHeaderLikeButtonSpinner";
+import TeamPostsPagination from "./TeamPostsPagination";
 
 
 interface IPostCommentsStore {
@@ -13,6 +14,8 @@ interface IPostCommentsStore {
   updatePage: (page: number) => void;
   currentCommentsFilterValue: TCommentsFilter;
   updateCurrentCommentsFilterValue: (value: TCommentsFilter) => void;
+  postCommentsArgumentsModified: boolean;
+  setPostCommentsArgumentsModified: (value: boolean) => void;
 }
 
 type TCommentsFilter = "recent" | "oldest" | "popular";
@@ -22,6 +25,8 @@ const PostCommentsStore = createStore<IPostCommentsStore>((set) => ({
   updatePage: (page) => set({ page }),
   currentCommentsFilterValue: "recent",
   updateCurrentCommentsFilterValue: (value) => set({ currentCommentsFilterValue: value }),
+  postCommentsArgumentsModified: false,
+  setPostCommentsArgumentsModified: (value) => set({ postCommentsArgumentsModified: value }),
 }));
 
 export const PostCommentsContext = createContext(PostCommentsStore);
@@ -29,24 +34,57 @@ export const PostCommentsContext = createContext(PostCommentsStore);
 
 const TeamPostsPostCommentsContainer = () => {
   const { teamId, postId } = useParams();
-  const page = useStore(PostCommentsStore, (state) => state.page);
-  const filter = useStore(PostCommentsStore, (state) => state.currentCommentsFilterValue);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const page = parseInt(searchParams.get("page") || '1');
+  const sort = searchParams.get('sort') || '';
+
+  const postCommentsArgumentsModified = useStore(PostCommentsStore, (state) => state.postCommentsArgumentsModified);
+  const setPostCommentsArgumentsModified = useStore(PostCommentsStore, (state) => state.setPostCommentsArgumentsModified);
 
   const postCommentsQuery = useQuery({
-    queryKey: ["team", teamId as string, "posts", postId as string, "comments", page, filter],
+    queryKey: ["team", teamId as string, "posts", postId as string, "comments", page],
     queryFn: async () => {
       return await getTeamPostComments(
         teamId as string, 
         postId as string, 
         page,
-        filter
+        sort
       );
     },
     placeholderData: keepPreviousData,
   });
 
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+
+  const handlePageChange = (newPage: number) => {
+    setPostCommentsArgumentsModified(true);
+    router.push(pathname + '?' + createQueryString('page', newPage.toString()));
+  }
+
+  useEffect(() => {
+    if (postCommentsArgumentsModified) {
+      postCommentsQuery.refetch();
+      setPostCommentsArgumentsModified(false);
+    }
+  }, [page, sort]);
+
   if (postCommentsQuery.isLoading || postCommentsQuery.isRefetching) {
-    return <div>로딩중...</div>;
+    return (
+      <div className="p-[24px] flex flex-col gap-[16px] items-center justify-center">
+        <TeamHeaderLikeButtonSpinner />
+      </div>
+    )
   }
 
   if (postCommentsQuery.isError) {
@@ -73,10 +111,14 @@ const TeamPostsPostCommentsContainer = () => {
           comment={comment}
         />
       ))}
-      <TeamPostsPostCommentsPagination
-        previous={postCommentsQuery.data?.previous ? page - 1 : null}
+      <TeamPostsPagination
         currentPageNumber={page}
-        next={postCommentsQuery.data?.next ? page + 1 : null}
+        previousCallback={
+          postCommentsQuery.data?.previous ? () => handlePageChange(page - 1) : undefined
+        }
+        nextCallback={
+          postCommentsQuery.data?.next ? () => handlePageChange(page + 1) : undefined
+        }
       />
     </div>
   );

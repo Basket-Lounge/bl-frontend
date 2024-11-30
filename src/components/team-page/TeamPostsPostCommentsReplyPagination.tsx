@@ -28,7 +28,7 @@ const TeamPostsPostCommentsReplyPagination = ({
 
   return (
     <div className="">
-      <div className="flex px-[24px] py-[16px] rounded-full bg-color3 w-fit mx-auto items-center gap-[24px]">
+      <div className="flex px-[24px] py-[16px] rounded-full bg-color4 w-fit mx-auto items-center gap-[24px]">
         {previousLink && (
         <button
           onClick={handlePreviousClick}

@@ -19,18 +19,18 @@ export default function TeamPlayersPlayerDetailsCareerStats({stats}: ITeamPlayer
       className="mt-[16px] p-[24px] bg-color3 rounded-md flex"
     >
       <div className="divide-y divide-white">
-        <div className="py-[16px]"> 
-          <p className="w-[200px] font-semibold">Season</p>
+        <div className="py-[16px] text-[14px] lg:text-[16px]">
+          <p className="w-[150px] lg:w-[200px] font-semibold">Season</p>
         </div>
         { stats.length > 0 && stats.map((seasonStats, index) => (
           <div className="py-[16px]">
-            <p className="w-[200px] font-semibold">{seasonStats.season_id}</p>
+            <p className="w-[150px] lg:w-[200px] font-semibold">{seasonStats.season_id}</p>
           </div>
         ))}
       </div>
       <div className="overflow-x-auto w-[1260px] divide-y divide-white">
-        <div className="py-[16px] w-[1260px] flex">
-          <p className="w-[60px] font-semibold text-right">TEAM</p>
+        <div className="py-[16px] w-[1260px] flex text-[14px] lg:text-[16px]">
+          <p className="w-[60px] font-semibold text-right">팀</p>
           <p className="w-[60px] font-semibold text-right">GP</p>
           <p className="w-[60px] font-semibold text-right">MIN</p>
           <p className="w-[60px] font-semibold text-right">PTS</p>

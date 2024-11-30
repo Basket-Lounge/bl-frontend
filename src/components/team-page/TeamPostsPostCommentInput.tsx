@@ -71,8 +71,9 @@ const TeamPostsPostCommentInput = () => {
         <button 
           className="bg-color1 text-white py-2 px-4 rounded-full"
           onClick={handleSubmitClick}
+          disabled={mutation.isPending}
         >
-          댓글 등록
+          {mutation.isPending ? '저장 중...' : '저장'}
         </button>
       </div>
       )}

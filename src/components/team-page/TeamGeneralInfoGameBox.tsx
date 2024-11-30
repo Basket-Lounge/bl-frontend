@@ -17,7 +17,7 @@ const TeamGeneralInfoGameBox : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
   ) : displayLiveGameTimeForGameBox(game.game_status_id, game.live_period, game.live_pc_time);
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch p-[24px] bg-color3 rounded-md w-1/4">
+    <div className="flex flex-col gap-[24px] items-stretch p-[24px] bg-color3 rounded-md">
       {/* Away Team */}
       <TeamGeneralInfoGameBoxTeam 
         team={game.visitor_team} 

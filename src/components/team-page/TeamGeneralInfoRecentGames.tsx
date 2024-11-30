@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
-import TeamGeneralInfoGameBox from "./TeamGeneralInfoGameBox";
 import { useQuery } from "@tanstack/react-query";
 import { getLast4Games } from "@/api/team.api";
+import TeamGeneralInfoRecentGamesCarousel from "./TeamGeneralInfoRecentGamesCarousel";
 
 
 const TeamGeneralInfoRecentGames = () => {
@@ -39,13 +39,7 @@ const TeamGeneralInfoRecentGames = () => {
 
   return (
     <div className="mt-[16px] flex gap-[32px]">
-      {/* 최근 4경기 결과 */}
-      {recentGamesQuery.data.map(game => (
-        <TeamGeneralInfoGameBox 
-          key={game.game_id} 
-          game={game}
-        />
-      ))}
+      <TeamGeneralInfoRecentGamesCarousel games={recentGamesQuery.data} />
     </div>
   )
 }

@@ -24,7 +24,7 @@ export default function TeamPlayers() {
   const selectedPlayer = teamPlayersQuery.data.find(player => player.id === currentPlayerId);
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <div className="flex flex-col gap-[24px] items-stretch border">
       {!selectedPlayer && <TeamPlayersFilter />}
       <Suspense fallback={<div>Loading...</div>}>
         {!selectedPlayer ? (

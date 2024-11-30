@@ -16,11 +16,11 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
   const losses = team.stats?.LOSSES || 0;
 
   return (
-    <div className="flex gap-[48px] items-start">
+    <div className="flex gap-[24px] lg:gap-[48px] items-start">
       {/* Team Logo */}
-      <div className="w-[156px] h-[156px] rounded-full relative">
+      <div className="w-[128px] h-[128px] lg:w-[156px] lg:h-[156px] rounded-full relative">
         <Image
-          className="w-auto h-[70%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
+          className="w-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
           src={'/logos/' + team.symbol.toLowerCase() + '.svg'}
           alt="team-logo"
           width={20}
@@ -30,11 +30,11 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
       {/* Team Name */}
       <div className="flex flex-col gap-[16px] grow">
         <div className="flex flex-col items-start gap-[8px]">
-          <h3 className="text-white text-[24px] font-medium">The Home of</h3>
-          <h1 className="text-white text-[32px] font-bold">{EnglishName}</h1>
-          <h3 className="text-white text-[24px] font-medium">{KoreanName}</h3>
+          <h3 className="text-white text-[20px] lg:text-[24px] font-medium">The Home of</h3>
+          <h1 className="text-white text-[24px] lg:text-[32px] font-bold">{EnglishName}</h1>
+          <h3 className="text-white text-[20px] lg:text-[24px] font-medium">{KoreanName}</h3>
         </div>
-        <div className="flex items-center gap-[24px]">
+        <div className="flex items-center gap-[16px] lg:gap-[24px] flex-wrap">
           <div className="px-[32px] py-[4px] rounded-full bg-white">
             <p className="text-[14px] text-color1 font-bold">지구 {leagueRank}위</p>
           </div>

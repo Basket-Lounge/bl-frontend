@@ -6,7 +6,9 @@ interface ITeamPlayersPlayerDetailsGameStatsProps {
   stats: PlayerGameStatistics[] | undefined;
 }
 
-export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersPlayerDetailsGameStatsProps) {
+export default function TeamPlayersPlayerDetailsGameStats(
+  {stats}: ITeamPlayersPlayerDetailsGameStatsProps
+) {
   if (!stats) {
     return (
       <div className="mt-[16px] bg-color3 animate-pulse w-full h-[112px] rounded-md">
@@ -19,12 +21,12 @@ export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersP
       className="mt-[16px] p-[24px] bg-color3 rounded-md flex"
     >
       <div className="divide-y divide-white">
-        <div className="py-[16px]"> 
-          <p className="w-[200px] font-semibold">매치업</p>
+        <div className="py-[16px] text-[14px] lg:text-[16px]">
+          <p className="w-[150px] lg:w-[200px] font-semibold">매치업</p>
         </div>
         { stats.length > 0 && stats.map((seasonStats, index) => (
           <div className="py-[16px]">
-            <p className="w-[200px] font-semibold">{
+            <p className="w-[150px] lg:w-[200px] font-semibold">{
               seasonStats.game_data.visitor_team.id === seasonStats.team.id ?
               `${seasonStats.game_data.visitor_team.symbol} @ ${seasonStats.game_data.home_team.symbol}` :
               `${seasonStats.game_data.home_team.symbol} vs ${seasonStats.game_data.visitor_team.symbol}`
@@ -33,7 +35,7 @@ export default function TeamPlayersPlayerDetailsGameStats({stats}: ITeamPlayersP
         ))}
       </div>
       <div className="overflow-x-auto w-[1140px] divide-y divide-white">
-        <div className="py-[16px] w-[1140px] flex">
+        <div className="py-[16px] w-[1140px] flex text-[14px] lg:text-[16px]">
           <p className="w-[60px] font-semibold text-right">MIN</p>
           <p className="w-[60px] font-semibold text-right">PTS</p>
           <p className="w-[60px] font-semibold text-right">AST</p>

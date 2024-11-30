@@ -1,7 +1,9 @@
 'use client'
 
 import { getPlayerCareerStats, getPlayerLast5GamesStats, getPlayerSeasonStats, getPlayersFromTeam } from "@/api/player.api";
+import { pageSizeControllerStoreContext } from "@/components/common/PageSizeController";
 import TeamPlayersPlayerDetailsCareerStats from "@/components/team-page/TeamPlayersPlayerDetailsCareerStats";
+import TeamPlayersPlayerDetailsExtraInfo from "@/components/team-page/TeamPlayersPlayerDetailsExtraInfo";
 import TeamPlayersPlayerDetailsGameStats from "@/components/team-page/TeamPlayersPlayerDetailsGameStats";
 import TeamPlayersPlayerDetailsSeasonStats from "@/components/team-page/TeamPlayersPlayerDetailsSeasonStats";
 import { Player } from "@/models/player.models";
@@ -9,6 +11,8 @@ import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useContext } from "react";
+import { useStore } from "zustand";
 
 
 const TeamPlayersPlayerDetails = () => {
@@ -41,8 +45,13 @@ const TeamPlayersPlayerDetails = () => {
     }
   });
 
+  const store = useContext(pageSizeControllerStoreContext);
+  const {
+    pageWidth
+  } = useStore(store);
+
+
   const selectedPlayer = teamPlayersQuery.data.find(player => player.id === Number(playerId)) as Player;
-  const playerPosition = getPositionInKoreanFromAbbreviation(selectedPlayer.position);
 
   const handleGoBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -55,7 +64,7 @@ const TeamPlayersPlayerDetails = () => {
         👈 선수 목록으로 돌아가기
       </button>
       <div className="flex items-start justify-between overflow-x-auto gap-[48px]">
-        <div className="flex gap-[48px] item-start shrink-0 grow">
+        <div className="flex gap-[48px] items-center lg:item-start shrink-0 grow">
           <div className="w-[128px] h-[128px] overflow-hidden bg-white relative rounded-full">
             <Image
               className="w-[100%] h-auto absolute bottom-0"
@@ -74,36 +83,12 @@ const TeamPlayersPlayerDetails = () => {
                 <h1 className="text-white text-[24px] font-bold">{selectedPlayer.last_name}</h1>
               </div>
             </div>
-            <div className="flex items-center gap-[16px] flex-wrap grow">
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{playerPosition}</p>
-              </div>
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.height}</p>
-              </div>
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.weight} lbs</p>
-              </div>
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.country}</p>
-              </div>
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.college}</p>
-              </div>
-              {selectedPlayer.draft_year && (
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.draft_year}년 드래프트</p>
-              </div>
-              )}
-              {selectedPlayer.draft_round && selectedPlayer.draft_number && (
-              <div className="px-[32px] py-[4px] rounded-full bg-color3">
-                <p className="text-[14px] text-white font-bold">{selectedPlayer.draft_round}라운드 {selectedPlayer.draft_number}순위 지명</p>
-              </div>
-              )}
-            </div>
+            {pageWidth > 768 && (
+              <TeamPlayersPlayerDetailsExtraInfo player={selectedPlayer} />
+            )}
           </div>
         </div>
-        <div className="bg-color3 rounded-lg text-[16px] p-[12px] font-medium flex gap-[12px]">
+        {/* <div className="bg-color3 rounded-lg text-[16px] p-[12px] font-medium flex gap-[12px]">
           <Image
             src={"/icons/favorite_border_24dp_FFFFFF.svg"}
             alt="favorite"
@@ -111,8 +96,11 @@ const TeamPlayersPlayerDetails = () => {
             height={24}
           />
           24
-        </div>
+        </div> */}
       </div>
+      {pageWidth <= 768 && (
+        <TeamPlayersPlayerDetailsExtraInfo player={selectedPlayer} />
+      )}
       <div>
         <h3 className="text-white text-[20px] font-bold">2024-25 시즌 스탯</h3>
         <TeamPlayersPlayerDetailsSeasonStats stats={playerSeasonStatsQuery.data} />

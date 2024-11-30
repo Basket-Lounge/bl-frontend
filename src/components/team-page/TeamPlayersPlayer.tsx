@@ -24,7 +24,7 @@ const TeamPlayersPlayer : React.FC<ITeamPlayersPlayerProps> = ({ player }) => {
 
   return (
     <div 
-      className="flex flex-col gap-[24px] items-stretch p-[24px] rounded-md w-1/4 bg-color3"
+      className="flex flex-col gap-[24px] items-stretch p-[24px] rounded-md bg-color3"
       onClick={handleClick}
     >
       <div className="flex items-center justify-between">

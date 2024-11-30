@@ -60,7 +60,7 @@ const TeamGeneralInfoSeasonBestPlayer = () => {
           />
         </div> 
         <div className="">
-          <h3 className="text-white text-[20px] font-semibold">{bestPlayer!.first_name} {bestPlayer!.last_name}</h3>
+          <h3 className="text-white text-[16px] lg:text-[20px] font-semibold">{bestPlayer!.first_name} {bestPlayer!.last_name}</h3>
           <div className="mt-[16px] flex gap-[32px]">
             <div className="flex flex-col gap-[8px] items-center">
               <p className="text-white text-[14px] font-light">PTS</p>

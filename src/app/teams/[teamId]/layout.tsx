@@ -21,7 +21,7 @@ export default function TeamsPage({ params, children }: {
   return (
     <TeamStoreContext.Provider value={TeamStore}>
       <div className="my-[32px] flex flex-col items-stretch gap-[24px]">
-        <h1 className="text-white text-[32px] font-bold">팀 페이지</h1>
+        <h1 className="text-white text-[24px] lg:text-[32px] font-bold">팀 페이지</h1>
         <TeamHeader team={headerQuery.data} />
         <TeamSectionOptions />
         {children}

@@ -2,7 +2,7 @@ import TeamScheduleFilterButton from "./TeamScheduleFilterButton";
 
 const TeamScheduleFilter = () => {
   return (
-    <div className="flex gap-[24px] items-center mt-[16px]">
+    <div className="flex gap-[16px] lg:gap-[24px] items-center mt-[16px] flex-wrap">
       <TeamScheduleFilterButton name="전체" queryKey="0" />
       <TeamScheduleFilterButton name="10월" queryKey="10" />
       <TeamScheduleFilterButton name="11월" queryKey="11" />

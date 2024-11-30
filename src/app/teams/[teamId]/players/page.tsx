@@ -28,7 +28,7 @@ const TeamPlayersContainer = () => {
   return (
     <div className="flex flex-col items-stretch gap-[24px]">
       <TeamPlayersFilter />
-      <div className="flex items-start w-full gap-[32px] flex-wrap">
+      <div className="w-full gap-[32px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
         {filteredPlayers.map(player => (
           <TeamPlayersPlayer key={player.id} player={player} />
         ))}

@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getGamesForTeam } from "@/api/game.api";
 import { filterGamesByMonth } from "@/utils/game.utils";
 import TeamScheduleGameSkeleton from "./TeamScheduleGameSkeleton";
+import { pageSizeControllerStoreContext } from "../common/PageSizeController";
 
 
 const TeamScheduleGamesContainer = () => {
@@ -41,7 +42,7 @@ const TeamScheduleGamesContainer = () => {
   }
 
   return (
-    <div className="flex items-start w-full gap-[32px] flex-wrap mt-[16px]">
+    <div className="w-full gap-[32px] mt-[16px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
       {filterGamesByMonth(scheduleQuery.data, currentFilterValue).map(game => (
         <TeamScheduleGame key={game.game_id} game={game} />
       ))}

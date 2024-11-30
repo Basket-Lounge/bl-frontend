@@ -150,9 +150,16 @@ export const getTeamPostComments = async (
   teamId: string, 
   postId: string, 
   page: number,
-  filter: string
+  sort?: string,
 ) => {
-  const response = await httpClient.get<TeamPostCommentsPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/?page=${page}&filter=${filter}`);
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<TeamPostCommentsPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/?${searchParams.toString()}`);
   return response.data;
 }
 

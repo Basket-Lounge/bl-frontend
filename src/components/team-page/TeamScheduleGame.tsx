@@ -41,7 +41,7 @@ const TeamScheduleGame : React.FC<ITeamScheduleGameProps> = ({
   const gameTime = gameDateTime[1] + " " + gameDateTime[2];
 
   return (
-    <div className={"flex flex-col gap-[24px] items-stretch p-[24px] rounded-md w-1/4 " + bgColor}>
+    <div className={"flex flex-col gap-[24px] items-stretch p-[24px] rounded-md " + bgColor}>
       <p className={"text-center text-white w-full mx-auto text-[14px] rounded-full py-[6px] font-semibold bg-color1"}>
         {isHome ? "홈" : "원정"}
       </p>

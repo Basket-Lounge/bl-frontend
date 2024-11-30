@@ -1,18 +1,48 @@
+import { publishTeamPostCommentReply } from "@/api/team.api";
 import { TeamPostCommentValidation } from "@/utils/validation.utils";
-import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useContext, useEffect, useState } from "react";
+import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
+import { useStore } from "zustand";
+import { useParams } from "next/navigation";
 
 
 interface ITeamPostsPostCommentsReplyInputProps {
-  isMutating: boolean;
-  handleMutation: (comment: string) => void;
+  commentId: string;
 };
 
 const TeamPostsPostCommentsReplyInput = ({
-  isMutating,
-  handleMutation
+  commentId
 }: ITeamPostsPostCommentsReplyInputProps) => {
   const [reply, setReply] = useState<string>("");
   const [replyError, setReplyError] = useState<string | null>(null);
+
+  const { teamId, postId } = useParams();
+
+  const store = useContext(PostCommentReplyContext);
+  if (!store) {
+    throw new Error("PostCommentReplyContext is not found");
+  }
+
+  const {
+    updateReplyAdded
+  } = useStore(store);
+
+  // For submitting a reply to a comment
+  const replyMutation = useMutation({
+    mutationFn: (reply: string) => {
+      return publishTeamPostCommentReply(
+        teamId as string, 
+        postId as string, 
+        commentId,
+        reply
+      )
+    },
+    onSuccess: () => {
+      setReply('');
+      updateReplyAdded(true);
+    }
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setReply(e.target.value);
@@ -30,14 +60,8 @@ const TeamPostsPostCommentsReplyInput = ({
       return;
     }
 
-    handleMutation(reply);
+    replyMutation.mutate(reply);
   };
-
-  useEffect(() => {
-    if (!isMutating) {
-      setReply("");
-    }
-  }, [isMutating]);
 
   return (
     <div
@@ -54,14 +78,15 @@ const TeamPostsPostCommentsReplyInput = ({
       { reply && (
       <div className="mt-[8px] flex items-center justify-between">
         <div>
-        {isMutating && <p className="mt-[16px] text-white">저장 중...</p>}
+        {replyMutation.isPending && <p className="mt-[16px] text-white">저장 중...</p>}
         {replyError && <p className="mt-[16px] text-red-500">{replyError}</p>}
         </div>
         <button 
           className="bg-color1 text-white py-2 px-4 rounded-full"
           onClick={handleSubmitClick}
+          disabled={replyMutation.isPending}
         >
-          댓글 등록
+          {replyMutation.isPending ? '저장 중...' : '저장'}
         </button>
       </div>
       )}

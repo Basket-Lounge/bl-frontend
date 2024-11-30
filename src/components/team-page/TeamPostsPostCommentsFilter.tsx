@@ -1,6 +1,7 @@
 'use client'
 
-import TeamPostsPostCommentsFilterButton from "./TeamPostsPostCommentsFilterButton";
+import FilterButton from "../common/FilterButton";
+import TeamPostsPostCommentsSortButtonOptionsContainer from "./TeamPostsPostCommentsSortButtonOptionsContainer";
 
 
 interface ITeamPostsPostCommentsFilter {
@@ -12,9 +13,9 @@ const TeamPostsPostCommentsFilter = ({ count }: ITeamPostsPostCommentsFilter) =>
     <div className="flex justify-between items-end">
       <h3 className="text-[20px] font-bold text-white">전체 댓글 ({count}) 💬</h3>
       <div className="flex items-center gap-[24px]">
-        <TeamPostsPostCommentsFilterButton queryKey="recent" name="최신순" />
-        <TeamPostsPostCommentsFilterButton queryKey="oldest" name="오래순" />
-        <TeamPostsPostCommentsFilterButton queryKey="popular" name="인기순" />
+        <FilterButton name="정렬">
+          <TeamPostsPostCommentsSortButtonOptionsContainer />
+        </FilterButton>
       </div>
     </div>
   );
