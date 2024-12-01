@@ -4,6 +4,7 @@ import { getAllReports, getResolvedReports, getUnresolvedReports } from "@/api/a
 import AdminReportsContainer from "@/components/admin-page/AdminReportsContainer";
 import AdminReportsDetails from "@/components/admin-page/AdminReportsDetails";
 import AdminReportsFilter from "@/components/admin-page/AdminReportsFilter";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { TReportType } from "@/models/admin.models";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
@@ -51,7 +52,8 @@ const AdminReportsPage = () => {
   }
 
   const divClassName = report ? 
-    "desktop-1:grid grid-cols-2 item-start gap-[32px]" : "flex flex-col items-stretch gap-[32px]"
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
     if (initialFetch.current) {
@@ -74,7 +76,7 @@ const AdminReportsPage = () => {
           reports={adminReportsQuery.data.results}
         />
         {report ? (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<SpinnerLoading />}>
             <AdminReportsDetails reportId={report} />
           </Suspense>
         ) : null}

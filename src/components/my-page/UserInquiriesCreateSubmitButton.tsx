@@ -90,16 +90,13 @@ const UserInquiriesCreateSubmitButton = () => {
     });
   }
 
-  if (mutation.isPending) {
-    return <div>문의를 생성하는 중...</div>
-  }
-  
   return (
     <button 
       className="bg-color1 text-white rounded-full py-[12px] px-[24px] font-semibold"
       onClick={handleClick}
+      disabled={mutation.isPending}
     >
-      문의하기
+      {mutation.isPending ? "문의를 생성하는 중..." : "문의 생성"}
     </button> 
   );
 }

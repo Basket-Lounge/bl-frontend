@@ -1,10 +1,13 @@
 import { sortUserChatMessagesByDate } from "@/utils/user.utils";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { UserChatMessageWithUserData } from "@/models/user.models";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { getUserChat } from "@/api/admin.api";
 import AdminUsersDetailsDMsChatHistory from "./AdminUsersDetailsDMsChatHistory";
 import AdminUsersDetailsDMsChatControlButtons from "./AdminUsersDetailsDMsChatControlButtons";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IAdminUsersDetailsDMsChatProps {
@@ -12,8 +15,25 @@ interface IAdminUsersDetailsDMsChatProps {
   chatId: string;
 }
 
-const AdminUsersDetailsDMsChat = ({ userId, chatId }: IAdminUsersDetailsDMsChatProps) => {
-  const [currentChatId, setCurrentChatId] = useState<string>(chatId);
+const AdminUsersDetailsDMsChat = (
+  { userId, chatId }: IAdminUsersDetailsDMsChatProps
+) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const createQueryString = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('chat');
+
+    return params.toString()
+  }, [searchParams])
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(pathname + '?' + createQueryString());
+    router.push(pathname +  '?' + createQueryString());
+  }
 
   const queryClient = useQueryClient();
   const chatQuery = useSuspenseQuery({
@@ -42,13 +62,6 @@ const AdminUsersDetailsDMsChat = ({ userId, chatId }: IAdminUsersDetailsDMsChatP
   const messages = userMessages.concat(otherUserMessages || []) || []
   const sortedMessages = sortUserChatMessagesByDate(messages);
 
-  // useEffect(() => {
-  //   if (chatId !== currentChatId) {
-  //     setCurrentChatId(chatId);
-  //     chatQuery.refetch();
-  //   }
-  // }, [chatId]);
-
   useEffect(() => {
     return () => {
       queryClient.removeQueries({
@@ -58,24 +71,37 @@ const AdminUsersDetailsDMsChat = ({ userId, chatId }: IAdminUsersDetailsDMsChatP
   }, [chatId]);
 
   if (chatQuery.isRefetching || chatQuery.isLoading) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />
   }
 
   return (
-    <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
-      <div className="p-[24px] flex justify-between items-center relative">
-        <div className="flex gap-[24px]">
-          <div className="flex w-[64px] h-[64px] bg-white rounded-full"></div>
-          <div className="flex flex-col gap-[12px]">
-            <p className="font-semibold text-[16px] line-clamp-1">{otherUser?.user_data.username}</p>
-            <p className="text-[14px]">{chatQuery.data.updated_at}</p>
+    <div className="bg-color3 rounded-md overflow-auto relative">
+      <button
+        onClick={handleClick}
+        className="absolute top-0 right-0 p-[8px] text-white z-10"
+      >
+        <Image
+          src="/icons/close_24dp_FFFFFF.svg"
+          alt="close"
+          width={24}
+          height={24}
+        />
+      </button>
+      <div className="divide-y divide-white">
+        <div className="p-[24px] flex justify-between items-center relative">
+          <div className="flex gap-[24px]">
+            <div className="flex w-[64px] h-[64px] bg-white rounded-full"></div>
+            <div className="flex flex-col gap-[12px]">
+              <p className="font-semibold text-[16px] line-clamp-1">{otherUser?.user_data.username}</p>
+              <p className="text-[14px]">{chatQuery.data.updated_at}</p>
+            </div>
           </div>
+          <AdminUsersDetailsDMsChatControlButtons userId={userId} />
         </div>
-        <AdminUsersDetailsDMsChatControlButtons userId={userId} />
+        <AdminUsersDetailsDMsChatHistory
+          messages={sortedMessages} 
+        />
       </div>
-      <AdminUsersDetailsDMsChatHistory
-        messages={sortedMessages} 
-      />
     </div>
   )
 }

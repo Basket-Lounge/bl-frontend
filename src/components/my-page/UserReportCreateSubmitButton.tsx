@@ -95,16 +95,17 @@ const UserReportCreateSubmitButton = () => {
       description
     });
   }
-
+  
   return (
-    <button 
-      className="bg-color1 text-white rounded-full py-[12px] px-[24px] font-semibold"
-      onClick={handleClick}
-      disabled={mutation.isPending}
-    >
-      {mutation.isError ? '다시 시도해주세요' : '신고하기'}
-      {mutation.isPending ? '생성 중...' : null}
-    </button> 
+    <div className="flex flex-col gap-[24px] items-stretch">
+      <button 
+        className="bg-color1 text-white rounded-full py-[12px] px-[24px] font-semibold"
+        onClick={handleClick}
+        disabled={mutation.isPending}
+      >
+        {mutation.isPending ? '생성 중...' : '신고하기'}
+      </button> 
+    </div>
   );
 }
 

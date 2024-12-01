@@ -1,5 +1,6 @@
 import { IUser } from "@/models/user.models";
 import AdminUsersContainerItem from "./AdminUsersContainerItem";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminUsersContainerProps {
@@ -12,12 +13,7 @@ const AdminUsersContainer = ({
   if (users.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[24px]">
-          유저가 없습니다.
-        </p>
+        <CuteErrorMessage error="유저가 없습니다." />
       </div>
     );
   }

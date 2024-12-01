@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { getGamePlayersStats } from "@/api/game.api";
 import GameSummaryTop4PlayersCarousel from "./GameSummaryTop4PlayersCarousel";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 const GameSummaryTop4Players = () => {
@@ -31,14 +32,7 @@ const GameSummaryTop4Players = () => {
 
   if (playersStatsQuery.isError) {
     return (
-      <div className="flex flex-col gap-[16px] items-stretch">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[32px]">
-          선수들의 기록을 불러오는 중 오류가 발생했습니다.
-        </p>
-      </div>
+      <CuteErrorMessage error="선수들의 기록을 불러오는 중 오류가 발생했습니다." />
     )
   }
 

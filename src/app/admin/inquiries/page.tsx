@@ -6,6 +6,7 @@ import {
 import AdminInquiriesContainer from "@/components/admin-page/AdminInquiriesContainer";
 import AdminInquiriesFilter from "@/components/admin-page/AdminInquiriesFilter";
 import AdminInquiriesLiveChat from "@/components/admin-page/AdminInquiriesLiveChat";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { TInquiryChannelType } from "@/models/admin.models";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
@@ -52,7 +53,8 @@ const AdminInquiriesPage = () => {
   }
 
   const divClassName = inquiry ? 
-    "desktop-1:grid grid-cols-2 item-start gap-[32px]" : "flex flex-col items-stretch gap-[32px]"
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
     if (inquiriesArgumentsModified) {
@@ -79,7 +81,7 @@ const AdminInquiriesPage = () => {
           inquiryType={filter}
         />
         {inquiry ? (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<SpinnerLoading />}>
             <AdminInquiriesLiveChat inquiryId={inquiry} />
           </Suspense>
         ) : null}

@@ -11,6 +11,7 @@ import AdminUsersDetailsPostsCommentsFilter from "@/components/admin-page/AdminU
 import UserCommentsContainer from "@/components/common/UserCommentsContainer";
 import AdminUsersDetailsPostsCommentsContainerItem from "@/components/admin-page/AdminUsersDetailsPostsCommentsContainerItem";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 
 const CommentsPage = () => {
@@ -92,7 +93,7 @@ const CommentsPage = () => {
   }, [status, search, sort, teams, page]);
 
   if (userCommentsQuery.isRefetching || userCommentsQuery.isLoading) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />;
   }
 
   return (

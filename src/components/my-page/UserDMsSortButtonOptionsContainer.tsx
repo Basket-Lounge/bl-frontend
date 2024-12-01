@@ -113,7 +113,7 @@ const UserDMsSortButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="absolute w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%] left-0"
+      className="w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%]"
     >
       <div className="flex flex-col gap-[16px]">
         <SortButtonOption

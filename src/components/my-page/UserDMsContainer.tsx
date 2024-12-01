@@ -6,6 +6,7 @@ import { getConnectionToken, getSubscriptionTokenForLiveChatUpdate } from "@/api
 import { useAuthStore } from "@/stores/auth.stores";
 import { sortUserChatByLastMessageDate } from "@/utils/user.utils";
 import { useQueryClient } from "@tanstack/react-query";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 interface IUserDMsContainerProps {
   chats: UserChat[];
@@ -29,7 +30,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
   }, [chats]);
 
   useEffect(() => {
-    const client = new Centrifuge(`ws://${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
+    const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;
@@ -89,12 +90,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
   if (realChats.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[24px]">
-          포스트가 없습니다.
-        </p>
+        <CuteErrorMessage error="포스트가 없습니다." />
       </div>
     );
   }

@@ -1,9 +1,11 @@
 'use client'
 
-import { getUserChat, getUserChats } from "@/api/admin.api";
+import { getUserChats } from "@/api/admin.api";
 import AdminUsersDetailsDMsChat from "@/components/admin-page/AdminUsersDetailsDMsChat";
 import AdminUsersDetailsDMsContainer from "@/components/admin-page/AdminUsersDetailsDMsContainer";
 import AdminUsersDetailsDMsFilter from "@/components/admin-page/AdminUsersDetailsDMsFilter";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
+import UserChatLoading from "@/components/common/UserChatLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useQuery  } from "@tanstack/react-query";
@@ -55,8 +57,9 @@ const DMsPage: React.FC = () => {
     router.push(pathname + '?' + createQueryString('page', newPage.toString()));
   }
 
-  const divClassName = !chatId ? 
-    "flex flex-col items-stretch gap-[32px]" : "desktop-1:grid grid-cols-2 item-start gap-[32px]";
+  const divClassName = chatId ? 
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
     if (userChatsQuery.isRefetching) {
@@ -77,7 +80,7 @@ const DMsPage: React.FC = () => {
   }, [sort, search, page]);
 
   if (userChatsQuery.isLoading || userChatsQuery.isRefetching) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />;
   }
 
   return (
@@ -85,14 +88,14 @@ const DMsPage: React.FC = () => {
       <AdminUsersDetailsDMsFilter />
       <div className={divClassName}>
         {userChatsQuery.isRefetching ? 
-          <div>Loading...</div> :
+          <UserChatLoading /> :
           <AdminUsersDetailsDMsContainer chats={userChatsQuery.data.results} />
         }
-        {!chatId ? null : (
-          <Suspense fallback={<div>Loading...</div>}>
+        {chatId ? (
+          <Suspense fallback={<SpinnerLoading />}>
             <AdminUsersDetailsDMsChat userId={parseInt(userId as string)} chatId={chatId} />
           </Suspense>
-        )}
+        ) : null}
       </div>
       <TeamPostsPagination
         currentPageNumber={page}

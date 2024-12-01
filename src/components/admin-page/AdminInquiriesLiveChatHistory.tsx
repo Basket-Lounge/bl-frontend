@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { markInquiryAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import AdminInquiriesLiveChatHistoryEntry from "./AdminInquiriesLiveChatHistoryEntry";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminInquiriesLiveChatHistoryProps {
@@ -52,7 +53,7 @@ const AdminInquiriesLiveChatHistory = ({
   }
 
   useEffect(() => {
-    const client = new Centrifuge("ws://127.0.0.1:8000/connection/websocket", {
+    const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
         const data = await getConnectionToken();
         return data.token;
@@ -138,12 +139,9 @@ const AdminInquiriesLiveChatHistory = ({
   if (sortedMessages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[24px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[20px]">
-          메시지가 없습니다.
-        </p>
+        <CuteErrorMessage
+          error="메시지가 없습니다."
+        />
       </div>
     );
   }

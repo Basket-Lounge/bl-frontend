@@ -4,7 +4,9 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
 import UserInquiriesLiveChatHistory from "./UserInquiriesLiveChatHistory";
 import UserInquiriesLiveChatInput from "./UserInquiriesLiveChatInput";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 
 interface IUserInquiriesLiveChatProps {
@@ -12,6 +14,10 @@ interface IUserInquiriesLiveChatProps {
 }
 
 const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const [currentInquiryId, setCurrentInquiryId] = useState<string>(inquiryId);
   const chatQuery = useSuspenseQuery({
     queryKey: ['my-page', 'inquiries', 'chat', inquiryId],
@@ -42,6 +48,18 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
 
   const inquiryTypeInKorean = extractInquiryTypeNameInKorean(realInquiry.inquiry_type_data);
 
+  const createQueryString = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('inquiry');
+
+    return params.toString()
+  }, [searchParams])
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(pathname + '?' + createQueryString());
+  }
+
   useEffect(() => {
     if (inquiryId !== currentInquiryId) {
       setCurrentInquiryId(inquiryId);
@@ -62,6 +80,17 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
   return (
     <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
       <div className="p-[24px] flex justify-between items-center relative">
+        <button
+          onClick={handleClick}
+          className="absolute top-0 right-0 p-[16px] text-white"
+        >
+          <Image
+            src="/icons/close_24dp_FFFFFF.svg"
+            alt="close"
+            width={24}
+            height={24}
+          />
+        </button>
         <div className="flex gap-[24px]">
           <div className="flex flex-col gap-[12px] items-start">
             <p className="font-semibold text-[16px] line-clamp-1">{realInquiry.title}</p>

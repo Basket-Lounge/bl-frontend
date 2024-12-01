@@ -2,6 +2,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getLast4Games } from "@/api/team.api";
 import TeamGeneralInfoRecentGamesCarousel from "./TeamGeneralInfoRecentGamesCarousel";
+import TeamGeneralInfoRecentGamesSkeletons from "./TeamGeneralInfoRecentGamesSkeletons";
 
 
 const TeamGeneralInfoRecentGames = () => {
@@ -16,16 +17,7 @@ const TeamGeneralInfoRecentGames = () => {
 
   if (recentGamesQuery.isLoading || recentGamesQuery.isRefetching) {
     return (
-      <div className="mt-[16px] flex gap-[32px]">
-        <div className="bg-color3 animate-pulse w-full h-[250px] rounded-md">
-        </div>
-        <div className="bg-color3 animate-pulse w-full h-[250px] rounded-md">
-        </div>
-        <div className="bg-color3 animate-pulse w-full h-[250px] rounded-md">
-        </div>
-        <div className="bg-color3 animate-pulse w-full h-[250px] rounded-md">
-        </div>
-      </div>
+      <TeamGeneralInfoRecentGamesSkeletons />
     )
   }
 

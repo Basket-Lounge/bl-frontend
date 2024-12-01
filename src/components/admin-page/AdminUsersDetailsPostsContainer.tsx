@@ -1,5 +1,6 @@
 import { TeamPost } from "@/models/team.models";
 import AdminUsersDetailsPostsContainerItem from "./AdminUsersDetailsPostsContainerItem";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminUsersDetailsPostsContainerProps {
@@ -10,12 +11,7 @@ const AdminUsersDetailsPostsContainer = ({ posts }: IAdminUsersDetailsPostsConta
   if (posts.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[32px]">
-          포스트가 없습니다.
-        </p>
+        <CuteErrorMessage error="포스트가 없습니다." />
       </div>
     );
   }

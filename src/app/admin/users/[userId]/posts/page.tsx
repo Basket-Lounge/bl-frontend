@@ -4,6 +4,7 @@ import { getUserPosts } from "@/api/admin.api";
 import { getTeamPostStatus } from "@/api/team.api";
 import AdminUsersDetailsPostsContainer from "@/components/admin-page/AdminUsersDetailsPostsContainer";
 import AdminUsersDetailsPostsFilter from "@/components/admin-page/AdminUsersDetailsPostsFilter";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -87,7 +88,7 @@ const PostsPage = () => {
   }, [sort, search, status, teams, page]);
 
   if (teamPostsQuery.isRefetching || teamPostsQuery.isLoading) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />;
   }
 
   return (

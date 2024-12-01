@@ -13,7 +13,6 @@ export default function TeamGeneralInfo() {
       <div>
         <h3 className="text-white text-[20px] font-bold">최근 4경기 결과</h3>
         <TeamGeneralInfoRecentGames />
-
       </div>
       <div className="lg:flex items-start gap-[32px]">
         <div className="grow flex flex-col gap-[24px] items-stretch">

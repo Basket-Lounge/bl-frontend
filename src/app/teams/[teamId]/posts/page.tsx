@@ -1,6 +1,7 @@
 'use client'
 
 import { getTeamPosts } from "@/api/team.api";
+import CuteErrorMessage from "@/components/common/CuteErrorMessage";
 import TeamPostsContainer from "@/components/team-page/TeamPostsContainer";
 import TeamPostsContainerSkeleton from "@/components/team-page/TeamPostsContainerSkeleton";
 import TeamPostsFilter from "@/components/team-page/TeamPostsFilter";
@@ -70,14 +71,9 @@ export default function TeamPosts() {
 
   if (teamPostsQuery.isError) {
     return (
-      <div className="flex flex-col gap-[16px] items-stretch">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[20px]">
-          포스트를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.
-        </p>
-      </div>
+      <CuteErrorMessage
+        error="포스트를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요"
+      />
     );
   }
 

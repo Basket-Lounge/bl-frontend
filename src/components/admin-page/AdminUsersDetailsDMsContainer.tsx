@@ -3,6 +3,7 @@ import AdminUsersDetailsDMsContainerItem from "./AdminUsersDetailsDMsContainerIt
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { getUser } from "@/api/admin.api";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 interface IAdminUsersDetailsDMsContainerProps {
   chats: UserChat[];
@@ -20,12 +21,7 @@ const AdminUsersDetailsDMsContainer = ({ chats }: IAdminUsersDetailsDMsContainer
   if (chats.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[24px]">
-          포스트가 없습니다.
-        </p>
+        <CuteErrorMessage error="메시지가 없습니다." />
       </div>
     );
   }

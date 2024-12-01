@@ -1,5 +1,6 @@
 import { UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatHistoryEntry from "./AdminUsersDetailsDMsChatHistoryEntry";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminUsersDetailsDMsChatHistoryProps {
@@ -10,12 +11,7 @@ const AdminUsersDetailsDMsChatHistory = ({ messages }: IAdminUsersDetailsDMsChat
   if (messages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[24px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[20px]">
-          메시지가 없습니다.
-        </p>
+        <CuteErrorMessage error="메시지가 없습니다." />
       </div>
     );
   }

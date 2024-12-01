@@ -8,6 +8,8 @@ import ModalController from "@/components/common/modal/ModalController";
 import PageSizeController from "@/components/common/PageSizeController";
 import { ErrorRenderer } from "@/components/common/ErrorRenderer";
 import { ErrorBoundaryHandler } from "@/components/common/ErrorBoundaryHandler";
+import TeamHeaderLikeButtonSpinner from "@/components/team-page/TeamHeaderLikeButtonSpinner";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 
 const pretendard = localFont({
@@ -35,7 +37,9 @@ export default function RootLayout({
           <PageSizeController>
             <ModalController />
             <ErrorBoundaryHandler>
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={(
+                <SpinnerLoading />
+              )}>
                 {children}
               </Suspense>
             </ErrorBoundaryHandler>

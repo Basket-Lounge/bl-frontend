@@ -4,6 +4,7 @@ import { getReport, resolveReport, unresolveReport } from "@/api/admin.api";
 import AdminReportsDetailsHeader from "./AdminReportsDetailsHeader";
 import AdminReportsDetailsInfo from "./AdminReportsDetailsInfo";
 import AdminReportsDetailsResolveButton from "./AdminReportsDetailsResolveButton";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IAdminReportsDetailsProps {
@@ -66,7 +67,7 @@ const AdminReportsDetails = ({ reportId }: IAdminReportsDetailsProps) => {
   }, [reportQuery.data]);
 
   if (reportQuery.isRefetching) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />;
   }
 
   return (

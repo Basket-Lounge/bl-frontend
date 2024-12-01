@@ -1,7 +1,7 @@
 'use client';
 
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useStore } from 'zustand';
 import { getMyInfo } from '@/api/user.api';
 import { MyPageStoreContext } from '@/stores/myPage.stores';
@@ -12,8 +12,6 @@ export default function UserPage({ children }: {
 ) {
   const queryClient = useQueryClient();
   const store = useContext(MyPageStoreContext);
-
-  const [error, setError] = useState(false);
 
   const setUsername = useStore(store, (state) => state.setUsername);
   const setPrevUsername = useStore(store, (state) => state.setPrevUsername);
@@ -59,20 +57,7 @@ export default function UserPage({ children }: {
       return;
     }
 
-    if (userQuery.error) {
-      setError(true);
-    }
   }, [userQuery.data]);
-
-  if (error) {
-    return <div>에러가 발생했습니다.</div>;
-  }
-
-  if (userQuery.isLoading) {
-    return (
-      <div className="">로딩중...</div>
-    );
-  }
 
   return children;
 }

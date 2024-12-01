@@ -2,6 +2,9 @@ import { IUser } from "@/models/user.models";
 import { translateRoleNameToKorean } from "@/utils/user.utils";
 import Image from "next/image";
 import UserHeaderLikeButton from "./UserHeaderLikeButton";
+import { useContext } from "react";
+import { pageSizeControllerStoreContext } from "../common/PageSizeController";
+import { useStore } from "zustand";
 
 
 interface IUserHeaderProps {
@@ -9,6 +12,9 @@ interface IUserHeaderProps {
 }
 
 export default function UserHeader({ user }: IUserHeaderProps) {
+  const store = useContext(pageSizeControllerStoreContext);
+  const pageWidth = useStore(store, (state) => state.pageWidth);
+
   return (
     <div className="flex gap-[48px] items-start justify-between">
       {/* Team Logo */}
@@ -38,7 +44,7 @@ export default function UserHeader({ user }: IUserHeaderProps) {
           </div>
         </div>
       </div>
-      <UserHeaderLikeButton likesCount={user.likes_count} />
+      { pageWidth >= 768 && <UserHeaderLikeButton likesCount={user.likes_count} /> }
     </div>
   )
 }

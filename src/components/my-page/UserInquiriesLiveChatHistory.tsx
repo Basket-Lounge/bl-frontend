@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { markInquiryAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import UserInquiriesLiveChatHistoryEntry from "./UserInquiriesLiveChatHistoryEntry";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IUserInquiriesLiveChatHistoryProps {
@@ -118,12 +119,7 @@ const UserInquiriesLiveChatHistory = (
   if (sortedMessages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[24px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[20px]">
-          메시지가 없습니다.
-        </p>
+        <CuteErrorMessage error="메시지가 없습니다." />
       </div>
     );
   }

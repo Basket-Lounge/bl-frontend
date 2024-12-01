@@ -5,7 +5,10 @@ import UserDMsChatInput from "./UserDMsChatInput";
 import UserDMsChatHistory from "./UserDMsChatHistory";
 import { UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatControlButtons from "./UserDMsChatControlButtons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import SpinnerLoading from "../common/SpinnerLoading";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 
 interface IUserDMsChatProps {
   userId: number;
@@ -13,6 +16,22 @@ interface IUserDMsChatProps {
 
 const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
   const [currentUserId, setCurrentUserId] = useState<number>(userId);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const createQueryString = useCallback(() => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('user');
+
+    return params.toString()
+  }, [searchParams])
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(pathname + '?' + createQueryString());
+  }
 
   const chatQuery = useSuspenseQuery({
     queryKey: ['my-page', "DMs", "chat", userId],
@@ -48,12 +67,23 @@ const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
   }, [userId]);
 
   if (chatQuery.isRefetching) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />
   }
 
   return (
     <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
       <div className="p-[24px] flex justify-between items-center relative">
+        <button
+          onClick={handleClick}
+          className="absolute top-0 right-0 p-[8px] text-white"
+        >
+          <Image
+            src="/icons/close_24dp_FFFFFF.svg"
+            alt="close"
+            width={24}
+            height={24}
+          />
+        </button>
         <div className="flex gap-[24px]">
           <div className="flex w-[64px] h-[64px] bg-white rounded-full"></div>
           <div className="flex flex-col gap-[12px]">

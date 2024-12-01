@@ -1,6 +1,8 @@
 'use client'
 
 import { getMyChats } from "@/api/user.api";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
+import UserChatLoading from "@/components/common/UserChatLoading";
 import UserDMsChat from "@/components/my-page/UserDMsChat";
 import UserDMsContainer from "@/components/my-page/UserDMsContainer";
 import UserDMsFilter from "@/components/my-page/UserDMsFilter";
@@ -54,8 +56,9 @@ const DMsPage: React.FC = () => {
     router.push(pathname + '?' + createQueryString('page', newPage.toString()));
   }
 
-  const divClassName = isNaN(userToChatWith) ? 
-    "flex flex-col items-stretch gap-[32px]" : "desktop-1:grid grid-cols-2 item-start gap-[32px]";
+  const divClassName = !isNaN(userToChatWith) ?
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
     if (chatDeleted) {
@@ -80,11 +83,11 @@ const DMsPage: React.FC = () => {
       <UserDMsFilter />
       <div className={divClassName}>
         {(userChatsQuery.isRefetching || userChatsQuery.isLoading) ?
-          <div>Loading...</div> :
+          <UserChatLoading /> :
           <UserDMsContainer chats={userChatsQuery.data!.results} />
         }
         {isNaN(userToChatWith) ? null : (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<SpinnerLoading />}>
             <UserDMsChat userId={userToChatWith} />
           </Suspense>
         )}

@@ -1,5 +1,4 @@
 import UserInquiriesCreateButton from "./UserInquiriesCreateButton";
-import UserInquiriesSearchBox from "./UserInquiriesSearchBox";
 
 
 const UserInquiriesFilter = () => {
@@ -10,7 +9,6 @@ const UserInquiriesFilter = () => {
       </div>
       <div className="flex gap-[24px] items-center">
         <UserInquiriesCreateButton />
-        <UserInquiriesSearchBox />
       </div>
     </div>
   );

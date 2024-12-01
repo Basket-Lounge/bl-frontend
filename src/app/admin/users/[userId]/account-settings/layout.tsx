@@ -16,7 +16,6 @@ export default function UserPage({ children }: {
   const store = useContext(UserManagementStoreContext);
 
   const [initialized, setInitialized] = useState(false);
-  const [error, setError] = useState(false);
 
   const setUsername = useStore(store, (state) => state.setUsername);
   const setPrevUsername = useStore(store, (state) => state.setPrevUsername);
@@ -78,15 +77,7 @@ export default function UserPage({ children }: {
       setInitialized(true);
       return;
     }
-
-    if (userQuery.error) {
-      setError(true);
-    }
   }, [userQuery.data]);
-
-  if (error) {
-    return <div>에러가 발생했습니다.</div>;
-  }
 
   return children;
 }

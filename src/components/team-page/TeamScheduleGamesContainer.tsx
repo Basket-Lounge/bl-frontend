@@ -6,8 +6,7 @@ import { useStore } from "zustand";
 import { useQuery } from "@tanstack/react-query";
 import { getGamesForTeam } from "@/api/game.api";
 import { filterGamesByMonth } from "@/utils/game.utils";
-import TeamScheduleGameSkeleton from "./TeamScheduleGameSkeleton";
-import { pageSizeControllerStoreContext } from "../common/PageSizeController";
+import TeamScheduleGamesSkeletons from "./TeamScheduleGamesSkeletons";
 
 
 const TeamScheduleGamesContainer = () => {
@@ -24,11 +23,7 @@ const TeamScheduleGamesContainer = () => {
 
   if (scheduleQuery.isLoading || scheduleQuery.isRefetching) {
     return (
-      <div className="flex items-start w-full gap-[32px] flex-wrap mt-[16px]">
-        <TeamScheduleGameSkeleton />
-        <TeamScheduleGameSkeleton />
-        <TeamScheduleGameSkeleton />
-      </div>
+      <TeamScheduleGamesSkeletons />
     )
   }
 

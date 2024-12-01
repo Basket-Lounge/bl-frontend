@@ -3,6 +3,7 @@
 import { getAllRoles, getAllUsers } from "@/api/admin.api";
 import AdminUsersContainer from "@/components/admin-page/AdminUsersContainer";
 import AdminUsersFilter from "@/components/admin-page/AdminUsersFilter";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -63,7 +64,7 @@ const AdminUserManagementPage = () => {
   }, [roles, search, sort, page]);
 
   if (usersQuery.isRefetching) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />;
   }
 
   return (

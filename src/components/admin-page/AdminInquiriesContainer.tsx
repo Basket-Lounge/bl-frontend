@@ -11,6 +11,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import AdminInquiriesContainerItem from "./AdminInquiriesContainerItem";
 import { TInquiryChannelType } from "@/models/admin.models";
 import { determineAdminInquirySubscriptionChannelName } from "@/utils/admin.utils";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminInquiriesContainerProps {
@@ -93,12 +94,9 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
   if (realInquiries.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[32px]">
-          (つ╥﹏╥)つ
-        </p>
-        <p className="font-bold text-[24px]">
-          문의가 없습니다.
-        </p>
+        <CuteErrorMessage
+          error="문의가 없습니다."
+        />
       </div>
     );
   }

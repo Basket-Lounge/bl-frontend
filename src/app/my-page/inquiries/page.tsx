@@ -1,13 +1,14 @@
 'use client'
 
 import { getMyInquiries } from "@/api/user.api";
+import SpinnerLoading from "@/components/common/SpinnerLoading";
 import UserInquiriesContainer from "@/components/my-page/UserInquiriesContainer";
 import UserInquiriesFilter from "@/components/my-page/UserInquiriesFilter";
 import UserInquiriesLiveChat from "@/components/my-page/UserInquiriesLiveChat";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useCallback } from "react";
 
 
 const InquiriesPage = () => {
@@ -16,7 +17,6 @@ const InquiriesPage = () => {
   const searchParams = useSearchParams();
 
   const page = parseInt(searchParams.get("page") || '1');
-  const search = searchParams.get('search') || '';
   const inquiry = searchParams.get("inquiry") || '';
 
   const userInquiriesQuery = useSuspenseQuery({
@@ -26,12 +26,23 @@ const InquiriesPage = () => {
     },
   });
 
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+
   const handlePageChange = (newPage: number) => {
-    router.push(pathname + `?page=${newPage}`);
+    router.push(pathname + `?${createQueryString('page', newPage.toString())}`);
   }
 
   const divClassName = inquiry ? 
-    "desktop-1:grid grid-cols-2 item-start gap-[32px]" : "flex flex-col items-stretch gap-[32px]"
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col items-stretch gap-[32px]"
 
   return (
     <div className="flex flex-col gap-[24px] items-stretch">
@@ -39,7 +50,7 @@ const InquiriesPage = () => {
       <div className={divClassName}>
         <UserInquiriesContainer inquiries={userInquiriesQuery.data.results} />
         {inquiry ? (
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<SpinnerLoading />}>
             <UserInquiriesLiveChat inquiryId={inquiry} />
           </Suspense>
         ) : null}
