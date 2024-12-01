@@ -40,7 +40,7 @@ export default function NavBar() {
             스케쥴
           </button>
         </div>
-        <div className="flex justify-end w-1/3">
+        <div className="flex justify-end grow">
           <UserMenu />
         </div>
       </div>

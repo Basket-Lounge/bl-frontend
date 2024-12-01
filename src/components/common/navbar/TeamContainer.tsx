@@ -33,7 +33,7 @@ const TeamContainer = () => {
 
   return (
     <div 
-      className="w-[600px] bg-color3 rounded-md p-[24px] border-none flex flex-wrap gap-[16px] z-20"
+      className="w-full lg:w-[600px] bg-color3 rounded-md p-[24px] border-none flex flex-wrap gap-[16px] z-20"
     >
       {teamsQuery.data!.map((team) => (
         <TeamButton

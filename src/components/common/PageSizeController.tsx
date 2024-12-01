@@ -8,6 +8,7 @@ import { useAuthStore } from "@/stores/auth.stores";
 
 import { ThemeProvider } from "@material-tailwind/react";
 import useDebounce from '@/hooks/useDebounce';
+import SpinnerLoading from './SpinnerLoading';
 
 
 interface IPageSizeControllerStore {
@@ -57,7 +58,7 @@ const PageSizeController = ({ children }: { children: React.ReactNode }) => {
           { authenticationAttempted ? children : <div>Loading...</div> }
         </div> */}
         <div className="grow mx-auto sm:w-[360px] md:w-[480px] lg:w-[768px] xl:w-[1024px] 2xl:w-[1200px]">
-          { authenticationAttempted ? children : <div>Loading...</div> }
+          { authenticationAttempted ? children : <SpinnerLoading /> }
         </div>
         <Footer />
       </div>
