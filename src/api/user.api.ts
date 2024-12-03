@@ -215,16 +215,6 @@ export const markInquiryAsRead = async (inquiryId: string) => {
   return response.data;
 }
 
-export const updateUserIntroduction = async (introduction: string) => {
-  const response = await httpClient.put<IUpdateUserIntroduction>("/api/users/me/introduction/", { introduction });
-  return response.data;
-}
-
-export const updateUserProfileVisibility = async (isProfileVisible: boolean) => {
-  const response = await httpClient.put<IUpdateProfileVisibility>("/api/users/me/profile-visibility/", { is_profile_visible: isProfileVisible });
-  return response.data;
-}
-
 export const likeUser = async (userId: number) => {
   const response = await httpClient.post<UserLikes>(`/api/users/${userId}/likes/`);
   return response.data as UserLikes;
