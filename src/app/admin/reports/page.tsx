@@ -1,15 +1,16 @@
 'use client'
 
-import { getAllReports, getResolvedReports, getUnresolvedReports } from "@/api/admin.api";
+import { getAllReports } from "@/api/admin.api";
 import AdminReportsContainer from "@/components/admin-page/AdminReportsContainer";
 import AdminReportsDetails from "@/components/admin-page/AdminReportsDetails";
 import AdminReportsFilter from "@/components/admin-page/AdminReportsFilter";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
-import { TReportType } from "@/models/admin.models";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useCallback, useEffect, useRef } from "react";
+import { Suspense, useCallback, useContext, useEffect } from "react";
+import { useStore } from "zustand";
 
 
 const AdminReportsPage = () => {
@@ -17,25 +18,24 @@ const AdminReportsPage = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const initialFetch = useRef<boolean>(true);
-
   const page = parseInt(searchParams.get("page") || '1');
-  const filter : TReportType = searchParams.get("filter") as TReportType || 'all';
+  const sort = searchParams.get("sort") || '';
+  const resolved = searchParams.get("resolved") || '';
+  const search = searchParams.get("search") || '';
+
   const report = searchParams.get("report") || '';
 
   const queryClient = useQueryClient();
   const adminReportsQuery = useSuspenseQuery({
     queryKey: ['admin', "reports", "pagination", page],
     queryFn: async () => {
-      if (filter === 'unsolved') {
-        return await getUnresolvedReports(page);
-      } else if (filter === 'solved') {
-        return await getResolvedReports(page);
-      } else {
-        return await getAllReports(page);
-      }
+      return await getAllReports(page, {resolved, search, sort});
     },
   });
+
+  const store = useContext(AdminPageStoreContext);
+  const reportsArgumentsModified = useStore(store, (state) => state.reportsArgumentsModified);
+  const setReportsArgumentsModified = useStore(store, (state) => state.setReportsArgumentsModified);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -56,17 +56,28 @@ const AdminReportsPage = () => {
     "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
-    if (initialFetch.current) {
-      initialFetch.current = false;
-      return;
-    }
-
     return () => {
       queryClient.removeQueries({
         queryKey: ['admin', "reports", "pagination"],
       })
     }
   }, []);
+
+  useEffect(() => {
+    if (reportsArgumentsModified) {
+      setReportsArgumentsModified(false);
+      adminReportsQuery.refetch();
+    }
+  }, [page, resolved, search, sort]);
+
+  if (adminReportsQuery.isRefetching || adminReportsQuery.isLoading) {
+    return (
+      <div className="flex flex-col gap-[24px] items-stretch">
+        <AdminReportsFilter />
+        <div className="h-[120px] w-[100%] flex items-center justify-center animate-pulse bg-color3 rounded-md" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-[24px] items-stretch">

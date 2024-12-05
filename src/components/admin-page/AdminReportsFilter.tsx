@@ -1,15 +1,28 @@
-import AdminReportsSearchBox from "./AdminReportsSearchBox";
-import AdminReportsTypeFilterButton from "./AdminReportsTypeFilterButton";
+import { useContext } from "react";
+import FilterButton from "../common/FilterButton";
+import SearchBox from "../common/SearchBox";
+import AdminReportsSortButtonOptionsContainer from "./AdminReportsSortButtonOptionsContainer";
+import AdminReportsStatusFilterButtonOptionsContainer from "./AdminReportsStatusFilterButtonOptionsContainer";
+import { AdminPageStoreContext } from "@/stores/admin.stores";
+import { useStore } from "zustand";
 
 
 const AdminReportsFilter = () => {
+  const store = useContext(AdminPageStoreContext);
+  const setReportsArgumentsModified = useStore(store, (state) => state.setReportsArgumentsModified);
+
   return (
     <div className="flex justify-between items-end">
       <div className="flex gap-[24px]">
-        <AdminReportsTypeFilterButton name="상태 필터" />
+        <FilterButton name="상태 필터">
+          <AdminReportsStatusFilterButtonOptionsContainer />
+        </FilterButton>
+        <FilterButton name="정렬">
+          <AdminReportsSortButtonOptionsContainer />
+        </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <AdminReportsSearchBox />
+        <SearchBox pressEnterCallback={() => setReportsArgumentsModified(true)} />
       </div>
     </div>
   );

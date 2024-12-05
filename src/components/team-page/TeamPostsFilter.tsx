@@ -4,6 +4,7 @@ import { useStore } from "zustand";
 import FilterButton from "../common/FilterButton";
 import SearchBox from "../common/SearchBox";
 import TeamPostsSortButtonOptionsContainer from "./TeamPostsSortButtonOptionsContainer";
+import TeamPostsGoToCreateButton from "./TeamPostsGoToCreateButton";
 
 
 const TeamPostsFilter = () => {
@@ -18,6 +19,7 @@ const TeamPostsFilter = () => {
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
+        <TeamPostsGoToCreateButton />
         <SearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
       </div>
     </div>

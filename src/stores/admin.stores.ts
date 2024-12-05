@@ -3,6 +3,10 @@ import { createContext } from "react";
 import { createStore } from "zustand";
 
 interface IAdminPageStore {
+  // Reports
+  reportsArgumentsModified: boolean;
+  setReportsArgumentsModified: (modified: boolean) => void;
+
   // Inquiries
   inquiriesArgumentsModified: boolean;
   setInquiriesArgumentsModified: (modified: boolean) => void;
@@ -32,6 +36,11 @@ interface IAdminPageStore {
 }
 
 export const AdminPageStore = createStore<IAdminPageStore>((set) => ({
+  reportsArgumentsModified: false,
+  setReportsArgumentsModified: (modified: boolean) => {
+    set({ reportsArgumentsModified: modified });
+  },
+
   inquiriesArgumentsModified: false,
   setInquiriesArgumentsModified: (modified: boolean) => {
     set({ inquiriesArgumentsModified: modified });

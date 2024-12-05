@@ -244,8 +244,31 @@ export const markInquiryAsUnsolved = async (inquiryId: string) => {
   return response.data;
 }
 
-export const getAllReports = async (page: number) => {
-  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/?page=${page}`);
+export const getAllReports = async (
+  page: number,
+  data: {
+    resolved?: string,
+    search?: string,
+    sort?: string,
+  }
+) => {
+  const { resolved, search, sort } = data;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', page.toString());
+
+  if (resolved) {
+    searchParams.set('resolved', resolved);
+  }
+
+  if (search) {
+    searchParams.set('search', search);
+  }
+
+  if (sort) {
+    searchParams.set('sort', sort);
+  }
+
+  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/?${searchParams.toString()}`);
   return response.data as IReportPaginationResult;
 }
 
