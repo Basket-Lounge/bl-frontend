@@ -1,8 +1,8 @@
 import { markInquiryAsSolved, markInquiryAsUnsolved } from "@/api/admin.api";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
 import Image from "next/image";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface IAdminInquiriesLiveChatHeaderSolveButtonProps {
@@ -41,7 +41,7 @@ const AdminInquiriesLiveChatHeaderSolveButton = (
       <button
         disabled
       >
-        <TeamHeaderLikeButtonSpinner />
+        <ButtonLoading />
       </button>
     )
   }

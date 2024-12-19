@@ -1,4 +1,4 @@
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
+import ButtonLoading from "./ButtonLoading";
 
 
 const LoadingButton = () => {
@@ -7,7 +7,7 @@ const LoadingButton = () => {
       className={"text-[14px] font-semibold px-[32px] py-[2px] rounded-full bg-color3 text-white relative"}
       disabled={true}
     >
-      <TeamHeaderLikeButtonSpinner />
+      <ButtonLoading />
     </button>
   )
 }

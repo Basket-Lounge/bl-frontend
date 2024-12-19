@@ -10,8 +10,8 @@ import AdminUsersDetailsPostsCommentsContainerItemInput from "./AdminUsersDetail
 import UserCommentsContainerEditDeleteButtonsContainer from "../my-page/UserCommentsContainerItemEditDeleteButtonsContainer";
 import UserCommentsContainerItemLikesRepliesBox from "../my-page/UserCommentsContainerItemLikesRepliesBox";
 import { useParams } from "next/navigation";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface IAdminUsersDetailsPostsCommentsContainerItemProps {
@@ -85,7 +85,7 @@ const AdminUsersDetailsPostsCommentsContainerItem = ({ comment }: IAdminUsersDet
   return (
     <div className="flex flex-col items-stretch gap-[24px] bg-color3 rounded-md p-[24px]">
       {mutating ? (
-        <TeamHeaderLikeButtonSpinner />
+        <ButtonLoading />
       ) : (
         <UserCommentsContainerContent
           content={editedContent}

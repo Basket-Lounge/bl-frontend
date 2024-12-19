@@ -6,9 +6,9 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useStore } from "zustand";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
 import { likeUser, unlikeUser } from "@/api/user.api";
 import { UserLikes } from "@/models/user.models";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IUserHeaderLikeButtonProps {
@@ -74,7 +74,7 @@ export default function UserHeaderLikeButton(
         />
       )}
       { teamLikeMutation.isPending ?
-        <TeamHeaderLikeButtonSpinner /> :
+        <SpinnerLoading /> :
         realLikesCount
       }
     </button>
