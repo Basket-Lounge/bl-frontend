@@ -42,14 +42,16 @@ const ModalDeleteComment = ({
     <div className="p-4 text-color1">
       <p>정말로 해당 댓글을 삭제하시겠습니까?</p>
       <div className="flex justify-center mt-4">
+        {!deleteCommentMutation.isPending && (
+          <button
+            className="rounded-full py-[12px] px-[24px] mr-2 bg-[#DC0909] text-white font-semibold"
+            onClick={handleCancelClick}
+          >
+            취소
+          </button>
+        )}
         <button
-          className="btn btn-secondary mr-2"
-          onClick={handleCancelClick}
-        >
-          취소
-        </button>
-        <button
-          className="btn btn-primary"
+          className="rounded-full py-[12px] px-[24px] bg-color1 text-white font-semibold"
           onClick={handleDeleteComment}
           disabled={deleteCommentMutation.isPending}
         >

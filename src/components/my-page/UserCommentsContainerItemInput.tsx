@@ -1,6 +1,6 @@
-import { editTeamPostComment, publishTeamPostCommentReply } from "@/api/team.api";
+import { editTeamPostComment } from "@/api/team.api";
 import { TeamPostCommentValidation } from "@/utils/validation.utils";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 
 
@@ -86,15 +86,15 @@ const UserCommentsContainerItemInput = (
       <div className="mt-[8px] flex items-center justify-between">
         <div>
         {commentError && <p className="mt-[16px] text-red-500">{commentError}</p>}
-        {mutation.isPending && <p className="mt-[16px] text-white">저장 중...</p>}
         {mutation.isError && <p className="mt-[16px] text-white">저장 중 오류가 발생했습니다.</p>}
         {mutation.isSuccess && <p className="mt-[16px] text-white">저장되었습니다.</p>}
         </div>
         <button 
           className="bg-color1 text-white py-2 px-4 rounded-full"
           onClick={handleSubmitClick}
+          disabled={mutation.isPending}
         >
-          댓글 등록
+          {mutation.isPending ? "저장 중..." : "저장"}
         </button>
       </div>
       )}
