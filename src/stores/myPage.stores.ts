@@ -66,6 +66,9 @@ interface IMyPageStore {
   postArgumentsModified: boolean;
   setPostArgumentsModified: (modified: boolean) => void;
 
+  lastModifiedPostId: string | null;
+  setLastModifiedPostId: (postId: string | null) => void;
+
   commentArgumentsModified: boolean;
   setCommentArgumentsModified: (modified: boolean) => void;
 }
@@ -118,6 +121,8 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
 
   postArgumentsModified: false,
   setPostArgumentsModified: (modified) => set({ postArgumentsModified: modified }),
+  lastModifiedPostId: null,
+  setLastModifiedPostId: (postId) => set({ lastModifiedPostId: postId }),
 
   commentArgumentsModified: false,
   setCommentArgumentsModified: (modified) => set({ commentArgumentsModified: modified }),
