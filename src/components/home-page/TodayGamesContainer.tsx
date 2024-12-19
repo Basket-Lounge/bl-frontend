@@ -17,28 +17,28 @@ export default function TodayGamesContainer() {
 
   if (todayGamesQuery.isLoading || todayGamesQuery.isRefetching) {
     return (
-      <div>
+      <section>
         <h3 className="text-[20px] font-bold">오늘의 경기</h3>
         <TodayGameSkeletonsContainer />
-      </div>
+      </section>
     );
   }
 
   if (todayGamesQuery.data!.length === 0) {
     return (
-      <div>
+      <section>
         <h3 className="text-[20px] font-bold">오늘의 경기</h3>
         <div className="h-[200px] flex flex-col gap-[16px] items-center justify-center">
           <CuteErrorMessage error="오늘의 경기가 없습니다." />
         </div>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div>
+    <section>
       <h3 className="text-[20px] font-bold">오늘의 경기</h3>
       <TodayGamesListController games={todayGamesQuery.data!} />
-    </div>
+    </section>
   );
 }

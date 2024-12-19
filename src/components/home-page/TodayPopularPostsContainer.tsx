@@ -15,29 +15,29 @@ const TodayPopularPostsContainer = () => {
 
   if (popularPostsQuery.isLoading || popularPostsQuery.isRefetching) {
     return (
-      <div>
+      <section>
         <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>
         <TodayPopularPostSkeletonsContainer />
-      </div>
+      </section>
     );
   }
 
   if (popularPostsQuery.data!.results.length === 0) {
     return (
-      <div>
+      <section>
         <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>
         <div className="h-[200px] flex flex-col gap-[16px] items-center justify-center">
           <CuteErrorMessage error="현재 HOT한 게시물이 없습니다." />
         </div>
-      </div>
+      </section>
     ); 
   }
 
   return (
-    <div>
+    <section>
       <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>
       <TodayPopularPostsListController posts={popularPostsQuery.data!.results} />
-    </div>
+    </section>
   )
 }
 

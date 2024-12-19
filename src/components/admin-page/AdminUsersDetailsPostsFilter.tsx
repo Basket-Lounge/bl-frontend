@@ -1,11 +1,11 @@
 import AdminUsersDetailsPostsStatusFilterButtonOptionsContainer from "./AdminUsersDetailsPostsStatusFilterButtonOptionsContainer";
 import AdminUsersDetailsPostsSortButtonOptionsContainer from "./AdminUsersDetailsPostsSortButtonOptionsContainer";
 import AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer from "./AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer";
-import AdminUsersSearchBox from "./AdminUsersSearchBox";
 import { useContext } from "react";
 import { useStore } from "zustand";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import FilterButton from "../common/FilterButton";
+import SearchBox from "../common/SearchBox";
 
 const AdminUsersDetailsPostsFilter = () => {
   const store = useContext(AdminPageStoreContext);
@@ -25,7 +25,7 @@ const AdminUsersDetailsPostsFilter = () => {
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <AdminUsersSearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
+        <SearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
       </div>
     </div>
   );

@@ -73,7 +73,7 @@ const AdminInquiriesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch">
       <AdminInquiriesFilter />
       <div className={divClassName}>
         <AdminInquiriesContainer 
@@ -95,7 +95,7 @@ const AdminInquiriesPage = () => {
           adminInquiriesQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   );
 }
 

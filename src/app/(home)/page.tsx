@@ -31,7 +31,7 @@ export default function Home() {
 
   return (
     <div className="w-full flex flex-col gap-[32px] items-stretch mx-auto py-[32px]">
-      <div className="h-[300px] w-full bg-white/10 rounded-md relative flex flex-col justify-center items-start overflow-hidden px-[64px] lg:px-[128px] gap-[24px]">
+      <section className="h-[300px] w-full bg-white/10 rounded-md relative flex flex-col justify-center items-start overflow-hidden px-[64px] lg:px-[128px] gap-[24px]">
         <span
           ref={subHeadingRef}
           className="text-[20px] lg:text-[24px] font-light h-[24px]" 
@@ -42,7 +42,7 @@ export default function Home() {
         >
           Basket Lounge
         </h1>
-      </div>
+      </section>
       <TodayGamesContainer />
       <SeasonTopPlayersContainer />
       <TodayPopularPostsContainer />

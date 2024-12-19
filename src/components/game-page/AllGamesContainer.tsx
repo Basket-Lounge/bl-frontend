@@ -70,7 +70,7 @@ const AllGamesContainer = () => {
   }
 
   return (
-    <div className="flex flex-col items-stretch gap-[16px]">
+    <section className="flex flex-col items-stretch gap-[16px]">
       <h3 className="text-[20px] font-bold">2024-25시즌 전체 스케쥴 📅</h3>
       <AllGamesFilter />
       {(gamesQuery.data) && (
@@ -95,7 +95,7 @@ const AllGamesContainer = () => {
           }
         />
       )}
-    </div>
+    </section>
   )
 }
 

@@ -80,7 +80,7 @@ const AdminReportsPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch">
       <AdminReportsFilter />
       <div className={divClassName}>
         <AdminReportsContainer
@@ -101,7 +101,7 @@ const AdminReportsPage = () => {
           adminReportsQuery.data.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   );
 }
 

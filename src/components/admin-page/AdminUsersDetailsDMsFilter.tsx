@@ -1,9 +1,9 @@
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import AdminFilterButton from "./AdminFilterButton";
 import AdminUsersDetailsDMsSortButtonOptionsContainer from "./AdminUsersDetailsDMsSortButtonOptionsContainer";
-import AdminUsersSearchBox from "./AdminUsersSearchBox";
 import { useContext } from "react";
 import { useStore } from "zustand";
+import SearchBox from "../common/SearchBox";
 
 
 const AdminUsersDetailsDMsFilter = () => {
@@ -18,7 +18,7 @@ const AdminUsersDetailsDMsFilter = () => {
         </AdminFilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <AdminUsersSearchBox pressEnterCallback={() => setChatArgumentsModified(true)} />
+        <SearchBox pressEnterCallback={() => setChatArgumentsModified(true)} />
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ export default function NavBar() {
   }
 
   return (
-    <div className="bg-color1 w-full py-[20px]">
+    <header className="bg-color1 w-full py-[20px]">
       <div className="flex items-center sm:w-[360px] md:w-[480px] lg:w-[768px] xl:w-[1024px] 2xl:w-[1200px] mx-auto">
         <div className="text-white text-[16px] lg:text-[20px] font-medium w-1/3">
           <button
@@ -44,6 +44,6 @@ export default function NavBar() {
           <UserMenu />
         </div>
       </div>
-    </div>
+    </header>
   )
 }

@@ -11,7 +11,7 @@ export default function AdminHeader({ user }: IAdminHeaderProps) {
   const role = translateRoleNameToKorean(user.role_data.name);
 
   return (
-    <div className="flex gap-[48px] items-start justify-between">
+    <section className="flex gap-[48px] items-start justify-between">
       {/* Team Logo */}
       <div className="flex gap-[48px] items-stretch">
         <div className="w-[156px] h-[156px] rounded-full bg-white relative">
@@ -31,6 +31,6 @@ export default function AdminHeader({ user }: IAdminHeaderProps) {
           </h3>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

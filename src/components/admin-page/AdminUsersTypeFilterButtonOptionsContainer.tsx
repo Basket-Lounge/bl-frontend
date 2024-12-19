@@ -68,7 +68,7 @@ const AdminUsersTypeFilterButtonOptionsContainer = () => {
 
   return (
     <div 
-      className="absolute w-[350px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[150%] left-0"
+      className="w-[350px] bg-color3 rounded-md p-[24px] z-10 flex gap-[16px] flex-wrap top-[150%]"
     >
       {rolesQuery.data.map((role) => (
         <AdminUsersFilterButtonOption

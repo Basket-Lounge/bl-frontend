@@ -15,17 +15,17 @@ export default function SeasonTopPlayersContainer() {
 
   if (top10PlayersQuery.isLoading || top10PlayersQuery.isRefetching) {
     return (
-      <div>
+      <section>
         <h3 className="text-[20px] font-bold">2024-25 평균 득점 TOP 10</h3>
         <SeasonTopPlayerSkeletonsContainer />
-      </div>
+      </section>
     );
   }
 
   return (
-    <div>
+    <section>
       <h3 className="text-[20px] font-bold">2024-25 평균 득점 TOP 10</h3>
       <SeasonTopPlayersListController players={top10PlayersQuery.data!} />
-    </div>
+    </section>
   );
 }
