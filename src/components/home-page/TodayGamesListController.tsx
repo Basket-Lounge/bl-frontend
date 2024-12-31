@@ -76,30 +76,3 @@ export default function TodayGamesListController(
     </Carousel>
   );
 }
-
-
-// const { pageWidth, setPageWidth } = useStore(pageSizeControllerStore);
-
-// useEffect(() => {
-//   const handleResize = () => {
-//     setPageWidth(window.innerWidth);
-//   }
-
-//   window.addEventListener('resize', handleResize);
-//   handleResize();
-
-//   return () => {
-//     window.removeEventListener('resize', handleResize);
-//   }
-// }, []);
-
-// return (
-//   <ThemeProvider>
-//     <div className='flex flex-col min-h-screen w-full'>
-//       <NavBar />
-//       {/* <div style={{ width: `${pageWidth}px`, margin: 'auto', flexGrow: 1}}>
-//         { authenticationAttempted ? children : <div>Loading...</div> }
-//       </div> */}
-//       <div className="grow mx-auto sm:w-[360px] md:w-[480px] lg:w-[768px] xl:w-[1024px] 2xl:w-[1200px]">
-//         { authenticationAttempted ? children : <div>Loading...</div> }
-//       </div>

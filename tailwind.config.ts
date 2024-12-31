@@ -1,4 +1,5 @@
 import withMT from "@material-tailwind/react/utils/withMT";
+import plugin from "tailwindcss/plugin";
 
 const config = withMT({
   content: [
@@ -27,10 +28,48 @@ const config = withMT({
         "tablet": "768px",
         "mobile-2": "480px",
         "mobile-1": "320px",
-      }
+      },
+      keyframes: {
+        fadeFromColor3To2: {
+          '0%, 100%': { 
+            backgroundColor: "#423F3E",
+          },
+          '50%': { 
+            backgroundColor: "#2B2B2B",
+          },
+        },
+      },
+      animation: {
+        fadeFrom3To2: 'fadeFromColor3To2 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'animate-fade-in-and-out': (value) => ({
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              backgroundColor: value,
+              top: '0',
+              left: '0',
+              width: '100%',
+              height: '100%',
+              opacity: '0',
+              animation: `${theme('animation.fade')}`,
+              borderRadius: 'inherit',
+            },
+          }),
+        },
+        {
+          values: theme('colors'),
+        }
+      )
+    })
+  ],
 });
 
 export default config;

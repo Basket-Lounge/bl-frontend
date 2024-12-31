@@ -22,8 +22,9 @@ export default function TodayGame({ game }: ITodayGameProps) {
   const gameDate = gameDateTime[0];
   const gameTime = gameDateTime[1] + " " + gameDateTime[2];
 
+  const gameInProgressEffect = game.game_status_id != 2 ? "bg-color3" : "animate-fadeFrom3To2";
   return (
-    <div className="p-[24px] bg-color3 rounded-md flex flex-col gap-[16px]">
+    <div className={"p-[24px] rounded-md flex flex-col gap-[16px] relative " + gameInProgressEffect}>
       <TeamGeneralInfoGameBoxTeam 
         team={game.visitor_team} 
         lineScore={game.visitor_team.linescore as LineScore} 
@@ -38,7 +39,7 @@ export default function TodayGame({ game }: ITodayGameProps) {
         <p className="text=lg:text-[16px] font-medium text-center">{gameDate} {gameTime}</p>
       )}
       {game.game_status_id == 2 && (
-        <p className="text-[16px] font-medium text-center">경기 진행중</p>
+        <p className="text-[16px] font-medium text-center">{game.game_status_text}</p>
       )}
       {game.game_status_id == 3 && (
         <p className="text-[16px] font-medium text-center">경기 종료</p>
