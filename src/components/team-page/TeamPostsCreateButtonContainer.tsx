@@ -9,6 +9,7 @@ import { TeamStoreContext } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { TeamPostError } from "@/models/team.models";
 import { AxiosError } from "axios";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 const TeamPostsCreateButtonContainer = () => {
@@ -19,7 +20,7 @@ const TeamPostsCreateButtonContainer = () => {
   const updateContentError = useStore(store, (state) => state.updatePostsCreateContentError);
 
   const router = useRouter();
-  const { teamId } = useParams();
+  const { teamId } = useParams<{ teamId: string }>();
   const queryClient = useQueryClient();
 
   const postStatusQuery = useSuspenseQuery({
@@ -31,12 +32,15 @@ const TeamPostsCreateButtonContainer = () => {
 
   const mutation = useMutation({
     mutationFn: (post: { title: string, content: string, status: number }) => {
-      return publishTeamPost(teamId as string, post.title, post.content, post.status)
+      return publishTeamPost(teamId, post.title, post.content, post.status)
     },
     onSuccess: () => {
       queryClient.removeQueries({
-        queryKey: ["team", teamId as string, "posts", "pagination"]
+        queryKey: ["team", teamId, "posts", "pagination"]
       });
+      queryClient.cancelQueries({
+        queryKey: ['my-page', "posts", "pagination"],
+      })
 
       updateTitle("");
       updateContent("");
@@ -69,7 +73,7 @@ const TeamPostsCreateButtonContainer = () => {
   }
 
   if (mutation.isPending) {
-    return <div>Creating post...</div>
+    return <SpinnerLoading />;
   }
 
   return (

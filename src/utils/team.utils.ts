@@ -1,21 +1,20 @@
-import { Player } from "@/models/player.models";
 import { ConferenceStandings, ConferenceTeam, Team, TeamPostStatus } from "@/models/team.models";
 
 
 export const extractTeamEnglishName = (team: Team) => {
-    return team.teamname_set.find(name => name.language.name === "English")?.name || "";
+  return team.teamname_set.find(name => name.language.name === "English")?.name || "";
 }
 
 export const extractTeamKoreanName = (team: Team) => {
-    return team.teamname_set.find(name => name.language.name === "Korean")?.name || "";
+  return team.teamname_set.find(name => name.language.name === "Korean")?.name || "";
 }
 
 export const extractStatusKoreanName = (status: TeamPostStatus) => {
-    return status.poststatusdisplayname_set.find(name => name.language_data.name === "Korean")?.display_name || "";
+  return status.poststatusdisplayname_set.find(name => name.language_data.name === "Korean")?.display_name || "";
 }
 
 export const extractStatusEnglishName = (status: TeamPostStatus) => {
-    return status.poststatusdisplayname_set.find(name => name.language_data.name === "English")?.display_name || "";
+  return status.poststatusdisplayname_set.find(name => name.language_data.name === "English")?.display_name || "";
 }
 
 export const getTeamConferenceInKorean = (standings: ConferenceStandings, teamId: number) => {

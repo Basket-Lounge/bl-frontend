@@ -1,4 +1,3 @@
-import AdminInquiriesTypeFilterButton from "./AdminInquiriesTypeFilterButton";
 import SearchBox from "../common/SearchBox";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
 import { useContext } from "react";
@@ -14,7 +13,6 @@ const AdminInquiriesFilter = () => {
   return (
     <div className="flex justify-between items-end">
       <div className="flex gap-[24px]">
-        {/* <AdminInquiriesTypeFilterButton name="상태 필터" /> */}
         <FilterButton name="상태 필터">
           <AdminInquiriesTypeFilterButtonOptionsContainer />
         </FilterButton>
