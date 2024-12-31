@@ -1,5 +1,4 @@
 import Image from "next/image";
-import TeamPostsPostCommentsItemLikesButtonSpinner from "./TeamPostsPostCommentsItemLikesButtonSpinner";
 import { TeamPostCommentLikes } from "@/models/team.models";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { likeTeamPostComment, unlikeTeamPostComment } from "@/api/team.api";
@@ -9,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { useStore } from "zustand";
 import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useAuthStore } from "@/stores/auth.stores";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface ITeamPostsPostCommentsItemLikesRepliesButtonsContainerProps {
@@ -122,7 +122,7 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
           />
         )}
         {likeMutation.isPending ? (
-          <TeamPostsPostCommentsItemLikesButtonSpinner />
+          <ButtonLoading />
         ) : (
           <span className="text-white">{likesCount}</span>
         )}

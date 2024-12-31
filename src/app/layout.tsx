@@ -2,13 +2,10 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Suspense } from "react";
-import { ErrorBoundary } from "react-error-boundary";
 import { QueryProvider } from "@/components/common/QueryProvider";
 import ModalController from "@/components/common/modal/ModalController";
 import PageSizeController from "@/components/common/PageSizeController";
-import { ErrorRenderer } from "@/components/common/ErrorRenderer";
 import { ErrorBoundaryHandler } from "@/components/common/ErrorBoundaryHandler";
-import TeamHeaderLikeButtonSpinner from "@/components/team-page/TeamHeaderLikeButtonSpinner";
 import SpinnerLoading from "@/components/common/SpinnerLoading";
 
 

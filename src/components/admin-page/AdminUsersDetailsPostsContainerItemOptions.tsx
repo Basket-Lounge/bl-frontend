@@ -6,8 +6,8 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useContext, useRef, useState } from "react";
 import { useStore } from "zustand";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface IAdminUsersDetailsPostsContainerOptionsProps {
@@ -105,7 +105,7 @@ const AdminUsersDetailsPostsContainerOptions = ({ post }: IAdminUsersDetailsPost
       ref={menuButtonRef}
     >
       {(deletePostMutation.isPending || hidePostMutation.isPending || restorePostMutation.isPending) ? (
-        <TeamHeaderLikeButtonSpinner />
+        <ButtonLoading />
       ) : (
         <Image
           src="/icons/options_24dp_FFFFFF.svg"

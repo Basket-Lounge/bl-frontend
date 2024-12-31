@@ -4,8 +4,8 @@ import { useAuthStore } from "@/stores/auth.stores";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
+import { useCallback } from "react";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface IAdminInquiriesLiveChatHeaderAssignModeratorButtonProps {
@@ -54,7 +54,7 @@ const AdminInquiriesLiveChatHeaderAssignModeratorButton = (
       <button
         disabled
       >
-        <TeamHeaderLikeButtonSpinner />
+        <ButtonLoading />
       </button>
     )
   }

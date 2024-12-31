@@ -5,8 +5,8 @@ import { useParams, usePathname, useRouter, useSearchParams } from "next/navigat
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeamPostComments } from "@/api/team.api";
 import TeamPostsPostCommentsItem from "./TeamPostsPostCommentsItem";
-import TeamHeaderLikeButtonSpinner from "./TeamHeaderLikeButtonSpinner";
 import TeamPostsPagination from "./TeamPostsPagination";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IPostCommentsStore {
@@ -81,9 +81,7 @@ const TeamPostsPostCommentsContainer = () => {
 
   if (postCommentsQuery.isLoading || postCommentsQuery.isRefetching) {
     return (
-      <div className="p-[24px] flex flex-col gap-[16px] items-center justify-center">
-        <TeamHeaderLikeButtonSpinner />
-      </div>
+      <SpinnerLoading />
     )
   }
 

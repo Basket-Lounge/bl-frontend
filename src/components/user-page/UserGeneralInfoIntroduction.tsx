@@ -1,7 +1,7 @@
 import { getUserInfo } from "@/api/user.api";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import TeamHeaderLikeButtonSpinner from "../team-page/TeamHeaderLikeButtonSpinner";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 const UserGeneralInfoIntroduction = () => {
@@ -17,9 +17,7 @@ const UserGeneralInfoIntroduction = () => {
     return (
       <div className="w-full">
         <label className="text-white text-[20px] font-bold block">자기 소개</label>
-        <div className="p-[16px] flex flex-col gap-[16px] items-center justify-center">
-          <TeamHeaderLikeButtonSpinner />
-        </div>
+        <SpinnerLoading />
       </div>
     )
   }

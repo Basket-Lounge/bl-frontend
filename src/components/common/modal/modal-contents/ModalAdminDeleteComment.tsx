@@ -1,7 +1,7 @@
 import { deletePostComment } from "@/api/admin.api";
-import TeamHeaderLikeButtonSpinner from "@/components/team-page/TeamHeaderLikeButtonSpinner";
 import { useModalStore } from "@/stores/modal.stores";
 import { useMutation } from "@tanstack/react-query";
+import ButtonLoading from "../../ButtonLoading";
 
 
 interface IModalAdminDeleteCommentProps {
@@ -53,7 +53,7 @@ const ModalAdminDeleteComment = ({
           onClick={handleDeleteComment}
           disabled={deleteCommentMutation.isPending}
         >
-          {deleteCommentMutation.isPending ? <TeamHeaderLikeButtonSpinner /> : "삭제"}
+          {deleteCommentMutation.isPending ? <ButtonLoading /> : "삭제"}
         </button>
       </div>
     </div>

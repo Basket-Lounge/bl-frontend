@@ -40,7 +40,7 @@ const AdminInquiriesFilterButtonOption = <CustomType extends string>(
         return false
       }
     },
-    [searchParams]
+    [searchParams, queryValue]
   )
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

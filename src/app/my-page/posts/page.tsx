@@ -2,8 +2,8 @@
 
 import { getMyPosts } from "@/api/user.api";
 import CuteErrorMessage from "@/components/common/CuteErrorMessage";
+import UserPostsContainer from "@/components/my-page/UserPostsContainer";
 import UserPostsFilter from "@/components/my-page/UserPostsFilter";
-import TeamPostsContainer from "@/components/team-page/TeamPostsContainer";
 import TeamPostsContainerSkeleton from "@/components/team-page/TeamPostsContainerSkeleton";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { MyPageStoreContext } from "@/stores/myPage.stores";
@@ -19,6 +19,8 @@ const PostsPage = () => {
   const searchParams = useSearchParams();
 
   const store = useContext(MyPageStoreContext);
+  const lastModifiedPostId = useStore(store, (state) => state.lastModifiedPostId);
+  const setLastModifiedPostId = useStore(store, (state) => state.setLastModifiedPostId);
   const postArgumentsModified = useStore(store, (state) => state.postArgumentsModified);
   const setPostArgumentsModified = useStore(store, (state) => state.setPostArgumentsModified);
 
@@ -49,6 +51,13 @@ const PostsPage = () => {
   }
 
   useEffect(() => {
+    if (lastModifiedPostId) {
+      teamPostsQuery.refetch();
+      setLastModifiedPostId(null);
+    }
+  }, [lastModifiedPostId]);
+
+  useEffect(() => {
     if (postArgumentsModified) {
       teamPostsQuery.refetch();
       setPostArgumentsModified(false);
@@ -75,7 +84,7 @@ const PostsPage = () => {
   return (
     <div className="flex flex-col gap-[16px] items-stretch">
       <UserPostsFilter />
-      <TeamPostsContainer posts={teamPostsQuery.data!.results} />
+      <UserPostsContainer posts={teamPostsQuery.data!.results} />
       <TeamPostsPagination 
         currentPageNumber={page}
         previousCallback={

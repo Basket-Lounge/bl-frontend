@@ -1,4 +1,4 @@
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 interface ISectionOptionButtonProps<CustomType> {

@@ -6,10 +6,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import TeamPostsPostCommentsItemLikesButtonSpinner from "./TeamPostsPostCommentsItemLikesButtonSpinner";
 
 import { useAuthStore } from "@/stores/auth.stores";
 import { useStore } from "zustand";
+import ButtonLoading from "../common/ButtonLoading";
 
 
 interface ITeamPostsPostLikeCommentButtonContainerProps {
@@ -81,7 +81,7 @@ const TeamPostsPostLikeCommentButtonContainer = ({
           />
         )}
         {postLikeMutation.isPending ? (
-          <TeamPostsPostCommentsItemLikesButtonSpinner />
+          <ButtonLoading />
         ) : (
           <span>{realLikesCount}</span>
         )}
