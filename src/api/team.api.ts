@@ -131,6 +131,22 @@ export const publishTeamPost = async (
   return response.data;
 }
 
+export const editTeamPost = async (
+  teamId: string,
+  postId: string,
+  title: string,
+  content: string,
+  status: number
+) => {
+  const response = await httpClient.patch<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`, { title, content, status });
+  return response.data;
+}
+
+export const deleteTeamPost = async (teamId: string, postId: string) => {
+  const response = await httpClient.delete(`/api/teams/${teamId}/posts/${postId}/`);
+  return response.data;
+}
+
 export const getTeamPost = async (teamId: string, postId: string) => {
   const response = await httpClient.get<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`);
   return response.data;

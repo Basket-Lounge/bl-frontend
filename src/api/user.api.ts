@@ -2,8 +2,6 @@ import {
   InquiryType, 
   IReportType, 
   IRole, 
-  IUpdateProfileVisibility, 
-  IUpdateUserIntroduction, 
   IUser, 
   MyPageCommentsPaginationResult, 
   UserChat, 
@@ -13,7 +11,7 @@ import {
 } from "@/models/user.models";
 import { httpClient, httpClientFormData } from "./http";
 import { TeamPostPaginationResult } from "@/models/team.models";
-import { IInitialLoginResponse, IRefreshTokenResponse } from "@/models/auth.models";
+import { IInitialLoginResponse } from "@/models/auth.models";
 
 
 export const getAuthTokens = async (

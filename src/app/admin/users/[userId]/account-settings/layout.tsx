@@ -3,7 +3,7 @@
 import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { getAllRoles, getUser } from '@/api/admin.api';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { useStore } from 'zustand';
 import { UserManagementStoreContext } from '@/stores/admin.stores';
 
@@ -14,8 +14,6 @@ export default function UserPage({ children }: {
   const { userId } = useParams();
   const queryClient = useQueryClient();
   const store = useContext(UserManagementStoreContext);
-
-  const [initialized, setInitialized] = useState(false);
 
   const setUsername = useStore(store, (state) => state.setUsername);
   const setPrevUsername = useStore(store, (state) => state.setPrevUsername);
@@ -74,7 +72,6 @@ export default function UserPage({ children }: {
       setIsProfileVisible(userQuery.data.is_profile_visible);
       setPrevIsProfileVisible(userQuery.data.is_profile_visible);
 
-      setInitialized(true);
       return;
     }
   }, [userQuery.data]);

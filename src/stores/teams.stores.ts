@@ -17,6 +17,8 @@ interface ITeamStore {
   updatePostsFilterValue: (value: TTeamPostsFilter) => void;
   searchValue: string;
   updateSearchValue: (value: string) => void;
+
+  // Creating posts
   postsCreateTitle: string;
   updatePostsCreateTitle: (value: string) => void;
   postsCreateTitleError: string | null;
@@ -25,6 +27,16 @@ interface ITeamStore {
   updatePostsCreateContent: (value: string) => void;
   postsCreateContentError: string | null;
   updatePostsCreateContentError: (value: string | null) => void;
+
+  // Editing posts
+  postsEditTitle: string;
+  updatePostsEditTitle: (value: string) => void;
+  postsEditTitleError: string | null;
+  updatePostsEditTitleError: (value: string | null) => void;
+  postsEditContent: string;
+  updatePostsEditContent: (value: string) => void;
+  postsEditContentError: string | null;
+  updatePostsEditContentError: (value: string | null) => void;
 }
 
 export const TeamStore = createStore<ITeamStore>((set) => ({
@@ -41,6 +53,7 @@ export const TeamStore = createStore<ITeamStore>((set) => ({
   updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
   searchValue: "",
   updateSearchValue: (value) => set({ searchValue: value }),
+
   postsCreateTitle: "",
   updatePostsCreateTitle: (value) => set({ postsCreateTitle: value }),
   postsCreateTitleError: "",
@@ -49,6 +62,15 @@ export const TeamStore = createStore<ITeamStore>((set) => ({
   updatePostsCreateContent: (value) => set({ postsCreateContent: value }),
   postsCreateContentError: "",
   updatePostsCreateContentError: (value) => set({ postsCreateContentError: value }),
+
+  postsEditTitle: "",
+  updatePostsEditTitle: (value) => set({ postsEditTitle: value }),
+  postsEditTitleError: "",
+  updatePostsEditTitleError: (value) => set({ postsEditTitleError: value }),
+  postsEditContent: "",
+  updatePostsEditContent: (value) => set({ postsEditContent: value }),
+  postsEditContentError: "",
+  updatePostsEditContentError: (value) => set({ postsEditContentError: value }),
 }));
 
 export const TeamStoreContext = createContext(TeamStore);

@@ -1,13 +1,13 @@
-import { updatePost } from "@/api/admin.api";
-import { getTeamPostStatus } from "@/api/team.api";
+import { deleteTeamPost } from "@/api/team.api";
 import useClickOutside from "@/hooks/useClickOutside";
 import { TeamPost } from "@/models/team.models";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useContext, useRef, useState } from "react";
 import { useStore } from "zustand";
 import ButtonLoading from "../common/ButtonLoading";
 import { MyPageStoreContext } from "@/stores/myPage.stores";
+import { useRouter } from "next/navigation";
 
 
 interface IUsersPostsContainerOptionsProps {
@@ -15,6 +15,7 @@ interface IUsersPostsContainerOptionsProps {
 }
 
 const UsersPostsContainerOptions = ({ post }: IUsersPostsContainerOptionsProps) => {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -29,21 +30,9 @@ const UsersPostsContainerOptions = ({ post }: IUsersPostsContainerOptionsProps) 
   const store = useContext(MyPageStoreContext);
   const setLastModifiedPostId = useStore(store, (state) => state.setLastModifiedPostId);
 
-  const teamPostStatusesQuery = useSuspenseQuery({
-    queryKey: ['users', "posts", "statuses"],
-    queryFn: async () => {
-      return await getTeamPostStatus();
-    },
-  });
-
-
   const deletePostMutation = useMutation({
     mutationFn: () => {
-      const createdStatusId = teamPostStatusesQuery.data.find(
-        (status) => status.name === "deleted"
-      )?.id;
-
-      return updatePost(post.id, { status: createdStatusId });
+      return deleteTeamPost(post.team_data.id.toString(), post.id);
     },
     onSuccess: () => {
       setLastModifiedPostId(post.id);
@@ -54,6 +43,12 @@ const UsersPostsContainerOptions = ({ post }: IUsersPostsContainerOptionsProps) 
     e.preventDefault();
     deletePostMutation.mutate();
     isMenuOpen && setIsMenuOpen(false);
+    e.stopPropagation();
+  }
+
+  const handleEditPostClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push(`/teams/${post.team_data.id}/posts/${post.id}/edit`);
     e.stopPropagation();
   }
 
@@ -81,6 +76,12 @@ const UsersPostsContainerOptions = ({ post }: IUsersPostsContainerOptionsProps) 
             onClick={handleDeletePostClick}
           >
             삭제하기
+          </button>
+          <button 
+            className="text-white font-medium p-[16px] hover:bg-color4"
+            onClick={handleEditPostClick}
+          >
+            수정하기
           </button>
         </div>
       )}
