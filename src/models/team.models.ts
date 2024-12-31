@@ -171,10 +171,15 @@ export interface TeamPost {
     user_data: {
         id: number;
         username: string;
+        favorite_team: {
+            id: number;
+            symbol: string;
+        }
     },
     team_data: {
         id: number;
         symbol: string;
+        teamname_set: TeamNameSet[];
     },
     status_data: TeamPostStatus;
     likes_count: number;
