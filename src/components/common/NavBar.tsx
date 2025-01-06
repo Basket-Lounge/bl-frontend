@@ -4,12 +4,18 @@ import useTokenRefresh from "@/hooks/useTokenRefresh";
 import { useRouter } from "next/navigation";
 import Team from "./navbar/Team";
 import UserMenu from "./navbar/UserMenu";
+import NotificationPopover from "./navbar/NotificationPopover";
+import { useAuthStore } from "@/stores/auth.stores";
+import { useStore } from "zustand";
 
 
 export default function NavBar() {
   const router = useRouter();
-
   useTokenRefresh();
+
+  const {
+    isAuthenticated
+  } = useStore(useAuthStore);
 
   const handleHomeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -40,7 +46,10 @@ export default function NavBar() {
             스케쥴
           </button>
         </div>
-        <div className="flex justify-end grow">
+        <div className="flex justify-end grow items-center gap-[24px]">
+          {isAuthenticated && (
+            <NotificationPopover />
+          )}
           <UserMenu />
         </div>
       </div>
