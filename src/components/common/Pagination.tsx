@@ -48,7 +48,7 @@ const Pagination = ({
           />
         </button>
         )}
-        <span className="rounded-full p-[6px] bg-color1">{currentPageNumber}</span>
+        <span className="rounded-full p-[6px] bg-color1 text-white font-bold">{currentPageNumber}</span>
         {nextCallback && (
         <button
           onClick={handleNextClick}

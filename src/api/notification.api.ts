@@ -11,6 +11,10 @@ export const markAllNotificationsAsRead = async () => {
   await httpClient.patch("/api/users/me/notifications/");
 }
 
+export const markNotificationAsRead = async (notificationId: string) => {
+  await httpClient.patch(`/api/users/me/notifications/${notificationId}/`);
+}
+
 export const getAllNotifications = async (
   page: number,
   data: {

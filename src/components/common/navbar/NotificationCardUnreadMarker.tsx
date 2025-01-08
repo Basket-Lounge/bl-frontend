@@ -1,6 +1,6 @@
 const NotificationCardUnreadMarker = () => {
   return (
-    <div className="absolute top-0 right-0 w-[8px] h-[8px] bg-[#DC0909] rounded-full" />
+    <div className="absolute top-0 right-0 w-[12px] h-[12px] bg-[#DC0909] rounded-full" />
   );
 }
 

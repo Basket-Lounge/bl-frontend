@@ -14,14 +14,19 @@ interface INotificationHeaderProps {
 const NotificationHeader = (
   { pending, data }: INotificationHeaderProps
 ) => {
-  const { currentSection } = useNotificationStore();
+  const { 
+    currentSection,
+    setIsMarkingNotificationAsReadClicked,
+    setIsHeaderUnreadNotificationCountChanged
+  } = useNotificationStore();
 
   const markAllAsReadMutation = useMutation({
     mutationFn: () => {
       return markAllNotificationsAsRead();
     },
     onSuccess: () => {
-      window.location.reload();
+      setIsHeaderUnreadNotificationCountChanged(true);
+      setIsMarkingNotificationAsReadClicked(true);
     }
   })
 
@@ -33,13 +38,15 @@ const NotificationHeader = (
             알림
           </span> 
         </div>
-        <TextButton
-          text="전체 읽음 표시"
-          size="small"
-          handleClick={() => markAllAsReadMutation.mutate()}
-          pending={markAllAsReadMutation.isPending}
-          disabled={markAllAsReadMutation.isPending}
-        />
+        {!pending && (
+          <TextButton
+            text="전체 읽음 표시"
+            size="small"
+            handleClick={() => markAllAsReadMutation.mutate()}
+            pending={markAllAsReadMutation.isPending}
+            disabled={markAllAsReadMutation.isPending}
+          />
+        )}
       </div>
       <div className="flex items-center gap-[24px] text-white text-[14px]">
         <NotificationHeaderSectionButton 

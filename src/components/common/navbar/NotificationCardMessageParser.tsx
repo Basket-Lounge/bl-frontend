@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 interface INotificationCardMessageParserProps {
   message: string;
   redirectURL: string | null;
+  clickCallback?: () => void;
 }
 
 const NotificationCardMessageParser = (
-  { message, redirectURL }: INotificationCardMessageParserProps
+  { message, redirectURL, clickCallback }: INotificationCardMessageParserProps
 ) => {
   const router = useRouter();
 
@@ -44,11 +45,12 @@ const NotificationCardMessageParser = (
     if (redirectURL) {
       router.push(redirectURL);
     }
+    clickCallback && clickCallback();
   };
 
   return (
     <button 
-      className="grow text-[14px] text-white line-clamp-2 leading-relaxed block"
+      className="grow text-[14px] text-white line-clamp-2 leading-relaxed block text-left"
       onClick={handleClick}
     >
       {parts}

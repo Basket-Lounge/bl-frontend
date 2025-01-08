@@ -3,6 +3,11 @@ import NotificationCardMessageParser from "./NotificationCardMessageParser";
 import { INotification } from "@/models/notification.models";
 import NotificationCardUnreadMarker from "./NotificationCardUnreadMarker";
 import { useAuthStore } from "@/stores/auth.stores";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { markNotificationAsRead } from "@/api/notification.api";
+import NotificationCardDatetime from "./NotificationCardDatetime";
+import { useState } from "react";
+import { useNotificationStore } from "@/stores/notification.stores";
 
 
 interface INotificationCardProps {
@@ -10,18 +15,51 @@ interface INotificationCardProps {
 }
 
 const NotificationCard = ({ notification }: INotificationCardProps) => {
+  const queryClient = useQueryClient();
   const {
     userId
   } = useAuthStore();
 
-  const userReadStatus = notification.recipients.find(
-    (recipient) => recipient.recipient_data.id === userId
-  )
+  const {
+    currentSection,
+  } = useNotificationStore();
+
+  const [read, setRead] = useState<boolean>(
+    notification.recipients.find(
+      (recipient) => recipient.recipient_data.id === userId
+    )?.read || false
+  );
+
+  const markAsReadMutation = useMutation({
+    mutationFn: () => {
+      return markNotificationAsRead(notification.id);
+    },
+    onSuccess: () => {
+      setRead(true);
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "unread-count"],
+        exact: true
+      });
+
+      if (currentSection === "unread") {
+        queryClient.invalidateQueries({
+          queryKey: ["notifications", "unread"],
+          exact: true
+        });
+      }
+    }
+  });
+
+  const handleNotificationCardClick = () => {
+    if (read === false) {
+      markAsReadMutation.mutate();
+    }
+  }
 
   return (
     <div className="px-[24px] py-[16px] flex items-start gap-[24px]">
       <div className="relative">
-        {userReadStatus && userReadStatus.read === false && (
+        {read === false && (
           <NotificationCardUnreadMarker />
         )}
         <div className="w-[40px] h-[40px] rounded-full overflow-hidden relative">
@@ -38,10 +76,14 @@ const NotificationCard = ({ notification }: INotificationCardProps) => {
           )}
         </div>
       </div>
-      <NotificationCardMessageParser 
-        message={notification.contents.Korean}
-        redirectURL={notification.redirect_url}
-      />
+      <div className="grow flex flex-col items-start gap-[8px]">
+        <NotificationCardMessageParser 
+          message={notification.contents.Korean}
+          redirectURL={notification.redirect_url}
+          clickCallback={handleNotificationCardClick}
+        />
+        <NotificationCardDatetime datetime={notification.created_at} />
+      </div>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { getAllNotifications, getUnreadNotifications } from "@/api/notification.
 import { useEffect } from "react";
 import NotificationCardContainer from "./NotificationCardContainer";
 import Pagination from "../Pagination";
+import { AxiosError } from "axios";
 
 
 const NotificationContainer = () => {
@@ -41,6 +42,9 @@ const NotificationContainer = () => {
 
     unreadNotificationPaginationPage,
     setUnreadNotificationPaginationPage,
+
+    isMarkingNotificationAsReadClicked,
+    setIsMarkingNotificationAsReadClicked
   } = useNotificationStore();
 
   const allNotificationQuery = useQuery({
@@ -48,12 +52,26 @@ const NotificationContainer = () => {
     queryFn: async () => {
       return await getAllNotifications(allNotificationPaginationPage, { sort: "-created_at" });
     },
+    throwOnError: (error: AxiosError, query) => {
+      if (error.response?.status === 404) {
+        setIsPageChanged(true);
+        setAllNotificationPaginationPage(1);
+      }
+      return false
+    },
   });
 
   const unreadNotificationQuery = useQuery({
     queryKey: ["notifications", "unread"],
     queryFn: async () => {
       return await getUnreadNotifications(unreadNotificationPaginationPage, { sort: "-created_at" });
+    },
+    throwOnError: (error: AxiosError, query) => {
+      if (error.response?.status === 404) {
+        setIsPageChanged(true);
+        setUnreadNotificationPaginationPage(1);
+      }
+      return false
     },
   });
 
@@ -88,6 +106,17 @@ const NotificationContainer = () => {
       setIsPageChanged(false);
     }
   }, [allNotificationPaginationPage, unreadNotificationPaginationPage]);
+
+  useEffect(() => {
+    if (isMarkingNotificationAsReadClicked) {
+      if (currentSection === "all") {
+        allNotificationQuery.refetch();
+      } else {
+        unreadNotificationQuery.refetch();
+      }
+      setIsMarkingNotificationAsReadClicked(false);
+    }
+  }, [isMarkingNotificationAsReadClicked]);
 
   return (
     <div
@@ -126,6 +155,10 @@ const NotificationContainer = () => {
             unreadNotificationQuery.data?.next ?
               () => handleUnreadNotificationPageChange(unreadNotificationPaginationPage + 1) :
               undefined
+        }
+        disabled={
+          allNotificationQuery.isLoading || allNotificationQuery.isRefetching ||
+          unreadNotificationQuery.isLoading || unreadNotificationQuery.isRefetching
         }
       />
     </div>
