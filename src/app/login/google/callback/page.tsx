@@ -62,11 +62,10 @@ const GoogleCallbackPage = () => {
     }
   }, [searchParams]);
 
-
   if (submitCodeMutation.isPending) {
     return (
       <div>
-        <p className="text-[16px] font-semibold" ref={loadingTextRef} />
+        <p className="text-[24px] font-semibold" ref={loadingTextRef} />
       </div>
     )
   }
@@ -82,7 +81,7 @@ const GoogleCallbackPage = () => {
 
   return (
     <div>
-      <p>구글 로그인 리다이렉트 페이지 입니다</p>
+      <h3 className="text-[24px] font-semibold">구글 로그인 페이지 입니다.</h3>
     </div>
   )
 }

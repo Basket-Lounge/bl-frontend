@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "zustand";
+import UserMenuContentButton from "./UserMenuContentButton";
 
 
 const UserMenuContent = () => {
@@ -13,6 +14,8 @@ const UserMenuContent = () => {
 
   const {
     username,
+    userRole,
+    setUserRole,
     setUsername,
     setIsAuthenticated,
     setUserId,
@@ -26,6 +29,7 @@ const UserMenuContent = () => {
       setUsername(null);
       setIsAuthenticated(false);
       setUserId(null);
+      setUserRole(null);
 
       if (pathname !== "/") {
         router.push("/");
@@ -40,6 +44,11 @@ const UserMenuContent = () => {
     router.push("/my-page/account-settings");
   }
 
+  const handleAdminPageClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/admin/inquiries");
+  }
+
   const handleLogoutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     logoutMutation.mutate();
@@ -48,19 +57,21 @@ const UserMenuContent = () => {
   if (username) {
     return (
       <div className="px-[24px] flex flex-col items-start py-[8px]">
-        <button
-          onClick={handleMyPageClick}
-          className="text-white text-[16px] font-medium py-[16px]"
-        >
-          마이페이지
-        </button>
-        <button
-          onClick={handleLogoutClick}
-          className="text-white text-[16px] font-medium py-[16px]"
+        <UserMenuContentButton
+          handleClick={handleMyPageClick}
+          text="마이페이지"
+        />
+        {(userRole && userRole <= 2) && (
+          <UserMenuContentButton
+            handleClick={handleAdminPageClick}
+            text="어드민 페이지"
+          />
+        )}
+        <UserMenuContentButton
+          handleClick={handleLogoutClick}
+          text={logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
           disabled={logoutMutation.isPending}
-        >
-          {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
-        </button>
+        />
       </div>
     )
   }

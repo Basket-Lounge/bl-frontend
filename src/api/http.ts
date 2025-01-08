@@ -1,5 +1,5 @@
 import { BACKEND_SERVER_URL } from "@/constants/backend";
-import axios, {AxiosRequestConfig} from "axios";
+import axios, {AxiosError, AxiosRequestConfig} from "axios";
 
 
 const DEFAULT_TIMEOUT = 30000;
@@ -16,16 +16,19 @@ export const createClient = (config?: AxiosRequestConfig) => {
     ...config,
   });
 
-  axiosInstance.interceptors.request.use(
+  axiosInstance.interceptors.response.use(
     (response) => {
       return response;
     },
-    (error) => {
-      if (error.response?.status === 401) {
-        // redirect to login page
-        window.location.href = "/login"; 
-        return
+    (error: AxiosError) => {
+      if (!error.config?.url?.startsWith("/api/token/refresh/")) {
+        if (error.response?.status === 401) {
+          // redirect to home page
+          window.location.href = "/"; 
+          return
+        }
       }
+
       return Promise.reject(error);
     }
   );
@@ -46,22 +49,17 @@ export const createClientFormData = (config?: AxiosRequestConfig) => {
     ...config,
   });
 
-  axiosInstance.interceptors.request.use(
+  axiosInstance.interceptors.response.use(
     (response) => {
       return response;
     },
-    (error) => {
-      console.log(error);
+    (error: AxiosError) => {
       if (error.response?.status === 401) {
-        // redirect to login page
-        window.history.pushState({}, "", "/login");
+        // redirect to home page
+        window.location.href = "/"; 
         return
       }
-      if (error.response?.status === 404) {
-        // redirect to forbidden page
-        window.history.pushState({}, "", "/forbidden");
-        return
-      }
+
       return Promise.reject(error);
     }
   );

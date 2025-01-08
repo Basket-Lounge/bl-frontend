@@ -1,9 +1,16 @@
 import { publishTeamPostComment } from "@/api/team.api";
 import { TeamPostCommentValidation } from "@/utils/validation.utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
+
+interface IErrorData {
+  error: {
+    content: string[];
+  } | Array<string>;
+}
 
 const TeamPostsPostCommentInput = () => {
   const [comment, setComment] = useState<string>("");
@@ -26,7 +33,21 @@ const TeamPostsPostCommentInput = () => {
       queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string, 'post'],});
       queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string, 'comments'],});
       setComment("");
-    }
+    },
+    onError: (error: AxiosError<IErrorData | Array<string>>, variables, context) => {
+      const errorData = error.response?.data;
+      if (errorData && 'error' in errorData) {
+        if (Array.isArray(errorData.error)) {
+          setCommentError('알 수 없는 에러가 발생했습니다.');
+          return;
+        }
+
+        const contentError = errorData.error.content.toString();
+        setCommentError(contentError || '알 수 없는 에러가 발생했습니다.');
+      } else {
+        setCommentError('알 수 없는 에러가 발생했습니다.');
+      }
+    },
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

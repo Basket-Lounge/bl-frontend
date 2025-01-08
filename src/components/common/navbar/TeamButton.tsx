@@ -22,8 +22,6 @@ const TeamButton = (
     router.push(`/teams/${teamId}/general-info`);
   }
 
-  console.log(teamCity)
-
   return (
     <button 
       className={"px-[32px] py-[8px] text-[14px] font-medium rounded-full flex items-center gap-[24px] bg-color2 text-white"}
