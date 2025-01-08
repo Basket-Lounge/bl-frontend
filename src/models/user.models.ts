@@ -25,6 +25,7 @@ export interface IUser {
   liked?: boolean;
   chat_blocked: boolean;
   favorite_team: {id: string, symbol: string};
+  login_notification_enabled?: boolean;
 }
 
 export interface IUpdateUserIntroduction {

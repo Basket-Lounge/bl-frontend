@@ -1,5 +1,5 @@
 export interface INotification {
-  id: number;
+  id: string;
   picture_url: string | null;
   redirect_url: string | null;
   contents: INotificationContents;
