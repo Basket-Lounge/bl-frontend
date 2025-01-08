@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-
 import { refreshAccessToken } from "@/api/login.api";
 import { useAuthStore } from "@/stores/auth.stores";
 import { useStore } from "zustand";
@@ -10,6 +9,7 @@ const useTokenRefresh = () => {
   const { 
     setUserId,
     setUsername, 
+    setUserRole,
     setIsAuthenticated,
     setAuthenticationAttempted
   } = useStore(useAuthStore);
@@ -23,10 +23,10 @@ const useTokenRefresh = () => {
   });
 
   useEffect(() => {
-    // setInterval is used to refresh the token every 3 minutes
+    // setInterval is used to refresh the token every 2 minutes
     const interval = setInterval(async () => {
       accessTokenQuery.refetch();
-    }, 30 * 1000);
+    }, 120 * 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -35,17 +35,19 @@ const useTokenRefresh = () => {
     if (accessTokenQuery.data) {
       setUserId(accessTokenQuery.data.id);
       setUsername(accessTokenQuery.data.username);
+      setUserRole(accessTokenQuery.data.role);
       setIsAuthenticated(true);
     }
   }, [accessTokenQuery.data]);
 
   useEffect(() => {
-    if (accessTokenQuery.isError) {
+    if (accessTokenQuery.isError || accessTokenQuery.isRefetchError) {
       setUserId(null);
       setUsername(null);
+      setUserRole(null);
       setIsAuthenticated(false);
     }
-  }, [accessTokenQuery.isLoading]);
+  }, [accessTokenQuery.isError, accessTokenQuery.isRefetchError]);
 
   useEffect(() => {
     if (!accessTokenQuery.isLoading)

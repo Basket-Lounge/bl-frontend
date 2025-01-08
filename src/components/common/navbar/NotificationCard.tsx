@@ -51,7 +51,7 @@ const NotificationCard = ({ notification }: INotificationCardProps) => {
   });
 
   const handleNotificationCardClick = () => {
-    if (read === false) {
+    if (read === false && markAsReadMutation.isPending === false) {
       markAsReadMutation.mutate();
     }
   }
