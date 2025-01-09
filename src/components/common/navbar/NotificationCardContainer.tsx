@@ -1,12 +1,13 @@
-import { INotificationPaginationResult } from "@/models/notification.models";
 import NotificationCard from "./NotificationCard";
 import NotificationCardSkeleton from "./NotificationCardSkeleton";
 import CuteErrorMessage from "../CuteErrorMessage";
+import { INotification } from "@/models/notification.models";
+import { IPaginationResult } from "@/models/common.models";
 
 
 interface INotificationCardContainerProps {
   pending: boolean;
-  data: INotificationPaginationResult | undefined;
+  data: IPaginationResult<INotification> | undefined;
 }
 
 const NotificationCardContainer = (

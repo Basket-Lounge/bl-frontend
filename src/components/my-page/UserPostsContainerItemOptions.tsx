@@ -42,6 +42,7 @@ const UsersPostsContainerOptions = ({ post }: IUsersPostsContainerOptionsProps) 
   const handleDeletePostClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     deletePostMutation.mutate();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     isMenuOpen && setIsMenuOpen(false);
     e.stopPropagation();
   }

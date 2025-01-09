@@ -1,14 +1,15 @@
-import { INotificationPaginationResult } from "@/models/notification.models";
+import { INotification } from "@/models/notification.models";
 import NotificationHeaderSectionButton from "./NotificationHeaderSectionButton";
 import { useNotificationStore } from "@/stores/notification.stores";
 import { useMutation } from "@tanstack/react-query";
 import { markAllNotificationsAsRead } from "@/api/notification.api";
 import TextButton from "../TextButton";
+import { IPaginationResult } from "@/models/common.models";
 
 
 interface INotificationHeaderProps {
   pending: boolean;
-  data: INotificationPaginationResult | undefined;
+  data: IPaginationResult<INotification> | undefined;
 }
 
 const NotificationHeader = (

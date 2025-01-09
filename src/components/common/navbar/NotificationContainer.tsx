@@ -9,26 +9,6 @@ import { AxiosError } from "axios";
 
 
 const NotificationContainer = () => {
-  /*
-  TODO:
-  API-related tasks:
-  - Create an API function that fetches notifications.
-  - Create an API function that marks all notifications as read.
-  - Create an API function that marks a notification as read.
-
-  Component-related tasks:
-  - Implement the NotificationHeader component.
-    - Display the total number of unread notifications.
-  - Implement the NotificationContent component.
-    - Create a notification card component.
-    - Create a notification card skeleton component.
-    - Create a list pagination component.
-
-  Util-related tasks:
-  - Create a function that formats the notification timestamp.
-  - Create a function that formats the notification message.
-  */
-
   const {
     currentSection,
     isSectionChanged,
@@ -55,7 +35,7 @@ const NotificationContainer = () => {
         { sort: "-created_at", context: "header" }
       );
     },
-    throwOnError: (error: AxiosError, query) => {
+    throwOnError: (error: AxiosError) => {
       if (error.response?.status === 404) {
         setIsPageChanged(true);
         setAllNotificationPaginationPage(1);
@@ -72,7 +52,7 @@ const NotificationContainer = () => {
         { sort: "-created_at", context: "header" }
       );
     },
-    throwOnError: (error: AxiosError, query) => {
+    throwOnError: (error: AxiosError) => {
       if (error.response?.status === 404) {
         setIsPageChanged(true);
         setUnreadNotificationPaginationPage(1);
@@ -143,7 +123,21 @@ const NotificationContainer = () => {
         data={currentSection === "all" ? allNotificationQuery.data : unreadNotificationQuery.data}
       />
       <Pagination
-        currentPageNumber={currentSection === "all" ? allNotificationPaginationPage : unreadNotificationPaginationPage}
+        currentPageNumber={
+          currentSection === "all" ? allNotificationPaginationPage : unreadNotificationPaginationPage
+        }
+        lastPageNumber={
+          currentSection === "all" ? allNotificationQuery.data?.last_page : unreadNotificationQuery.data?.last_page
+        }
+        firstPageCallback={
+          currentSection === "all" ?
+            allNotificationQuery.data?.first_page ?
+              () => handleAllNotificationPageChange(1) :
+              undefined :
+            unreadNotificationQuery.data?.first_page ?
+              () => handleUnreadNotificationPageChange(1) :
+              undefined
+        }
         previousCallback={
           currentSection === "all" ?
             allNotificationQuery.data?.previous ?
@@ -160,6 +154,15 @@ const NotificationContainer = () => {
               undefined :
             unreadNotificationQuery.data?.next ?
               () => handleUnreadNotificationPageChange(unreadNotificationPaginationPage + 1) :
+              undefined
+        }
+        lastPageCallback={
+          currentSection === "all" ?
+            allNotificationQuery.data?.last_page ?
+              () => handleAllNotificationPageChange(allNotificationQuery.data!.last_page) :
+              undefined :
+            unreadNotificationQuery.data?.last_page ?
+              () => handleUnreadNotificationPageChange(unreadNotificationQuery.data!.last_page) :
               undefined
         }
         disabled={

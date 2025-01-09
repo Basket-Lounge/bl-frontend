@@ -1,14 +1,14 @@
 import { useRouter } from "next/navigation";
 
 
-interface INotificationCardMessageParserProps {
+interface IUserNotificationsContainerListItemMessageParserProps {
   message: string;
   redirectURL: string | null;
   clickCallback?: () => void;
 }
 
-const NotificationCardMessageParser = (
-  { message, redirectURL, clickCallback }: INotificationCardMessageParserProps
+const UserNotificationsContainerListItemMessageParser = ( 
+  { message, redirectURL, clickCallback }: IUserNotificationsContainerListItemMessageParserProps
 ) => {
   const router = useRouter();
 
@@ -53,7 +53,7 @@ const NotificationCardMessageParser = (
 
   return (
     <button 
-      className="grow text-[14px] text-white line-clamp-2 leading-relaxed block text-left"
+      className="text-[16px] text-white line-clamp-1 leading-relaxed block text-left grow cursor-pointer"
       onClick={handleClick}
     >
       {parts}
@@ -61,4 +61,4 @@ const NotificationCardMessageParser = (
   );
 };
 
-export default NotificationCardMessageParser;
+export default UserNotificationsContainerListItemMessageParser;
