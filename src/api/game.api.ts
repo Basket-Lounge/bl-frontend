@@ -1,5 +1,6 @@
-import { Game, GamePaginationResult, IGameWithTeamStats, PlayerStatistics } from "@/models/game.models";
+import { Game, IGameWithTeamStats, PlayerStatistics } from "@/models/game.models";
 import { httpClient } from "./http";
+import { IPaginationResult } from "@/models/common.models";
 
 
 export const getGames = async (
@@ -27,8 +28,8 @@ export const getGames = async (
     searchParams.set('date-range-end', dateEnd);
   }
 
-  const response = await httpClient.get<GamePaginationResult>('/api/games/?' + searchParams.toString());
-  return response.data as GamePaginationResult;
+  const response = await httpClient.get<IPaginationResult<Game>>('/api/games/?' + searchParams.toString());
+  return response.data as IPaginationResult<Game>;
 }
 
 export const getGamesForTeam = async (teamId: string): Promise<Game[]> => {

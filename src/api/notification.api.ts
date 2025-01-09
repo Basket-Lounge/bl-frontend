@@ -1,5 +1,6 @@
-import { INotificationPaginationResult } from "@/models/notification.models";
+import { INotification, INotificationTemplateType } from "@/models/notification.models";
 import { httpClient } from "./http";
+import { IPaginationResult } from "@/models/common.models";
 
 
 export const getUnreadNotificationCount = async () => {
@@ -34,7 +35,7 @@ export const getAllNotifications = async (
     searchParams.set('context', context);
   }
 
-  const response = await httpClient.get<INotificationPaginationResult>("/api/users/me/notifications/?"+searchParams.toString());
+  const response = await httpClient.get<IPaginationResult<INotification>>("/api/users/me/notifications/?"+searchParams.toString());
   return response.data;
 }
 
@@ -57,6 +58,11 @@ export const getUnreadNotifications = async (
     searchParams.set('context', context);
   }
 
-  const response = await httpClient.get<INotificationPaginationResult>("/api/users/me/notifications/unread/?"+searchParams.toString());
+  const response = await httpClient.get<IPaginationResult<INotification>>("/api/users/me/notifications/unread/?"+searchParams.toString());
   return response.data;
+}
+
+export const getNotificationTypes = async () => {
+  const response = await httpClient.get<INotificationTemplateType[]>("/api/notifications/types/");
+  return response.data as INotificationTemplateType[];
 }

@@ -6,15 +6,14 @@ import {
   TeamPost, 
   TeamPostComment, 
   TeamPostCommentLikes, 
-  TeamPostCommentReplyPaginationResult, 
-  TeamPostCommentsPaginationResult, 
-  TeamPostPaginationResult, 
   TeamPostStatus, 
   TTeamLikesResult,
-  TeamPostCommentStatus
+  TeamPostCommentStatus,
+  TeamPostCommentReply
 } from "@/models/team.models";
 import { httpClient } from "./http";
 import { Game } from "@/models/game.models";
+import { IPaginationResult } from "@/models/common.models";
 
 
 export const getAllTeams = async () => {
@@ -56,8 +55,8 @@ export const removeUserFavoriteTeam = async (teamId: string) => {
 }
 
 export const getPopularPosts = async () => {
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/posts/popular/`);
-  return response.data as TeamPostPaginationResult;
+  const response = await httpClient.get<IPaginationResult<TeamPost>>(`/api/teams/posts/popular/`);
+  return response.data as IPaginationResult<TeamPost>;
 }
 
 export const getTeamPopularPosts = async (teamId: string) => {
@@ -92,8 +91,8 @@ export const getTeamPosts = async (
     searchParams.set('search', search);
   }
 
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/teams/${teamId}/posts/?${searchParams.toString()}`);
-  return response.data as TeamPostPaginationResult;
+  const response = await httpClient.get<IPaginationResult<TeamPost>>(`/api/teams/${teamId}/posts/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<TeamPost>;
 }
 
 export const getTeamPostStatus = async () => {
@@ -175,8 +174,8 @@ export const getTeamPostComments = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<TeamPostCommentsPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/?${searchParams.toString()}`);
-  return response.data;
+  const response = await httpClient.get<IPaginationResult<TeamPostComment>>(`/api/teams/${teamId}/posts/${postId}/comments/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<TeamPostComment>;
 }
 
 export const publishTeamPostComment = async (
@@ -240,8 +239,8 @@ export const getTeamPostCommentReplies = async (
   commentId: string,
   page: number
 ) => {
-  const response = await httpClient.get<TeamPostCommentReplyPaginationResult>(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/?page=${page}`);
-  return response.data;
+  const response = await httpClient.get<IPaginationResult<TeamPostCommentReply>>(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/?page=${page}`);
+  return response.data as IPaginationResult<TeamPostCommentReply>;
 }
 
 export const publishTeamPostCommentReply = async (
