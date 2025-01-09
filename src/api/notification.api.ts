@@ -19,15 +19,21 @@ export const getAllNotifications = async (
   page: number,
   data: {
     sort?: string;  
+    context?: string;
   }
 ) => {
-  const { sort } = data;
+  const { sort, context } = data;
   const searchParams = new URLSearchParams();
   searchParams.set('page', page.toString());
 
   if (sort) {
     searchParams.set('sort', sort);
   }
+
+  if (context) {
+    searchParams.set('context', context);
+  }
+
   const response = await httpClient.get<INotificationPaginationResult>("/api/users/me/notifications/?"+searchParams.toString());
   return response.data;
 }
@@ -36,15 +42,21 @@ export const getUnreadNotifications = async (
   page: number,
   data: {
     sort?: string;  
+    context?: string;
   }
 ) => {
-  const { sort } = data;
+  const { sort, context } = data;
   const searchParams = new URLSearchParams();
   searchParams.set('page', page.toString());
 
   if (sort) {
     searchParams.set('sort', sort);
   }
+
+  if (context) {
+    searchParams.set('context', context);
+  }
+
   const response = await httpClient.get<INotificationPaginationResult>("/api/users/me/notifications/unread/?"+searchParams.toString());
   return response.data;
 }

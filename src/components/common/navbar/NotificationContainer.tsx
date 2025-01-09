@@ -50,7 +50,10 @@ const NotificationContainer = () => {
   const allNotificationQuery = useQuery({
     queryKey: ["notifications", "all"],
     queryFn: async () => {
-      return await getAllNotifications(allNotificationPaginationPage, { sort: "-created_at" });
+      return await getAllNotifications(
+        allNotificationPaginationPage, 
+        { sort: "-created_at", context: "header" }
+      );
     },
     throwOnError: (error: AxiosError, query) => {
       if (error.response?.status === 404) {
@@ -64,7 +67,10 @@ const NotificationContainer = () => {
   const unreadNotificationQuery = useQuery({
     queryKey: ["notifications", "unread"],
     queryFn: async () => {
-      return await getUnreadNotifications(unreadNotificationPaginationPage, { sort: "-created_at" });
+      return await getUnreadNotifications(
+        unreadNotificationPaginationPage, 
+        { sort: "-created_at", context: "header" }
+      );
     },
     throwOnError: (error: AxiosError, query) => {
       if (error.response?.status === 404) {
