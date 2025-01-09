@@ -71,6 +71,12 @@ interface IMyPageStore {
 
   commentArgumentsModified: boolean;
   setCommentArgumentsModified: (modified: boolean) => void;
+
+  // For notifications
+  notificationsArgumentsModified: boolean;
+  setNotificationsArgumentsModified: (modified: boolean) => void;
+  notificationsActionTaken: boolean;
+  setNotificationsActionTaken: (value: boolean) => void;
 }
 
 export const MyPageStore = createStore<IMyPageStore>((set) => ({
@@ -148,6 +154,11 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
   updateInquiriesCreateContent: (value) => set({ inquiriesCreateContent: value }),
   inquiriesCreateContentError: "",
   updateInquiriesCreateContentError: (value) => set({ inquiriesCreateContentError: value }),
+
+  notificationsArgumentsModified: false,
+  setNotificationsArgumentsModified: (modified) => set({ notificationsArgumentsModified: modified }),
+  notificationsActionTaken: false,
+  setNotificationsActionTaken: (value) => set({ notificationsActionTaken: value }),
 }));
 
 export const MyPageStoreContext = createContext(MyPageStore);

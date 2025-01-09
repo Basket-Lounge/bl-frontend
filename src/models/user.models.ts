@@ -5,13 +5,6 @@ export interface IRole {
   weight: number;
 }
 
-export interface IUserPaginationResult {
-  count: number;
-  next: string;
-  previous: string;
-  results: IUser[];
-}
-
 export interface IUser {
   id: number;
   username: string;
@@ -34,13 +27,6 @@ export interface IUpdateUserIntroduction {
 
 export interface IUpdateProfileVisibility {
   is_profile_visible: boolean;
-}
-
-export interface MyPageCommentsPaginationResult {
-  count: number;
-  next: string;
-  previous: string;
-  results: MyPageComment[];
 }
 
 export interface MyPageComment {
@@ -71,13 +57,6 @@ export interface MyPageComment {
       username: string;
     }
   }
-}
-
-export interface UserChatsPaginationResult {
-  count: number;
-  next: string;
-  previous: string;
-  results: UserChat[];
 }
 
 export interface UserChat {
@@ -140,13 +119,6 @@ export interface InquiryCreateErrors {
   non_field_errors?: string[];
 }
 
-export interface UserInquiriesPaginationResult {
-  count: number;
-  next: string;
-  previous: string;
-  results: UserInquiry[];
-}
-
 export interface UserInquiry {
   id: string;
   title: string;
@@ -185,13 +157,6 @@ export interface UserInquiryModerator {
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
   unread_messages_count?: number;
-}
-
-export interface IReportPaginationResult {
-  count: number;
-  next: string;
-  previous: string;
-  results: IReportWithoutUserData[];
 }
 
 export interface IReport {
