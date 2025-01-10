@@ -11,12 +11,13 @@ import {
   QueryClient,
 } from '@tanstack/react-query'
 
+
 export default async function Home() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
     queryKey: ["home", "today-games"],
-    queryFn: getTodayGames
+    queryFn: getTodayGames,
   });
 
   await queryClient.prefetchQuery({

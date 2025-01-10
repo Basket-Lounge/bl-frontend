@@ -1,5 +1,5 @@
 interface ISortButtonOptionProps {
-  name: string;
+  name?: string;
   sortValue: (sort: string) => void;
   currentValue: boolean | null;
 };
@@ -16,7 +16,9 @@ const SortButtonOption = (
 
   return (
     <div className="flex flex-col gap-[12px]">
-      <h3 className="text-[14px] font-bold text-left text-white">{name}</h3>
+      {name && (
+        <h3 className="text-[14px] font-bold text-left text-white">{name}</h3>
+      )}
       <div className="flex gap-[8px]">
         <button 
           className={"px-[12px] py-[2px] rounded-full w-full font-bold text-[14px] " + ascendingOrderButtonBgColor + " " + ascendingOrderButtonTextColor}

@@ -52,12 +52,10 @@ interface IMyPageStore {
   updateInquiriesCreateTitle: (value: string) => void;
   inquiriesCreateTitleError: string | null;
   updateInquiriesCreateTitleError: (value: string | null) => void;
-
   inquiriesCreateTypeId: number | null;
   updateInquiriesCreateTypeId: (value: number | null) => void;
   inquiriesCreateTypeIdError: string | null;
   updateInquiriesCreateTypeIdError: (value: string | null) => void;
-
   inquiriesCreateContent: string;
   updateInquiriesCreateContent: (value: string) => void;
   inquiriesCreateContentError: string | null;
@@ -65,10 +63,8 @@ interface IMyPageStore {
 
   postArgumentsModified: boolean;
   setPostArgumentsModified: (modified: boolean) => void;
-
   lastModifiedPostId: string | null;
   setLastModifiedPostId: (postId: string | null) => void;
-
   commentArgumentsModified: boolean;
   setCommentArgumentsModified: (modified: boolean) => void;
 
@@ -77,6 +73,8 @@ interface IMyPageStore {
   setNotificationsArgumentsModified: (modified: boolean) => void;
   notificationsActionTaken: boolean;
   setNotificationsActionTaken: (value: boolean) => void;
+  currentPageNotificationIds: { id: string, checked: boolean }[];
+  setCurrentPageNotificationIds: (value: { id: string, checked: boolean }[]) => void;
 }
 
 export const MyPageStore = createStore<IMyPageStore>((set) => ({
@@ -159,6 +157,8 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
   setNotificationsArgumentsModified: (modified) => set({ notificationsArgumentsModified: modified }),
   notificationsActionTaken: false,
   setNotificationsActionTaken: (value) => set({ notificationsActionTaken: value }),
+  currentPageNotificationIds: [],
+  setCurrentPageNotificationIds: (value) => set({ currentPageNotificationIds: value }),
 }));
 
 export const MyPageStoreContext = createContext(MyPageStore);

@@ -22,6 +22,17 @@ export default function TodayGamesContainer() {
     );
   }
 
+  if (todayGamesQuery.isError || todayGamesQuery.isRefetchError) {
+    return (
+      <section>
+        <h3 className="text-[20px] font-bold">오늘의 경기</h3>
+        <div className="h-[200px] flex flex-col gap-[16px] items-center justify-center">
+          <CuteErrorMessage error="정보를 불러오는 중 오류가 발생했습니다." />
+        </div>
+      </section>
+    );
+  }
+
   if (todayGamesQuery.data!.length === 0 || todayGamesQuery.data === undefined) {
     return (
       <section>
