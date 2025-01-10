@@ -1,14 +1,18 @@
 import { useRouter } from "next/navigation";
+import NotificationCardUnreadMarker from "../common/navbar/NotificationCardUnreadMarker";
+import Image from "next/image";
 
 
 interface IUserNotificationsContainerListItemMessageParserProps {
   message: string;
   redirectURL: string | null;
+  pictureURL: string | null;
+  read?: boolean;
   clickCallback?: () => void;
 }
 
 const UserNotificationsContainerListItemMessageParser = ( 
-  { message, redirectURL, clickCallback }: IUserNotificationsContainerListItemMessageParserProps
+  { message, redirectURL, clickCallback, read, pictureURL }: IUserNotificationsContainerListItemMessageParserProps
 ) => {
   const router = useRouter();
 
@@ -52,12 +56,32 @@ const UserNotificationsContainerListItemMessageParser = (
   };
 
   return (
-    <button 
-      className="text-[16px] text-white line-clamp-1 leading-relaxed block text-left grow cursor-pointer"
-      onClick={handleClick}
-    >
-      {parts}
-    </button>
+    <div className="grow flex items-center gap-[24px]">
+      <div className="relative">
+        {read === false && (
+          <NotificationCardUnreadMarker />
+        )}
+        <div className="w-[40px] h-[40px] rounded-full overflow-hidden relative">
+          {pictureURL ? (
+            <Image
+              className="w-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
+              src={pictureURL}
+              alt="team-logo"
+              width={20}
+              height={20}
+            />
+          ) : (
+            <div className="w-full h-full bg-white/25" />
+          )}
+        </div>
+      </div>
+      <button 
+        className="text-[16px] text-white line-clamp-1 leading-relaxed block text-left grow cursor-pointer"
+        onClick={handleClick}
+      >
+        {parts}
+      </button>
+    </div>
   );
 };
 

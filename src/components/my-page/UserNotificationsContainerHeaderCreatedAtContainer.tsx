@@ -1,15 +1,15 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useContext, useState } from "react";
+import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useStore } from "zustand";
 import SortButtonOption from "../common/SortButtonOption";
-import { MyPageStoreContext } from "@/stores/myPage.stores";
 
 
-const UserNotificationsSortButtonOptionsContainer = () => {
+const UserNotificationsContainerHeaderCreatedAtContainer = () => { 
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const sort = searchParams.get('sort')?.split(',') || [];
 
   const createdAtIndex = sort.findIndex((value) => value === 'created_at' || value === '-created_at');
@@ -17,9 +17,6 @@ const UserNotificationsSortButtonOptionsContainer = () => {
     (value) => value === 'template__type__name' || value === '-template__type__name'
   );
 
-  // if sort is empty, don't set any state
-  // if the value is asc, set the state to true
-  // if the value is desc, set the state to false
   const [createdAtSort, setCreatedAtSort] = useState<boolean | null>(
     createdAtIndex !== -1 ? (sort[createdAtIndex] === 'created_at' ? true : false) : null
   );
@@ -31,7 +28,6 @@ const UserNotificationsSortButtonOptionsContainer = () => {
   const store = useContext(MyPageStoreContext);
   const setNotificationsArgumentsModified = useStore(store, (state) => state.setNotificationsArgumentsModified);
 
-
   const handleCreatedAtSortClick = (sort: string) => {
     if (sort === 'asc') {
       setCreatedAtSort(true);
@@ -40,17 +36,9 @@ const UserNotificationsSortButtonOptionsContainer = () => {
     }
   }
 
-  const handleTypeSortClick = (sort: string) => {
-    if (sort === 'asc') {
-      setTypeSort(true);
-    } else {
-      setTypeSort(false);
-    }
-  }
-
   const createQueryString = useCallback(() => {
-    const params = new URLSearchParams(searchParams.toString())
-    
+    const params = new URLSearchParams()
+
     const newSorts = [];
     if (createdAtSort !== null) {
       if (createdAtSort) {
@@ -87,27 +75,21 @@ const UserNotificationsSortButtonOptionsContainer = () => {
 
   const handleResetClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setTypeSort(null);
     setCreatedAtSort(null);
   }
 
   return (
     <div 
-      className="w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%]"
+      className="w-full lg:w-[400px] bg-color3 rounded-md p-[24px] border-none gap-[24px] flex flex-col z-20"
     >
       <div className="flex flex-col gap-[16px]">
-        <SortButtonOption
-          name="알림 종류"
-          sortValue={handleTypeSortClick}
-          currentValue={typeSort}
-        />
         <SortButtonOption
           name="생성 날짜"
           sortValue={handleCreatedAtSortClick}
           currentValue={createdAtSort}
         />
       </div>
-      <div className="w-full flex justify-start gap-[16px] mt-[16px]">
+      <div className="w-full flex justify-start mt-[16px] gap-[16px]">
         <button
           className="bg-color4 text-white px-[12px] py-[8px] rounded-full w-full"
           onClick={handleResetClick}
@@ -125,4 +107,4 @@ const UserNotificationsSortButtonOptionsContainer = () => {
   )
 }
 
-export default UserNotificationsSortButtonOptionsContainer;
+export default UserNotificationsContainerHeaderCreatedAtContainer;
