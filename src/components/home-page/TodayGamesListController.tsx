@@ -1,9 +1,10 @@
 import { Game } from "@/models/game.models";
-import { useCallback, useContext } from "react";
+import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
 import { pageSizeControllerStoreContext } from "../common/PageSizeController";
 import { useStore } from "zustand";
 import { Carousel } from "@material-tailwind/react";
 import TodayGame from "./TodayGame";
+import { filterTodayGames } from "@/utils/game.utils";
 
 
 interface ITodayGamesListControllerProps {
@@ -13,6 +14,39 @@ interface ITodayGamesListControllerProps {
 export default function TodayGamesListController(
   { games }: ITodayGamesListControllerProps
 ) {
+  console.log(games);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (activeIndex >= games.length) {
+      setActiveIndex(0);
+    }
+  }, [activeIndex, games.length]);
+
+  const handleNavigation = (
+    { setActiveIndex, activeIndex, length }: { setActiveIndex: Dispatch<SetStateAction<number>>, activeIndex: number, length: number }
+  ) => {
+    if (length === 1) return null;
+
+    return (
+      <div className="absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2">
+        {new Array(length).fill("").map((_, i) => (
+          <span
+            key={i}
+            className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+              activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+            }`}
+            onClick={() => {
+              if (i !== activeIndex) {
+                setActiveIndex(i);
+              }
+            }}
+          />
+        ))}
+      </div>
+    );
+  };
+
   const store = useContext(pageSizeControllerStoreContext);
   const { pageWidth } = useStore(store);
 
@@ -44,26 +78,27 @@ export default function TodayGamesListController(
       onPointerEnterCapture={undefined} 
       onPointerLeaveCapture={undefined}
       className="mt-[16px] w-full"
-      navigation={({ setActiveIndex, activeIndex, length }) => {
-        if (length === 1) return null;
-        if (activeIndex >= length) setActiveIndex(0);
+      navigation={handleNavigation}
+      // navigation={({ setActiveIndex, activeIndex, length }) => {
+      //   if (length === 1) return null;
+      //   // if (activeIndex >= length) setActiveIndex(0);
 
-        return (
-          <div className="absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2">
-            {new Array(length).fill("").map((_, i) => (
-              <span
-                key={i}
-                className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-                  activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
-                }`}
-                onClick={() => setActiveIndex(i)}
-              />
-            ))}
-          </div>
-        )
-      }}
+      //   return (
+      //     <div className="absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2">
+      //       {new Array(length).fill("").map((_, i) => (
+      //         <span
+      //           key={i}
+      //           className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+      //             activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+      //           }`}
+      //           // onClick={() => setActiveIndex(i)}
+      //         />
+      //       ))}
+      //     </div>
+      //   )
+      // }}
     >
-      {divideGames(games).map((gamesList, index) => (
+      {divideGames(filterTodayGames(games)).map((gamesList, index) => (
         <div key={index} className={"gap-[16px] mx-auto " + className}>
           {gamesList.map((game) => (
             <TodayGame

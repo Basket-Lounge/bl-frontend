@@ -1,17 +1,26 @@
+'use client'
+
 import { useQuery } from "@tanstack/react-query";
 import { getTop10PlayersThisSeason } from "@/api/player.api";
 import SeasonTopPlayersListController from "./SeasonTopPlayersListController";
 import SeasonTopPlayerSkeletonsContainer from "./SeasonTopPlayerSkeletonsContainer";
+import { useEffect } from "react";
 
 
 export default function SeasonTopPlayersContainer() {
+  // const top10PlayersQuery = useQuery({
+  //   queryKey: ["home", "top-10-players"],
+  //   queryFn: async () => {
+  //     return await getTop10PlayersThisSeason();
+  //   }
+  // });
+
   const top10PlayersQuery = useQuery({
     queryKey: ["home", "top-10-players"],
-    queryFn: async () => {
-      return await getTop10PlayersThisSeason();
-    }
+    queryFn: () => getTop10PlayersThisSeason()
   });
 
+  console.log(top10PlayersQuery.data);
 
   if (top10PlayersQuery.isLoading || top10PlayersQuery.isRefetching) {
     return (

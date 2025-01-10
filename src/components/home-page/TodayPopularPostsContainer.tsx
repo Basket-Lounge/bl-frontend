@@ -1,3 +1,5 @@
+'use client'
+
 import { getPopularPosts } from "@/api/team.api";
 import { useQuery } from "@tanstack/react-query";
 import TodayPopularPostsListController from "./TodayPopularPostsListController";
@@ -6,11 +8,16 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 const TodayPopularPostsContainer = () => {
+  // const popularPostsQuery = useQuery({
+  //   queryKey: ["home", "popular-posts"],
+  //   queryFn: async () => {
+  //     return await getPopularPosts();
+  //   }
+  // });
+
   const popularPostsQuery = useQuery({
     queryKey: ["home", "popular-posts"],
-    queryFn: async () => {
-      return await getPopularPosts();
-    }
+    queryFn: () => getPopularPosts()
   });
 
   if (popularPostsQuery.isLoading || popularPostsQuery.isRefetching) {

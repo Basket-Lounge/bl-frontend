@@ -1,51 +1,37 @@
-'use client'
-
+import { getTodayGames } from "@/api/game.api";
+import { getTop10PlayersThisSeason } from "@/api/player.api";
+import HomePageHeader from "@/components/home-page/HomePageHeader";
 import SeasonTopPlayersContainer from "@/components/home-page/SeasonTopPlayersContainer";
 import TodayGamesContainer from "@/components/home-page/TodayGamesContainer";
 import TodayPopularPostsContainer from "@/components/home-page/TodayPopularPostsContainer";
-import { useEffect, useRef } from "react";
-import Typed from 'typed.js';
 
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 
-export default function Home() {
-  const subHeadingRef = useRef<HTMLSpanElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
+export default async function Home() {
+  const queryClient = new QueryClient();
 
-  useEffect(() => {
-    const typed = new Typed(subHeadingRef.current!, {
-      strings: [
-        'NBA에 대한 모든 것을 공유하는 공간',
-        'NBA 마니아를 위한 공간',
-        'NBA Basketball?'
-      ],
-      typeSpeed: 50,
-      backDelay: 1500,
-      showCursor: false,
-      loop: true,
-    });
+  await queryClient.prefetchQuery({
+    queryKey: ["home", "today-games"],
+    queryFn: getTodayGames
+  });
 
-    return () => {
-      typed.destroy();
-    }
-  }, []);
+  await queryClient.prefetchQuery({
+    queryKey: ["home", "top-10-players"],
+    queryFn: getTop10PlayersThisSeason
+  });
 
   return (
-    <div className="w-full flex flex-col gap-[32px] items-stretch mx-auto py-[32px]">
-      <section className="h-[300px] w-full bg-white/10 rounded-md relative flex flex-col justify-center items-start overflow-hidden px-[64px] lg:px-[128px] gap-[24px]">
-        <span
-          ref={subHeadingRef}
-          className="text-[20px] lg:text-[24px] font-light h-[24px]" 
-        />
-        <h1 
-          ref={headingRef}
-          className="text-[32px] lg:text-[40px] font-bold"
-        >
-          Basket Lounge
-        </h1>
-      </section>
-      <TodayGamesContainer />
-      <SeasonTopPlayersContainer />
-      <TodayPopularPostsContainer />
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="w-full flex flex-col gap-[32px] items-stretch mx-auto py-[32px]">
+        <HomePageHeader />
+        <TodayGamesContainer />
+        <SeasonTopPlayersContainer />
+        <TodayPopularPostsContainer />
+      </div>
+    </HydrationBoundary>
   );
 }
