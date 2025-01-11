@@ -10,7 +10,7 @@ const UserNotificationsContainerListItemSettings = (
   { children }: IUserNotificationsContainerListItemSettingsProps
 ) => {
   return (
-    <div className="text-[16px] w-[5%]">
+    <div className="text-[16px] w-[10%] lg:w-[5%]">
       <Popover
         placement="bottom"
       >
@@ -23,6 +23,7 @@ const UserNotificationsContainerListItemSettings = (
               alt="settings"
               width={24}
               height={24}
+              className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px]"
             />
           </button>
         </PopoverHandler>

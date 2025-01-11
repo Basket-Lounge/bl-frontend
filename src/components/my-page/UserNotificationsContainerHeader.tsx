@@ -36,7 +36,7 @@ const UserNotificationsContainerHeader = () => {
   }
 
   return (
-    <div className="p-[8px] rounded-full bg-color1 flex items-center">
+    <div className="p-[8px] rounded-full bg-color1 flex items-center gap-[10%] lg:gap-[2%]">
       <div className="w-[5%]">
         <Checkbox 
           color="blue"
@@ -48,22 +48,22 @@ const UserNotificationsContainerHeader = () => {
           className="w-[16px] h-[16px]"
         />
       </div>
-      <p className="text-[16px] font-medium grow">내용</p>
+      <p className="text-[14px] lg:text-[16px] font-medium w-[60%] lg:w-[55%]">내용</p>
       <UserNotificationsContainerHeaderButton
         text="알림 종류"
-        className="text-[16px] font-medium w-[15%] text-left"
+        className="text-[14px] lg:text-[16px] font-medium hidden lg:block lg:w-[15%] text-left"
         queryKey="types"
       >
         <UserNotificationsContainerHeaderTypesContainer />
       </UserNotificationsContainerHeaderButton>
       <UserNotificationsContainerHeaderButton
         text="생성 날짜"
-        className="text-[16px] font-medium w-[20%] text-left"
+        className="text-[14px] lg:text-[16px] font-medium w-[25%] lg:w-[15%] text-left"
         queryKey="sort"
       >
         <UserNotificationsContainerHeaderCreatedAtContainer /> 
       </UserNotificationsContainerHeaderButton>
-      <p className="text-[16px] font-medium w-[5%]">설정</p>
+      <p className="text-[14px] lg:text-[16px] font-medium w-[10%] lg:w-[5%]">설정</p>
     </div>
   );
 }

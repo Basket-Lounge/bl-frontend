@@ -51,17 +51,18 @@ const UserNotificationsContainerListItemMessageParser = (
     if (redirectURL) {
       router.push(redirectURL);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    clickCallback && clickCallback();
+
+    if (clickCallback)
+      clickCallback();
   };
 
   return (
-    <div className="grow flex items-center gap-[24px]">
-      <div className="relative">
+    <div className="w-[60%] lg:w-[55%] flex items-center gap-[24px]">
+      <div className="relative w-fit">
         {read === false && (
           <NotificationCardUnreadMarker />
         )}
-        <div className="w-[40px] h-[40px] rounded-full overflow-hidden relative">
+        <div className="w-[24px] h-[24px] lg:w-[40px] lg:h-[40px] rounded-full overflow-hidden relative">
           {pictureURL ? (
             <Image
               className="w-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
@@ -76,7 +77,7 @@ const UserNotificationsContainerListItemMessageParser = (
         </div>
       </div>
       <button 
-        className="text-[16px] text-white line-clamp-1 leading-relaxed block text-left grow cursor-pointer"
+        className="lg:text-[16px] text-[14px] text-white leading-relaxed line-clamp-2 lg:line-clamp-none text-left grow cursor-pointer lg:truncate w-[50px] overflow-hidden"
         onClick={handleClick}
       >
         {parts}

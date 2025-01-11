@@ -10,6 +10,8 @@ const UserNotificationsContainerListItemSettingsContainer = (
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || '1');
+  const sort = searchParams.get("sort") || '';
+  const types = searchParams.get("types") || '';
 
   const deleteNotificationMutation = useMutation({
     mutationFn: () => {
@@ -17,7 +19,7 @@ const UserNotificationsContainerListItemSettingsContainer = (
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["notifications", "all", "pagination", page],
+        queryKey: ["notifications", "all", "pagination", page, { sort, types }],
         exact: true
       });
     } 

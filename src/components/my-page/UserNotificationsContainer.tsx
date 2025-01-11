@@ -10,17 +10,13 @@ import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useStore } from "zustand";
 import Pagination from "../common/Pagination";
 import { AxiosError } from "axios";
-import { useAuthStore } from "@/stores/auth.stores";
+import UserNotificationsContainerSkeletonList from "./UserNotificationsContainerSkeletonList";
 
 
 const UserNotificationsContainer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const {
-    userId
-  } = useAuthStore();
 
   const store = useContext(MyPageStoreContext);
   const notificationsArgumentsModified = useStore(store, (state) => state.notificationsArgumentsModified);
@@ -61,6 +57,7 @@ const UserNotificationsContainer = () => {
 
       return true;
     },
+    retry: 1,
   });
 
   const handlePageChange = (newPage: number) => {
@@ -105,7 +102,7 @@ const UserNotificationsContainer = () => {
     return (
       <div className="items-stretch flex flex-col">
         <UserNotificationsContainerHeader />
-        <UserNotificationsContainerList notifications={[]} />
+        <UserNotificationsContainerSkeletonList />
       </div>
     );
   }

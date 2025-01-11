@@ -88,7 +88,7 @@ const UserNotificationsContainerListItem = (
   }
 
   return (
-    <div className="px-[8px] py-[16px] rounded-full flex items-center">
+    <div className="px-[8px] py-[16px] rounded-full flex items-center gap-[10%] lg:gap-[2%]">
       <div className="w-[5%]">
         <Checkbox 
           color="blue"
@@ -109,7 +109,7 @@ const UserNotificationsContainerListItem = (
         clickCallback={handleClick}
       />
       <UserNotificationsContainerListItemType templateData={notification.template_data} />
-      <p className="text-[16px] w-[20%]">{timeAgoInKorean}</p>
+      <p className="text-[14px] lg:text-[16px] w-[25%] lg:w-[15%]">{timeAgoInKorean}</p>
       <UserNotificationsContainerListItemSettings>
         <UserNotificationsContainerListItemSettingsContainer id={notification.id} />
       </UserNotificationsContainerListItemSettings>

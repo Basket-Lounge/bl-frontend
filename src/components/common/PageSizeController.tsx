@@ -41,9 +41,7 @@ const PageSizeController = ({ children }: { children: React.ReactNode }) => {
     }
 
     setPageWidth(window.innerWidth);
-
     window.addEventListener('resize', handleResize);
-    handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
