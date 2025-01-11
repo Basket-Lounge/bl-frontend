@@ -1,3 +1,5 @@
+export type TDialogSize = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
+
 export interface IPaginationResult<T> {
     count: number;
     next: string | null;
