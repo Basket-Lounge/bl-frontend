@@ -28,7 +28,7 @@ const NotificationContainer = () => {
   } = useNotificationStore();
 
   const allNotificationQuery = useQuery({
-    queryKey: ["notifications", "all"],
+    queryKey: ["notifications", "all", allNotificationPaginationPage],
     queryFn: async () => {
       return await getAllNotifications(
         allNotificationPaginationPage, 
@@ -45,7 +45,7 @@ const NotificationContainer = () => {
   });
 
   const unreadNotificationQuery = useQuery({
-    queryKey: ["notifications", "unread"],
+    queryKey: ["notifications", "unread", unreadNotificationPaginationPage],
     queryFn: async () => {
       return await getUnreadNotifications(
         unreadNotificationPaginationPage, 
