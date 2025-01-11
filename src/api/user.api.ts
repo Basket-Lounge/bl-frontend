@@ -3,15 +3,15 @@ import {
   IReportType, 
   IRole, 
   IUser, 
-  MyPageCommentsPaginationResult, 
+  MyPageComment, 
   UserChat, 
-  UserChatsPaginationResult, 
   UserInquiryWithUserData, 
   UserLikes 
 } from "@/models/user.models";
 import { httpClient, httpClientFormData } from "./http";
-import { TeamPostPaginationResult } from "@/models/team.models";
+import { TeamPost } from "@/models/team.models";
 import { IInitialLoginResponse } from "@/models/auth.models";
+import { IPaginationResult } from "@/models/common.models";
 
 
 export const getAuthTokens = async (
@@ -55,8 +55,8 @@ export const getMyPosts = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/me/posts/?${searchParams.toString()}`);
-  return response.data as TeamPostPaginationResult;
+  const response = await httpClient.get<IPaginationResult<TeamPost>>(`/api/users/me/posts/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<TeamPost>;
 }
 
 export const getMyComments = async (
@@ -78,8 +78,8 @@ export const getMyComments = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/me/comments/?${searchParams.toString()}`);
-  return response.data as MyPageCommentsPaginationResult;
+  const response = await httpClient.get<IPaginationResult<MyPageComment>>(`/api/users/me/comments/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<MyPageComment>;
 }
 
 export const getMyChats = async (
@@ -101,8 +101,8 @@ export const getMyChats = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<UserChatsPaginationResult>(`/api/users/me/chats/?${searchParams.toString()}`);
-  return response.data as UserChatsPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserChat>>(`/api/users/me/chats/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<UserChat>;
 }
 
 export const getMyInquiries = async (page: number) => {
@@ -145,8 +145,8 @@ export const getUserPosts = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<TeamPostPaginationResult>(`/api/users/${userId}/posts/?${searchParams.toString()}`);
-  return response.data as TeamPostPaginationResult;
+  const response = await httpClient.get<IPaginationResult<TeamPost>>(`/api/users/${userId}/posts/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<TeamPost>;
 }
 
 export const getUserChat = async (userId: number) => {
@@ -199,8 +199,8 @@ export const getUserComments = async (
     searchParams.set('search', search);
   }
 
-  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/users/${userId}/comments/?${searchParams.toString()}`);
-  return response.data as MyPageCommentsPaginationResult;
+  const response = await httpClient.get<IPaginationResult<MyPageComment>>(`/api/users/${userId}/comments/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<MyPageComment>;
 }
 
 export const markChatAsRead = async (userId: number) => {

@@ -6,13 +6,13 @@ export interface INotification {
   created_at: string;
   updated_at: string;
   recipients: INotificationRecipient[];
+  template_data: INotificationTemplate;
 }
 
-export interface INotificationPaginationResult {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: INotification[];
+export interface INotificationTemplate {
+  id: number;
+  name: string;
+  type_data: {display_names: {English: string, Korean: string}, color_code: string};
 }
 
 export interface INotificationRecipient {
@@ -23,4 +23,12 @@ export interface INotificationRecipient {
 
 export interface INotificationContents {
   [key: string]: string;
+}
+
+export interface INotificationTemplateType{
+  id: number;
+  display_names: {English: string, Korean: string};
+  name: string;
+  description: string;
+  color_code: string;
 }

@@ -9,6 +9,7 @@ export default function MyPageSectionOptions() {
       <MyPageSectionOptionButton designatedSection="comments" name="댓글" />
       <MyPageSectionOptionButton designatedSection="dms" name="메시지" />
       <MyPageSectionOptionButton designatedSection="inquiries" name="문의" />
+      <MyPageSectionOptionButton designatedSection="notifications" name="알림" />
     </div>
   )
 }

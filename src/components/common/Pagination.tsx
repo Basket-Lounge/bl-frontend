@@ -2,15 +2,21 @@ import Image from "next/image";
 
 interface IPaginationProps {
   currentPageNumber: number;
+  lastPageNumber?: number;
+  firstPageCallback?: () => void;
   previousCallback?: () => void;
   nextCallback?: () => void;
+  lastPageCallback?: () => void;
   disabled?: boolean;
 }
 
 const Pagination = ({
   currentPageNumber,
+  lastPageNumber,
+  firstPageCallback,
   previousCallback,
   nextCallback,
+  lastPageCallback,
   disabled
 }: IPaginationProps) => {
 
@@ -35,6 +41,19 @@ const Pagination = ({
   return (
     <div className="">
       <div className="flex px-[24px] py-[16px] rounded-full bg-color3 w-fit mx-auto items-center gap-[24px]">
+        {(firstPageCallback && currentPageNumber !== 1) && (
+        <button
+          onClick={firstPageCallback}
+          disabled={disabled}
+        >
+          <Image
+            src="/icons/first_page_24dp_FFFFFF.svg"
+            alt="First"
+            width={24}
+            height={24}
+          />
+        </button>
+        )}
         {previousCallback && (
         <button
           onClick={handlePreviousClick}
@@ -57,6 +76,19 @@ const Pagination = ({
           <Image
             src="/icons/arrow_forward_24dp.svg"
             alt="Next"
+            width={24}
+            height={24}
+          />
+        </button>
+        )}
+        {(lastPageCallback && currentPageNumber !== lastPageNumber) && (
+        <button
+          onClick={lastPageCallback}
+          disabled={disabled}
+        >
+          <Image
+            src="/icons/last_page_24dp_FFFFFF.svg"
+            alt="Last"
             width={24}
             height={24}
           />

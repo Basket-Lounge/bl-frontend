@@ -29,13 +29,6 @@ export interface Game {
     updated_at: string;
 }
 
-export interface GamePaginationResult {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: Game[];
-}
-
 export interface LineScore {
     line_score_id: string;
     team: TTeamWithoutStats;

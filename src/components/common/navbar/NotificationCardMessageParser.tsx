@@ -22,6 +22,7 @@ const NotificationCardMessageParser = (
 
   // Process each match
   while ((match = regex.exec(message)) !== null) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [fullMatch, content] = match;
 
     // Add plain text before the match
@@ -41,10 +42,12 @@ const NotificationCardMessageParser = (
     parts.push(message.slice(lastIndex));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (redirectURL) {
       router.push(redirectURL);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     clickCallback && clickCallback();
   };
 

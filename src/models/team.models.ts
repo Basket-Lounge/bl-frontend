@@ -216,20 +216,6 @@ export interface TeamPostCommentStatus {
 
 export type TTeamPostsFilter = "all" | "recent" | "popular";
 
-export interface TeamPostPaginationResult {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: TeamPost[];
-}
-
-export interface TeamPostCommentsPaginationResult {
-    count: number;
-    next: string;
-    previous: string;
-    results: TeamPostComment[];
-}
-
 export interface TeamPostComment {
     id: string;
     content: string;
@@ -246,13 +232,6 @@ export interface TeamPostComment {
         id: number;
         name: string;
     }
-}
-
-export interface TeamPostCommentReplyPaginationResult {
-    count: number;
-    next: string;
-    previous: string;
-    results: TeamPostCommentReply[];
 }
 
 export interface TeamPostCommentReply {

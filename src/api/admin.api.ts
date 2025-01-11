@@ -1,6 +1,15 @@
-import { IReport, IReportPaginationResult, IRole, IUser, IUserPaginationResult, MyPageCommentsPaginationResult, UserChat, UserInquiriesPaginationResult } from "@/models/user.models";
+import { 
+  IReport, 
+  IReportWithoutUserData, 
+  IRole, 
+  IUser, 
+  MyPageComment, 
+  UserChat, 
+  UserInquiry
+} from "@/models/user.models";
 import { httpClient } from "./http";
 import { Team } from "@/models/team.models";
+import { IPaginationResult } from "@/models/common.models";
 
 
 export const getAllRoles = async () => {
@@ -27,8 +36,8 @@ export const getAllUsers = async (
     searchParams.set('search', search);
   }
 
-  const response = await httpClient.get<IUserPaginationResult>(`/api/admin/users/?${searchParams.toString()}`);
-  return response.data as IUserPaginationResult;
+  const response = await httpClient.get<IPaginationResult<IUser>>(`/api/admin/users/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<IUser>;
 }
 
 export const getUserPosts = async (
@@ -89,8 +98,8 @@ export const getUserPostComments = async (
     searchParams.set('search', search);
   }
 
-  const response = await httpClient.get<MyPageCommentsPaginationResult>(`/api/admin/users/${userId}/comments/?${searchParams.toString()}`);
-  return response.data as MyPageCommentsPaginationResult;
+  const response = await httpClient.get<IPaginationResult<MyPageComment>>(`/api/admin/users/${userId}/comments/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<MyPageComment>;
 }
 
 export const getUserChats = async (
@@ -132,8 +141,8 @@ export const getAllInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getUnassignedInquiries = async (page: number, search?: string) => {
@@ -142,8 +151,8 @@ export const getUnassignedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getAssignedInquiries = async (page: number, search?: string) => {
@@ -152,8 +161,8 @@ export const getAssignedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getSolvedInquiries = async (page: number, search?: string) => {
@@ -162,8 +171,8 @@ export const getSolvedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getUnsolvedInquiries = async (page: number, search?: string) => {
@@ -172,8 +181,8 @@ export const getUnsolvedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getMyInquiries = async (page: number, search?: string) => {
@@ -182,8 +191,8 @@ export const getMyInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<UserInquiriesPaginationResult>(url);
-  return response.data as UserInquiriesPaginationResult;
+  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
+  return response.data as IPaginationResult<UserInquiry>; 
 }
 
 export const getInquiries = async (page: number, filter?: string, search?: string) => {
@@ -268,18 +277,18 @@ export const getAllReports = async (
     searchParams.set('sort', sort);
   }
 
-  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/?${searchParams.toString()}`);
-  return response.data as IReportPaginationResult;
+  const response = await httpClient.get<IPaginationResult<IReportWithoutUserData>>(`/api/admin/reports/?${searchParams.toString()}`);
+  return response.data as IPaginationResult<IReportWithoutUserData>;
 }
 
 export const getUnresolvedReports = async (page: number) => {
-  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/unresolved/?page=${page}`);
-  return response.data as IReportPaginationResult;
+  const response = await httpClient.get<IPaginationResult<IReportWithoutUserData>>(`/api/admin/reports/unresolved/?page=${page}`);
+  return response.data as IPaginationResult<IReportWithoutUserData>;
 }
 
 export const getResolvedReports = async (page: number) => {
-  const response = await httpClient.get<IReportPaginationResult>(`/api/admin/reports/resolved/?page=${page}`);
-  return response.data as IReportPaginationResult;
+  const response = await httpClient.get<IPaginationResult<IReportWithoutUserData>>(`/api/admin/reports/resolved/?page=${page}`);
+  return response.data as IPaginationResult<IReportWithoutUserData>;
 }
 
 export const resolveReport = async (reportId: string) => {

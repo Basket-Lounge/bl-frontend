@@ -1,3 +1,4 @@
+import { TDialogSize } from "@/models/common.models";
 import { Team, TTeamPostsFilter } from "@/models/team.models";
 import { createContext } from "react";
 import { createStore } from "zustand";
@@ -52,12 +53,10 @@ interface IMyPageStore {
   updateInquiriesCreateTitle: (value: string) => void;
   inquiriesCreateTitleError: string | null;
   updateInquiriesCreateTitleError: (value: string | null) => void;
-
   inquiriesCreateTypeId: number | null;
   updateInquiriesCreateTypeId: (value: number | null) => void;
   inquiriesCreateTypeIdError: string | null;
   updateInquiriesCreateTypeIdError: (value: string | null) => void;
-
   inquiriesCreateContent: string;
   updateInquiriesCreateContent: (value: string) => void;
   inquiriesCreateContentError: string | null;
@@ -65,12 +64,22 @@ interface IMyPageStore {
 
   postArgumentsModified: boolean;
   setPostArgumentsModified: (modified: boolean) => void;
-
   lastModifiedPostId: string | null;
   setLastModifiedPostId: (postId: string | null) => void;
-
   commentArgumentsModified: boolean;
   setCommentArgumentsModified: (modified: boolean) => void;
+
+  // For notifications
+  notificationsArgumentsModified: boolean;
+  setNotificationsArgumentsModified: (modified: boolean) => void;
+  notificationsActionTaken: boolean;
+  setNotificationsActionTaken: (value: boolean) => void;
+  currentPageNotificationIds: { id: string, checked: boolean }[];
+  setCurrentPageNotificationIds: (value: { id: string, checked: boolean }[]) => void;
+  notificationsDeleteDialogOpen: TDialogSize | null;
+  setNotificationsDeleteDialogOpen: (value: TDialogSize | null) => void;
+  notificationsReadDialogOpen: TDialogSize | null;
+  setNotificationsReadDialogOpen: (value: TDialogSize | null) => void;
 }
 
 export const MyPageStore = createStore<IMyPageStore>((set) => ({
@@ -148,6 +157,17 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
   updateInquiriesCreateContent: (value) => set({ inquiriesCreateContent: value }),
   inquiriesCreateContentError: "",
   updateInquiriesCreateContentError: (value) => set({ inquiriesCreateContentError: value }),
+
+  notificationsArgumentsModified: false,
+  setNotificationsArgumentsModified: (modified) => set({ notificationsArgumentsModified: modified }),
+  notificationsActionTaken: false,
+  setNotificationsActionTaken: (value) => set({ notificationsActionTaken: value }),
+  currentPageNotificationIds: [],
+  setCurrentPageNotificationIds: (value) => set({ currentPageNotificationIds: value }),
+  notificationsDeleteDialogOpen: null,
+  setNotificationsDeleteDialogOpen: (value) => set({ notificationsDeleteDialogOpen: value }),
+  notificationsReadDialogOpen: null,
+  setNotificationsReadDialogOpen: (value) => set({ notificationsReadDialogOpen: value }),
 }));
 
 export const MyPageStoreContext = createContext(MyPageStore);
