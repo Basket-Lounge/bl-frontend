@@ -8,7 +8,14 @@ export const getUnreadNotificationCount = async () => {
   return response.data ? response.data.count : 0;
 }
 
-export const markAllNotificationsAsRead = async () => {
+export const markAllNotificationsAsRead = async (data: string[] = []) => {
+  if (data.length > 0) {
+    await httpClient.patch("/api/users/me/notifications/", {
+      data
+    });
+    return;
+  }
+
   await httpClient.patch("/api/users/me/notifications/");
 }
 
@@ -20,7 +27,14 @@ export const deleteNotification = async (notificationId: string) => {
   await httpClient.delete(`/api/users/me/notifications/${notificationId}/`);
 }
 
-export const deleteAllNotifications = async () => {
+export const deleteAllNotifications = async (data: string[] = []) => {
+  if (data.length > 0) {
+    await httpClient.delete("/api/users/me/notifications/", {
+      data
+    });
+    return;
+  }
+
   await httpClient.delete("/api/users/me/notifications/");
 }
 
