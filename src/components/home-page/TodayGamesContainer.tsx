@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTodayGames } from "@/api/game.api";
 import TodayGamesListController from "./TodayGamesListController";
 import TodayGameSkeletonsContainer from "./TodayGameSkeletonsContainer";
@@ -10,8 +10,10 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 export default function TodayGamesContainer() {
   const todayGamesQuery = useQuery({
     queryKey: ["home", "today-games"],
-    queryFn: () => getTodayGames()
+    queryFn: () => getTodayGames(),
+    refetchInterval: 60 * 1000,
   });
+
 
   if (todayGamesQuery.isLoading || todayGamesQuery.isRefetching) {
     return (

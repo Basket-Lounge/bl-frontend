@@ -1,29 +1,51 @@
 import { UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatHistoryEntry from "./UserDMsChatHistoryEntry";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveUserChat } from "@/api/webSocket.api";
-import { useMutation } from "@tanstack/react-query";
-import { markChatAsRead } from "@/api/user.api";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { getUserChatMessages, markChatAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import CuteErrorMessage from "../common/CuteErrorMessage";
+import SpinnerLoading from "../common/SpinnerLoading";
+import { sortUserChatMessagesByDate } from "@/utils/user.utils";
 
 
 interface IUserDMsChatHistoryProps {
-  messages: UserChatMessageWithUserData[];
   chatId: string;
   userId: number;
 }
 
-const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryProps) => {
+const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
+  const eventListenerAdded = useRef<boolean>(false);
 
-  const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>(messages);
+  const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
+
+  const userChatMessagesQuery = useInfiniteQuery({
+    queryKey: ['my-page', "DMs", "chat", userId, "messages"],
+    queryFn: async ({ pageParam = "" }) => {
+      return await getUserChatMessages(pageParam, userId);
+    }, 
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next == null) {
+        return undefined;
+      }
+      
+      const myURL = new URL(lastPage.next);
+      const cursor = myURL.searchParams.get('cursor');
+      return cursor;
+    }
+  });
+
+  const sortedInitialMessages = useMemo(() => {
+    return sortUserChatMessagesByDate(userChatMessagesQuery.data?.pages.map((page) => page.results).flat() || []);
+  }, [userChatMessagesQuery.data]);
 
   const markAsReadMutation = useMutation({
     mutationFn: async () => {
@@ -35,8 +57,19 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
     markAsReadMutation.mutate();
   }, 5000);
 
+  const loadPreviousMessages = useDebounce(() => {
+    userChatMessagesQuery.fetchNextPage();
+  }, 300);
+
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     markAsReadDebounceCallback();
+  }
+
+  const handleScroll = (e: Event) => {
+    const element = e.target as HTMLDivElement;
+    if (element.scrollTop === 0) {
+      loadPreviousMessages();
+    }
   }
 
   useEffect(() => {
@@ -48,7 +81,6 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
     });
     client.on('connecting', (ctx) => {
       setIsLoading(true);
-      setConnected(false);
       setError(null);
     });
     client.on("error", (ctx) => {
@@ -64,17 +96,12 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
     });
     subscription.on("subscribed", (ctx) => {
       setIsLoading(false);
-      setConnected(true);
     });
     subscription.on("error", (ctx) => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
       setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
     });
 
@@ -93,13 +120,21 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
     }
   }, [sortedMessages]);
 
+  useEffect(() => {
+    // run after 5 seconds to ensure that the elementRef is not null
+    const timeout = setTimeout(() => {
+      elementRef.current?.addEventListener("scroll", handleScroll);
+    }, 5000);
+    
+    return () => {
+      clearTimeout(timeout);
+      elementRef.current?.removeEventListener("scroll", handleScroll);
+    }
+  }, [userChatMessagesQuery.dataUpdatedAt]);
+
   if (isLoading) {
     return (
-      <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[20px]">
-          채팅 연결 중...
-        </p>
-      </div>
+      <SpinnerLoading />
     );
   }
 
@@ -113,7 +148,7 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
     );
   }
 
-  if (sortedMessages.length === 0) {
+  if (sortedMessages.length === 0 && sortedInitialMessages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <CuteErrorMessage error="메시지가 없습니다." />
@@ -127,6 +162,12 @@ const UserDMsChatHistory = ({ messages, chatId, userId }: IUserDMsChatHistoryPro
       ref={elementRef}
       onClick={handleClick}
     >
+      {userChatMessagesQuery.isFetchingNextPage && (
+        <SpinnerLoading />
+      )}
+      {sortedInitialMessages.map((message) => (
+        <UserDMsChatHistoryEntry key={message.id} message={message} />
+      ))}
       {sortedMessages.map((message) => (
         <UserDMsChatHistoryEntry key={message.id} message={message} />
       ))}

@@ -10,6 +10,7 @@ import SpinnerLoading from "../common/SpinnerLoading";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
+
 interface IUserDMsChatProps {
   userId: number;
 }
@@ -41,24 +42,7 @@ const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
   });
 
   const otherUser = chatQuery.data.participants.find((participant) => participant.user_data.id === userId);
-  const otherUserMessages : UserChatMessageWithUserData[] = otherUser?.messages?.map((message) => {
-    return {
-      ...message,
-      user_data: otherUser.user_data
-    }
-  }) || [];
   
-  const user = chatQuery.data.participants.find((participant) => participant.user_data.id !== userId);
-  const userMessages : UserChatMessageWithUserData[] = user?.messages?.map((message) => {
-    return {
-      ...message,
-      user_data: user.user_data
-    }
-  }) || [];
-
-  const messages = userMessages.concat(otherUserMessages || []) || []
-  const sortedMessages = sortUserChatMessagesByDate(messages);
-
   useEffect(() => {
     if (userId !== currentUserId) {
       setCurrentUserId(userId);
@@ -94,7 +78,6 @@ const UserDMsChat = ({ userId }: IUserDMsChatProps) => {
         <UserDMsChatControlButtons userId={userId} />
       </div>
       <UserDMsChatHistory 
-        messages={sortedMessages} 
         chatId={chatQuery.data.id}
         userId={userId}
       />

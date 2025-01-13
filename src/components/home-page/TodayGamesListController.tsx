@@ -14,7 +14,6 @@ interface ITodayGamesListControllerProps {
 export default function TodayGamesListController(
   { games }: ITodayGamesListControllerProps
 ) {
-  console.log(games);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
