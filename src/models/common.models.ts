@@ -9,3 +9,9 @@ export interface IPaginationResult<T> {
     last_page: number;
     results: T[];
 }
+
+export interface ICursorPaginationResult<T> {
+    results: T[];
+    next?: string;
+    previous?: string;
+}
