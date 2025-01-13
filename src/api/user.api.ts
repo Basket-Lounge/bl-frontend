@@ -5,13 +5,14 @@ import {
   IUser, 
   MyPageComment, 
   UserChat, 
+  UserChatMessageWithUserData, 
   UserInquiryWithUserData, 
   UserLikes 
 } from "@/models/user.models";
 import { httpClient, httpClientFormData } from "./http";
 import { TeamPost } from "@/models/team.models";
 import { IInitialLoginResponse } from "@/models/auth.models";
-import { IPaginationResult } from "@/models/common.models";
+import { ICursorPaginationResult, IPaginationResult } from "@/models/common.models";
 
 
 export const getAuthTokens = async (
@@ -152,6 +153,17 @@ export const getUserPosts = async (
 export const getUserChat = async (userId: number) => {
   const response = await httpClient.get<UserChat>(`/api/users/me/chats/${userId}/`);
   return response.data as UserChat;
+}
+
+export const getUserChatMessages = async (
+  cursor: string,
+  userId: number
+) => {
+  const response = await httpClient.get<ICursorPaginationResult<UserChatMessageWithUserData>>(
+    `/api/users/me/chats/${userId}/messages/` + (cursor ? `?cursor=${cursor}` : '')
+  );
+
+  return response.data as ICursorPaginationResult<UserChatMessageWithUserData>;
 }
 
 export const createUserChat = async (userId: number) => {
