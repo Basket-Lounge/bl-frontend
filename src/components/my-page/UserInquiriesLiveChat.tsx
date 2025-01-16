@@ -1,12 +1,13 @@
 import { getInquiry } from "@/api/user.api";
-import { extractInquiryTypeNameInKorean, sortUserChatMessagesByDate } from "@/utils/user.utils";
+import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
+import { UserInquiryWithUserData } from "@/models/user.models";
 import UserInquiriesLiveChatHistory from "./UserInquiriesLiveChatHistory";
 import UserInquiriesLiveChatInput from "./UserInquiriesLiveChatInput";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IUserInquiriesLiveChatProps {
@@ -25,27 +26,8 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
       return await getInquiry(inquiryId);
     }
   });
+
   const [realInquiry, setRealInquiry] = useState<UserInquiryWithUserData>(chatQuery.data);
-
-  const moderatorMessages : UserChatMessageWithUserData[] = chatQuery.data.moderators.map((moderator) => {
-    return moderator.messages?.map((message) => {
-      return {
-        ...message,
-        user_data: moderator.moderator_data
-      }
-    }) || [];
-  }).flat();
-  
-  const userMessages : UserChatMessageWithUserData[] = chatQuery.data.messages?.map((message) => {
-    return {
-      ...message,
-      user_data: chatQuery.data.user_data
-    }
-  }) || [];
-
-  const messages = moderatorMessages.concat(userMessages || []) || []
-  const sortedMessages = sortUserChatMessagesByDate(messages);
-
   const inquiryTypeInKorean = extractInquiryTypeNameInKorean(realInquiry.inquiry_type_data);
 
   const createQueryString = useCallback(() => {
@@ -74,7 +56,7 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
   }, [chatQuery.data]);
 
   if (chatQuery.isRefetching) {
-    return <div>Loading...</div>
+    return <SpinnerLoading />
   }
 
   return (
@@ -100,7 +82,6 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
         </div>
       </div>
       <UserInquiriesLiveChatHistory
-        messages={sortedMessages}
         inquiryId={inquiryId}
       />
       <div className="p-[24px]">

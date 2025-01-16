@@ -14,13 +14,9 @@ const UserInquiriesContainerItem = ({ inquiry }: IUserInquiriesContainerItemProp
 
   const page = parseInt(searchParams.get("page") || '1');
 
-  const unreadCount = inquiry.moderators.reduce((acc, moderator) => {
-    const unread_messages_count = moderator.unread_messages_count || 0;
-    return acc + unread_messages_count;
-  }, 0);
   const lastMessage : UserChatMessage | undefined = getLastMessageFromUserInquiry(inquiry);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     router.push(pathname + `?page=${page}&inquiry=${inquiry.id}`);
   }
 
@@ -36,11 +32,11 @@ const UserInquiriesContainerItem = ({ inquiry }: IUserInquiriesContainerItemProp
           <p className="text-[14px]">{lastMessage?.message || '메시지 없음'}</p>
         </div>
       </div>
-      {unreadCount > 0 && (
-      <div className="relative w-[40px] h-[40px] rounded-full bg-red-500 text-white">
-        <p className="font-semibold text-[16px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{unreadCount}</p>
-      </div>
-      )}
+      {(inquiry.unread_messages_count && inquiry.unread_messages_count > 0) ? (
+        <div className="relative w-[40px] h-[40px] rounded-full bg-red-500 text-white">
+          <p className="font-semibold text-[16px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{inquiry.unread_messages_count}</p>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -60,7 +60,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
     userChatMessagesQuery.fetchNextPage();
   }, 300);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     markAsReadDebounceCallback();
   }
 

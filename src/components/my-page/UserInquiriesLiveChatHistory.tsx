@@ -1,30 +1,53 @@
-import { UserChatMessageWithUserData } from "@/models/user.models";
-import { useEffect, useRef, useState } from "react";
+import { InquiryMessage } from "@/models/user.models";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveInquiryChat } from "@/api/webSocket.api";
-import { useMutation } from "@tanstack/react-query";
-import { markInquiryAsRead } from "@/api/user.api";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { getUserInquiryMessages, markInquiryAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import UserInquiriesLiveChatHistoryEntry from "./UserInquiriesLiveChatHistoryEntry";
 import CuteErrorMessage from "../common/CuteErrorMessage";
+import { sortInquiryMessagesByDate } from "@/utils/user.utils";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IUserInquiriesLiveChatHistoryProps {
-  messages: UserChatMessageWithUserData[];
   inquiryId: string;
 }
 
 const UserInquiriesLiveChatHistory = (
-  { messages, inquiryId }: IUserInquiriesLiveChatHistoryProps
+  { inquiryId }: IUserInquiriesLiveChatHistoryProps
 ) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
-  const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>(messages);
+  const [newMessages, setNewMessages] = useState<InquiryMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
+
+  const inquiryMessagesQuery = useInfiniteQuery({
+    queryKey: ['my-page', 'inquiries', 'chat', inquiryId, 'messages'],
+    queryFn: async ({ pageParam = "" }) => {
+      return await getUserInquiryMessages(pageParam, inquiryId);
+    }, 
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next == null) {
+        return undefined;
+      }
+
+      const myURL = new URL(lastPage.next);
+      const cursor = myURL.searchParams.get('cursor');
+      return cursor;
+    },
+    initialPageParam: ""
+  });
+
+
+  const sortedOldMessages = useMemo(() => {
+    return sortInquiryMessagesByDate(inquiryMessagesQuery.data?.pages.map((page) => page.results).flat() || []);
+  }, [inquiryMessagesQuery.data]);
 
   const markAsReadMutation = useMutation({
     mutationFn: async () => {
@@ -36,8 +59,19 @@ const UserInquiriesLiveChatHistory = (
     markAsReadMutation.mutate();
   }, 5000);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const loadPreviousMessages = useDebounce(() => {
+    inquiryMessagesQuery.fetchNextPage();
+  }, 300);
+
+  const handleClick = () => {
     markAsReadDebounceCallback();
+  }
+
+  const handleScroll = (e: Event) => {
+    const element = e.target as HTMLDivElement;
+    if (element.scrollTop === 0) {
+      loadPreviousMessages();
+    }
   }
 
   useEffect(() => {
@@ -71,13 +105,9 @@ const UserInquiriesLiveChatHistory = (
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
-      console.log("publication", ctx);
       if (ctx.data.type === "message") {
-        setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
+        setNewMessages((prevMessages) => [...prevMessages, ctx.data]);
       }
     });
 
@@ -94,7 +124,19 @@ const UserInquiriesLiveChatHistory = (
     if (elementRef.current) {
       elementRef.current.scrollTop = elementRef.current.scrollHeight;
     }
-  }, [sortedMessages]);
+  }, [newMessages]);
+
+  useEffect(() => {
+    // run after 5 seconds to ensure that the elementRef is not null
+    const timeout = setTimeout(() => {
+      elementRef.current?.addEventListener("scroll", handleScroll);
+    }, 5000);
+    
+    return () => {
+      clearTimeout(timeout);
+      elementRef.current?.removeEventListener("scroll", handleScroll);
+    }
+  }, [inquiryMessagesQuery.dataUpdatedAt]);
 
   if (isLoading) {
     return (
@@ -116,7 +158,7 @@ const UserInquiriesLiveChatHistory = (
     );
   }
 
-  if (sortedMessages.length === 0) {
+  if (newMessages.length === 0 && sortedOldMessages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <CuteErrorMessage error="메시지가 없습니다." />
@@ -130,7 +172,13 @@ const UserInquiriesLiveChatHistory = (
       ref={elementRef}
       onClick={handleClick}
     >
-      {sortedMessages.map((message) => (
+      {inquiryMessagesQuery.isFetchingNextPage && (
+        <SpinnerLoading />
+      )}
+      {sortedOldMessages.map((message) => (
+        <UserInquiriesLiveChatHistoryEntry key={message.id} message={message} />
+      ))}
+      {newMessages.map((message) => (
         <UserInquiriesLiveChatHistoryEntry key={message.id} message={message} />
       ))}
     </div>
