@@ -18,7 +18,6 @@ interface IUserDMsChatHistoryProps {
 
 const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
   const elementRef = useRef<HTMLDivElement>(null);
-  const eventListenerAdded = useRef<boolean>(false);
 
   const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);

@@ -85,20 +85,22 @@ const UserNotificationsPageHeaderReadDialog = () => {
         className="flex justify-end gap-[16px]"
       >
         <RegularButton
-          text="확인"
           size="small"
           bgColor="bg-color1"
           onClick={handleMarkNotificationsAsReadClick}
           pending={markNotificationsAsReadMutation.isPending}
           disabled={markNotificationsAsReadMutation.isPending}
-        />
+        >
+          {markNotificationsAsReadMutation.isPending ? '읽음 표시 중...' : '읽음 표시'}
+        </RegularButton>
         <RegularButton
-          text="취소"
           size="small"
           bgColor="bg-color1"
           onClick={() => handleOpen(null)}
           disabled={markNotificationsAsReadMutation.isPending}
-        />
+        >
+          취소
+        </RegularButton>
       </DialogFooter>
     </Dialog>
   );

@@ -35,22 +35,18 @@ const TeamPostsEditButtonContainer = () => {
       return editTeamPost(teamId, postId, post.title, post.content, post.status)
     },
     onSuccess: () => {
-      queryClient.removeQueries({
-        queryKey: ["team", teamId, "posts", "pagination"]
-      });
-
       updateTitle("");
       updateContent("");
       updateTitleError(null);
       updateContentError(null);
 
-      queryClient.cancelQueries({
+      queryClient.invalidateQueries({
         queryKey: ["team", teamId, "posts", postId, "post"]
       });
-      queryClient.cancelQueries({
+      queryClient.invalidateQueries({
         queryKey: ["team", teamId, "posts", "pagination"]
       });
-      queryClient.cancelQueries({
+      queryClient.invalidateQueries({
         queryKey: ['my-page', "posts", "pagination"],
       })
       router.back();

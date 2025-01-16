@@ -33,37 +33,41 @@ const UserNotificationsPageHeader = () => {
         <div className="flex justify-end items-end gap-[16px]">
           {itemsChecked > 0 ? (
             <RegularButton
-              text="선택 삭제"
               size="small"
               bgColor="bg-color1"
               className="hover:bg-color3"
               onClick={handleDeleteButtonClick}
-            />
+            >
+              선택 삭제
+            </RegularButton>
           ) : (
             <RegularButton
-              text="전체 삭제"
               size="small"
               bgColor="bg-color1"
               className="hover:bg-color3"
               onClick={handleDeleteButtonClick}
-            />
+            >
+              전체 삭제
+            </RegularButton>
           )}
           {itemsChecked > 0 ? (
             <RegularButton
-              text="선택 읽음 표시"
               size="small"
               bgColor="bg-color1"
               className="hover:bg-color3"
               onClick={handleMarkAllAsReadButtonClick}
-            />
+            >
+              선택 읽음 표시
+            </RegularButton>
           ) : (
             <RegularButton
-              text="전체 읽음 표시"
               size="small"
               bgColor="bg-color1"
               className="hover:bg-color3"
               onClick={handleMarkAllAsReadButtonClick}
-            />
+            >
+              전체 읽음 표시
+            </RegularButton>
           )}
         </div>
       </div>

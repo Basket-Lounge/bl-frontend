@@ -1,7 +1,7 @@
 import { Spinner } from "@material-tailwind/react";
 
 interface IRegularButtonProps {
-  text: string;
+  children?: React.ReactNode | string;
   width?: string;
   size?: 'small' | 'medium' | 'large' | 'full';
   bgColor?: 'bg-color1' | 'bg-color2' | 'bg-color3' | 'bg-white';
@@ -13,7 +13,7 @@ interface IRegularButtonProps {
 }
 
 const RegularButton = ({ 
-  text, 
+  children,
   size='medium', 
   width='w-fit',
   onClick,
@@ -50,7 +50,7 @@ const RegularButton = ({
             onPointerLeaveCapture={() => {}} 
           />
         ) : (
-          text
+          children
         )}
       </button>
     )
@@ -70,7 +70,7 @@ const RegularButton = ({
           onPointerLeaveCapture={() => {}} 
         />
       ) : (
-        text
+        children
       )}
     </button>
   )

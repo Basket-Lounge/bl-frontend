@@ -86,20 +86,22 @@ const UserNotificationsPageHeaderDeleteDialog = () => {
         className="flex justify-end gap-[16px]"
       >
         <RegularButton
-          text="확인"
           size="small"
           bgColor="bg-color1"
           onClick={handleDeleteNotificationsClick}
           pending={deleteNotificationsMutation.isPending}
           disabled={deleteNotificationsMutation.isPending}
-        />
+        >
+          {deleteNotificationsMutation.isPending ? '삭제 중...' : '삭제'}
+        </RegularButton>
         <RegularButton
-          text="취소"
           size="small"
           bgColor="bg-color1"
           onClick={() => handleOpen(null)}
           disabled={deleteNotificationsMutation.isPending}
-        />
+        >
+          취소
+        </RegularButton>
       </DialogFooter>
     </Dialog>
   );

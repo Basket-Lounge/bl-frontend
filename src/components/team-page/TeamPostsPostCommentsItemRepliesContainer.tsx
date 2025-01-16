@@ -7,9 +7,10 @@ import { useParams } from "next/navigation";
 import { useContext, useEffect } from "react";
 import TeamPostsPostCommentsReply from "./TeamPostsPostCommentsReply";
 import TeamPostsPostCommentsReplyInput from "./TeamPostsPostCommentsReplyInput";
-import TeamPostsPostCommentsReplyPagination from "./TeamPostsPostCommentsReplyPagination";
 import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useStore } from "zustand";
+import Pagination from "../common/Pagination";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 const TeamPostsPostCommentsItemRepliesContainer = ({
@@ -76,7 +77,7 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
         commentId={comment.id}
       />
       {( postCommentRepliesQuery.isLoading || postCommentRepliesQuery.isRefetching ) && (
-        <div className="h-[150px] animate-pulse bg-color4 rounded-md" />
+        <SpinnerLoading />
       )}
       {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && 
         postCommentRepliesQuery.data.results.map((reply) => (
@@ -86,11 +87,14 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
         />
       ))}
       {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && (
-        <TeamPostsPostCommentsReplyPagination
-          currentPageNumber={repliesPage}
-          previousLink={postCommentRepliesQuery.data.previous}
-          nextLink={postCommentRepliesQuery.data.next}
-          setPageNumber={handlePagination}
+        <Pagination
+          currentPageNumber={postCommentRepliesQuery.data.current_page}
+          firstPageCallback={() => handlePagination(postCommentRepliesQuery.data.first_page)}
+          previousCallback={postCommentRepliesQuery.data.previous ? () => handlePagination(repliesPage - 1) : undefined}
+          nextCallback={postCommentRepliesQuery.data.next ? () => handlePagination(repliesPage + 1) : undefined}
+          lastPageCallback={() => handlePagination(postCommentRepliesQuery.data.last_page)}
+          lastPageNumber={postCommentRepliesQuery.data.last_page}
+          disabled={postCommentRepliesQuery.isLoading || postCommentRepliesQuery.isRefetching}
         />
       )}
     </div>
