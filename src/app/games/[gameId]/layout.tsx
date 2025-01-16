@@ -14,10 +14,9 @@ export default function GamePage({ params, children }: {
   const headerQuery = useSuspenseQuery({
     queryKey: ["game", params.gameId],
     queryFn: async () => {
-      console.log('game page query executed');
       return await getGameGeneralInfo(params.gameId);
     },
-    refetchInterval: 30000
+    refetchInterval: 60000
   });
 
   return (
