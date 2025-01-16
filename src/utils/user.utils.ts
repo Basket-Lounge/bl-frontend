@@ -1,4 +1,4 @@
-import { InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator, UserInquiryWithUserData } from "@/models/user.models";
+import { InquiryMessage, InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator, UserInquiryWithUserData } from "@/models/user.models";
 
 
 export const translateRoleNameToKorean = (role: string) => {
@@ -28,6 +28,12 @@ export const createChannelNameForPrivateChat = (chatId: string, participants: Us
 }
 
 export const sortUserChatMessagesByDate = (messages: UserChatMessageWithUserData[]) => {
+  return messages.sort((a, b) => {
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
+}
+
+export const sortInquiryMessagesByDate = (messages: InquiryMessage[]) => {
   return messages.sort((a, b) => {
     return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
@@ -114,6 +120,10 @@ export const getLastMessageFromUserInquiry = (inquiry: UserInquiry) => {
       }
     }
   });
+
+  if (!recentModeratorMessage) {
+    return;
+  }
 
   const userlastMessage = inquiry.last_message?.created_at || '2000-01-01T00:00:00Z';
 
