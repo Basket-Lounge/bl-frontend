@@ -1,21 +1,26 @@
 'use client'
 
 import { getTeamPost } from "@/api/team.api";
+import DropdownButton from "@/components/common/DropdownButton";
 import TeamPostsPostCommentInput from "@/components/team-page/TeamPostsPostCommentInput";
 import TeamPostsPostCommentsContainer from "@/components/team-page/TeamPostsPostCommentsContainer";
+import TeamPostsPostOptions from "@/components/team-page/TeamPostsPostItemOptions";
 import TeamPostsPostLikeCommentButtonContainer from "@/components/team-page/TeamPostsPostLikeCommentButtonContainer";
+import { useAuthStore } from "@/stores/auth.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
 
 const PostPage = () => {
   const router = useRouter();
-  const { teamId, postId } = useParams();
+  const { userId } = useAuthStore();
+  const { teamId, postId } = useParams<{ teamId: string, postId: string }>();
   
   const postQuery = useSuspenseQuery({
-    queryKey: ["team", teamId as string, "posts", postId as string, "post"],
+    queryKey: ["team", teamId, "posts", postId, "post"],
     queryFn: async () => {
-      return await getTeamPost(teamId as string, postId as string);
+      return await getTeamPost(teamId, postId );
     }
   });
 
@@ -32,11 +37,25 @@ const PostPage = () => {
         👈 뒤로가기
       </button>
       <div className="flex flex-col items-stretch gap-[16px]">
-        <h1
-          className="bg-transparent text-white font-semibold outline-none grow text-[24px]"
-        >
-          {postQuery.data.title}
-        </h1>
+        <div className="flex items-end justify-between relative">
+          <h1
+            className="bg-transparent text-white font-semibold outline-none grow text-[24px]"
+          >
+            {postQuery.data.title}
+          </h1>
+          {userId === postQuery.data.user_data.id && (
+            <DropdownButton text={
+              <Image
+                src="/icons/settings_24dp_FFFFFF.svg"
+                alt="ellipsis"
+                width={24}
+                height={24}
+              />
+            }>
+              <TeamPostsPostOptions postId={postId} teamId={teamId} />
+            </DropdownButton>
+          )}
+        </div>
         <div className="flex items-center gap-[16px]">
           <div className="p-[20px] rounded-full bg-white">
 

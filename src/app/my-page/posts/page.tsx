@@ -2,10 +2,10 @@
 
 import { getMyPosts } from "@/api/user.api";
 import CuteErrorMessage from "@/components/common/CuteErrorMessage";
+import Pagination from "@/components/common/Pagination";
 import UserPostsContainer from "@/components/my-page/UserPostsContainer";
 import UserPostsFilter from "@/components/my-page/UserPostsFilter";
 import TeamPostsContainerSkeleton from "@/components/team-page/TeamPostsContainerSkeleton";
-import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { MyPageStoreContext } from "@/stores/myPage.stores";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -29,7 +29,7 @@ const PostsPage = () => {
   const page = parseInt(searchParams.get("page") || '1');
 
   const teamPostsQuery = useQuery({
-    queryKey: ['my-page', "posts", "pagination", page],
+    queryKey: ['my-page', "posts", "pagination", page, { sort, search }],
     queryFn: async () => {
       return await getMyPosts(page, { sort, search });
     },
@@ -85,14 +85,18 @@ const PostsPage = () => {
     <div className="flex flex-col gap-[16px] items-stretch">
       <UserPostsFilter />
       <UserPostsContainer posts={teamPostsQuery.data!.results} />
-      <TeamPostsPagination 
+      <Pagination
         currentPageNumber={page}
+        lastPageNumber={teamPostsQuery.data!.last_page}
+        firstPageCallback={() => handlePageChange(teamPostsQuery.data!.first_page)}
         previousCallback={
           teamPostsQuery.data!.previous ? () => handlePageChange(page - 1) : undefined
         }
         nextCallback={
           teamPostsQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
+        lastPageCallback={() => handlePageChange(teamPostsQuery.data!.last_page)}
+        disabled={teamPostsQuery.isLoading || teamPostsQuery.isRefetching}
       />
     </div>
   );
