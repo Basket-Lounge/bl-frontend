@@ -31,7 +31,7 @@ const AdminInquiriesPage = () => {
   const setInquiriesArgumentsModified = useStore(store, (state) => state.setInquiriesArgumentsModified);
 
   const adminInquiriesQuery = useQuery({
-    queryKey: ['admin', "inquiries", "pagination", page],
+    queryKey: ['admin', "inquiries", "pagination", page, { filter, search }],
     queryFn: async () => {
       return await getInquiries(page, filter, search);
     },
@@ -67,7 +67,7 @@ const AdminInquiriesPage = () => {
     return (
       <div className="flex flex-col gap-[24px] items-stretch">
         <AdminInquiriesFilter />
-        <div className="h-[120px] w-[100%] flex items-center justify-center animate-pulse bg-color3 rounded-md" />
+        <SpinnerLoading />
       </div>
     )
   }

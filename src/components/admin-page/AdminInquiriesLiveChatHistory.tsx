@@ -1,16 +1,17 @@
-import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
-import { useEffect, useRef, useState } from "react";
+import { InquiryMessage, UserInquiryWithUserData } from "@/models/user.models";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveAdminInquiryChat } from "@/api/webSocket.api";
-import { useMutation } from "@tanstack/react-query";
-import { markInquiryAsRead } from "@/api/user.api";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import useDebounce from "@/hooks/useDebounce";
 import AdminInquiriesLiveChatHistoryEntry from "./AdminInquiriesLiveChatHistoryEntry";
 import CuteErrorMessage from "../common/CuteErrorMessage";
+import { getInquiryMessages, markInquiryAsRead } from "@/api/admin.api";
+import { sortInquiryMessagesByDate } from "@/utils/user.utils";
+import RegularButton from "../common/RegularButton";
 
 
 interface IAdminInquiriesLiveChatHistoryProps {
-  messages: UserChatMessageWithUserData[];
   inquiryId: string;
   updateInquiryState: (inquiry: UserInquiryWithUserData) => void;
   updateInquiryModerator: (inquiry: UserInquiryWithUserData) => void;
@@ -18,7 +19,6 @@ interface IAdminInquiriesLiveChatHistoryProps {
 }
 
 const AdminInquiriesLiveChatHistory = ({ 
-  messages, 
   inquiryId, 
   updateInquiryModerator, 
   updateInquiryState,
@@ -26,12 +26,33 @@ const AdminInquiriesLiveChatHistory = ({
 }: IAdminInquiriesLiveChatHistoryProps ) => {
   const elementRef = useRef<HTMLDivElement>(null);
 
-  const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>(messages);
+  const [sortedNewMessages, setSortedMessages] = useState<InquiryMessage[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
+
+  const inquiryMessagesQuery = useInfiniteQuery({
+    queryKey: ['admin', 'inquiries', 'chat', inquiryId, 'messages'],
+    queryFn: async ({ pageParam = "" }) => {
+      return await getInquiryMessages(inquiryId, pageParam);
+    }, 
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next == null) {
+        return undefined;
+      }
+
+      const myURL = new URL(lastPage.next);
+      const cursor = myURL.searchParams.get('cursor');
+      return cursor;
+    },
+    initialPageParam: ""
+  });
+
+  const sortedOldMessages = useMemo(() => {
+    return sortInquiryMessagesByDate(inquiryMessagesQuery.data?.pages.map((page) => page.results).flat() || []);
+  }, [inquiryMessagesQuery.data]);
 
   const markAsReadMutation = useMutation({
     mutationFn: async () => {
@@ -43,12 +64,22 @@ const AdminInquiriesLiveChatHistory = ({
     markAsReadMutation.mutate();
   }, 5000);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const loadPreviousMessages = useDebounce(() => {
+    inquiryMessagesQuery.fetchNextPage();
+  }, 300);
+
+  const handleClick = () => {
     markAsReadDebounceCallback();
   }
 
-  const handleRetryClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleScroll = (e: Event) => {
+    const element = e.target as HTMLDivElement;
+    if (element.scrollTop === 0) {
+      loadPreviousMessages();
+    }
+  }
+
+  const handleRetryClick = () => {
     setConnectionAttempt(connectionAttempt + 1);
   }
 
@@ -59,13 +90,12 @@ const AdminInquiriesLiveChatHistory = ({
         return data.token;
       }
     });
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
       setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
-      console.log(ctx);
+    client.on("error", () => {
       setIsLoading(false);
       setError("웹소켓 연결 중 오류가 발생했습니다.");
     });
@@ -76,16 +106,15 @@ const AdminInquiriesLiveChatHistory = ({
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
       if (ctx.data.type === "message") {
         setSortedMessages((prevMessages) => [...prevMessages, ctx.data.message]);
       } else if (ctx.data.type.includes("moderator")) {
@@ -108,7 +137,19 @@ const AdminInquiriesLiveChatHistory = ({
     if (elementRef.current) {
       elementRef.current.scrollTop = elementRef.current.scrollHeight;
     }
-  }, [sortedMessages]);
+  }, [sortedNewMessages]);
+
+  useEffect(() => {
+    // run after 5 seconds to ensure that the elementRef is not null
+    const timeout = setTimeout(() => {
+      elementRef.current?.addEventListener("scroll", handleScroll);
+    }, 5000);
+    
+    return () => {
+      clearTimeout(timeout);
+      elementRef.current?.removeEventListener("scroll", handleScroll);
+    }
+  }, [inquiryMessagesQuery.dataUpdatedAt]);
 
   if (isLoading) {
     return (
@@ -120,23 +161,22 @@ const AdminInquiriesLiveChatHistory = ({
     );
   }
 
-  if (error) {
+  if (error || connected === false) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <p className="font-bold text-[20px]">
           {error}
         </p>
-        <button 
-          className="bg-color1 text-white rounded-md py-[8px] px-[16px] font-bold"
+        <RegularButton
           onClick={handleRetryClick}
         >
           다시 시도
-        </button>
+        </RegularButton>
       </div>
     );
   }
 
-  if (sortedMessages.length === 0) {
+  if (sortedNewMessages.length === 0 && sortedOldMessages.length === 0) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <CuteErrorMessage
@@ -152,7 +192,10 @@ const AdminInquiriesLiveChatHistory = ({
       ref={elementRef}
       onClick={handleClick}
     >
-      {sortedMessages.map((message) => (
+      {sortedOldMessages.map((message) => (
+        <AdminInquiriesLiveChatHistoryEntry key={message.id} message={message} />
+      ))}
+      {sortedNewMessages.map((message) => (
         <AdminInquiriesLiveChatHistoryEntry key={message.id} message={message} />
       ))}
       { solved && (

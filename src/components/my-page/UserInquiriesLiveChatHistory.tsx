@@ -9,6 +9,7 @@ import UserInquiriesLiveChatHistoryEntry from "./UserInquiriesLiveChatHistoryEnt
 import CuteErrorMessage from "../common/CuteErrorMessage";
 import { sortInquiryMessagesByDate } from "@/utils/user.utils";
 import SpinnerLoading from "../common/SpinnerLoading";
+import RegularButton from "../common/RegularButton";
 
 
 interface IUserInquiriesLiveChatHistoryProps {
@@ -74,6 +75,10 @@ const UserInquiriesLiveChatHistory = (
     }
   }
 
+  const handleRetryClick = () => {
+    setConnectionAttempt(connectionAttempt + 1);
+  }
+
   useEffect(() => {
     const client = new Centrifuge(`${process.env.NEXT_PUBLIC_CENTRIFUGO_SERVER_WS_URL}/connection/websocket`, {
       getToken: async () => {
@@ -81,14 +86,14 @@ const UserInquiriesLiveChatHistory = (
         return data.token;
       }
     });
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
       setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
+    client.on("error", () => {
       setIsLoading(false);
-      setError("웹소켓 연결 중 오류가 발생했습니다.");
+      setError("채팅 연결 중 오류가 발생했습니다.");
     });
 
     const subscription = client.newSubscription(`users/inquiries/${inquiryId}`, {
@@ -97,17 +102,17 @@ const UserInquiriesLiveChatHistory = (
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
     subscription.on("publication", (ctx) => {
       if (ctx.data.type === "message") {
-        setNewMessages((prevMessages) => [...prevMessages, ctx.data]);
+        setNewMessages((prevMessages) => [...prevMessages, ctx.data.message]);
       }
     });
 
@@ -118,7 +123,7 @@ const UserInquiriesLiveChatHistory = (
       subscription.unsubscribe();
       client.disconnect();
     }
-  }, [connectionAttempt]);
+  }, [connectionAttempt, inquiryId]);
 
   useEffect(() => {
     if (elementRef.current) {
@@ -148,12 +153,17 @@ const UserInquiriesLiveChatHistory = (
     );
   }
 
-  if (error) {
+  if (error || connected === false) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <p className="font-bold text-[20px]">
           {error}
         </p>
+        <RegularButton
+          onClick={handleRetryClick}
+        >
+          다시 시도
+        </RegularButton>
       </div>
     );
   }

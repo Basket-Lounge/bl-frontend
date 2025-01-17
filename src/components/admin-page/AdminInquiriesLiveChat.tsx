@@ -1,12 +1,12 @@
-import { getInquiry } from "@/api/user.api";
-import { sortUserChatMessagesByDate, updateInquiry, updateInquiryModerator } from "@/utils/user.utils";
+import {  updateInquiry, updateInquiryModerator } from "@/utils/user.utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { UserChatMessageWithUserData, UserInquiryWithUserData } from "@/models/user.models";
+import { UserInquiryWithUserData } from "@/models/user.models";
 import AdminInquiriesLiveChatHistory from "./AdminInquiriesLiveChatHistory";
 import AdminInquiriesLiveChatInput from "./AdminInquiriesLiveChatInput";
 import { useCallback, useEffect, useState } from "react";
 import AdminInquiriesLiveChatHeader from "./AdminInquiriesLiveChatHeader";
 import { useAuthStore } from "@/stores/auth.stores";
+import { getInquiry } from "@/api/admin.api";
 
 
 interface IAdminInquiriesLiveChatProps {
@@ -21,29 +21,11 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
       return await getInquiry(inquiryId);
     }
   });
+
   const [realInquiry, setRealInquiry] = useState<UserInquiryWithUserData>(chatQuery.data);
   const {
     userId
   } = useAuthStore();
-
-  const moderatorMessages : UserChatMessageWithUserData[] = chatQuery.data.moderators.map((moderator) => {
-    return moderator.messages?.map((message) => {
-      return {
-        ...message,
-        user_data: moderator.moderator_data
-      }
-    }) || [];
-  }).flat();
-  
-  const userMessages : UserChatMessageWithUserData[] = chatQuery.data.messages?.map((message) => {
-    return {
-      ...message,
-      user_data: chatQuery.data.user_data
-    }
-  }) || [];
-
-  const messages = moderatorMessages.concat(userMessages || []) || []
-  const sortedMessages = sortUserChatMessagesByDate(messages);
 
   const updateInquiryState = (newInquiry: UserInquiryWithUserData) => {
     const updatedInquiry = updateInquiry(realInquiry, newInquiry);
@@ -79,7 +61,7 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
     if (chatQuery.isSuccess) {
       setRealInquiry(chatQuery.data)
     }
-  }, [chatQuery.data]);
+  }, [chatQuery.dataUpdatedAt]);
 
   if (chatQuery.isRefetching) {
     return <div>Loading...</div>
@@ -95,7 +77,6 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
         solved={realInquiry.solved}
       />
       <AdminInquiriesLiveChatHistory
-        messages={sortedMessages}
         inquiryId={inquiryId}
         updateInquiryState={updateInquiryState}
         updateInquiryModerator={updateInquiryMod}

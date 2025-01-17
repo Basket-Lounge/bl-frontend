@@ -160,6 +160,7 @@ export interface UserInquiryModerator {
     username: string;
   };
   last_read_at: string;
+  unread_messages_count?: number;
   assigned_at?: string;
   in_charge?: boolean;
   last_message?: UserChatMessage;

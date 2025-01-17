@@ -22,9 +22,9 @@ interface IAdminInquiriesContainerProps {
 const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesContainerProps) => {
   const [realInquiries, setRealInquiries] = useState<UserInquiry[]>(inquiries);
 
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [connected, setConnected] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setIsLoading] = useState<boolean>(true);
+  const [, setConnected] = useState<boolean>(false);
+  const [, setError] = useState<string | null>(null);
 
   const {
     userId
@@ -47,12 +47,12 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
         return data.token;
       }
     });
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
       setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
+    client.on("error", () => {
       setIsLoading(false);
       setError("웹소켓 연결 중 오류가 발생했습니다.");
     });
@@ -63,15 +63,16 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
     subscription.on("publication", (ctx) => {
+      console.log("New publication received", ctx);
       queryClient.removeQueries({
         queryKey: ['admin', "inquiries", "pagination"],
       });
@@ -79,7 +80,7 @@ const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesCont
         realInquiries,
         ctx.data, 
       );
-      setRealInquiries(prevInquiries => [...sortedChatList]);
+      setRealInquiries(() => [...sortedChatList]);
     });
 
     subscription.subscribe();

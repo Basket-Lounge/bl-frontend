@@ -1,5 +1,6 @@
-import { UserChatMessage, UserInquiry } from "@/models/user.models";
-import { extractInquiryTypeNameInKorean, getLastMessageFromUserInquiry } from "@/utils/user.utils";
+import { UserInquiry } from "@/models/user.models";
+import { useAuthStore } from "@/stores/auth.stores";
+import { extractInquiryTypeNameInKorean } from "@/utils/user.utils";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
@@ -14,6 +15,10 @@ const AdminInquiriesContainerItem = ({ inquiry }: IAdminInquiriesContainerItemPr
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const {
+    userId
+  } = useAuthStore();
+
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString())
@@ -24,18 +29,12 @@ const AdminInquiriesContainerItem = ({ inquiry }: IAdminInquiriesContainerItemPr
     [searchParams]
   )
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     router.push(pathname + '?' + createQueryString('inquiry', inquiry.id.toString()));
   }
 
-  let unreadCount = inquiry.moderators.reduce((acc, moderator) => {
-    const unread_messages_count = moderator.unread_messages_count || 0;
-    return acc + unread_messages_count;
-  }, 0);
-  unreadCount += inquiry.unread_messages_count || 0;
-
+  const unreadCount = inquiry.moderators.find(moderator => moderator.moderator_data.id === userId)?.unread_messages_count || 0;
   const inquiryTypeInKorean = extractInquiryTypeNameInKorean(inquiry.inquiry_type_data);
-
   const boxBgColor = inquiry.solved ? "bg-[#16A34A]" : "bg-color3";
 
   return (
@@ -50,11 +49,11 @@ const AdminInquiriesContainerItem = ({ inquiry }: IAdminInquiriesContainerItemPr
           <div className="px-[32px] py-[2px] bg-white rounded-full text-color1 text-[14px] font-semibold">{inquiryTypeInKorean}</div>
         </div>
       </div>
-      {(!inquiry.solved && unreadCount > 0) && (
+      {(!inquiry.solved && unreadCount > 0) ? (
       <div className="relative w-[40px] h-[40px] rounded-full bg-red-500 text-white">
         <p className="font-semibold text-[16px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">{unreadCount}</p>
       </div>
-      )}
+      ) : null}
       {inquiry.solved && (
         <div>
           <Image
