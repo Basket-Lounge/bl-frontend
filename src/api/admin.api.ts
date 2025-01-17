@@ -1,15 +1,17 @@
 import { 
+  InquiryMessage,
   IReport, 
   IReportWithoutUserData, 
   IRole, 
   IUser, 
   MyPageComment, 
   UserChat, 
-  UserInquiry
+  UserInquiry,
+  UserInquiryWithUserData
 } from "@/models/user.models";
 import { httpClient } from "./http";
 import { Team } from "@/models/team.models";
-import { IPaginationResult } from "@/models/common.models";
+import { ICursorPaginationResult, IPaginationResult } from "@/models/common.models";
 
 
 export const getAllRoles = async () => {
@@ -211,9 +213,24 @@ export const getInquiries = async (page: number, filter?: string, search?: strin
   }
 }
 
+export const getInquiry = async (inquiryId: string) => {
+  const response = await httpClient.get<UserInquiryWithUserData>(`/api/admin/inquiries/${inquiryId}/`);
+  return response.data as UserInquiryWithUserData;
+}
+
 export const createInquiryMessage = async (inquiryId: string, message: string) => {
   const response = await httpClient.post(`/api/admin/inquiries/${inquiryId}/messages/`, { message });
   return response.data;
+}
+
+export const getInquiryMessages = async (inquiryId: string, cursor?: string) => {
+  let url = `/api/admin/inquiries/${inquiryId}/messages/`;
+  if (cursor) {
+    url += `?cursor=${cursor}`;
+  }
+
+  const response = await httpClient.get<ICursorPaginationResult<InquiryMessage>>(url);
+  return response.data as ICursorPaginationResult<InquiryMessage>;
 }
 
 export const updateInquiry = async (
@@ -240,6 +257,11 @@ export const assignInquiry = async (inquiryId: string) => {
 
 export const unassignInquiry = async (inquiryId: string) => {
   const response = await httpClient.delete(`/api/admin/inquiries/${inquiryId}/moderators/`);
+  return response.data;
+}
+
+export const markInquiryAsRead = async (inquiryId: string) => {
+  const response = await httpClient.patch(`/api/admin/inquiries/${inquiryId}/mark-as-read/`);
   return response.data;
 }
 
