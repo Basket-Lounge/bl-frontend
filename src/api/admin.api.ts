@@ -7,7 +7,8 @@ import {
   MyPageComment, 
   UserChat, 
   UserInquiry,
-  UserInquiryWithUserData
+  UserInquiryWithUserData,
+  UserInquiryWithUserDataFavoriteTeam
 } from "@/models/user.models";
 import { httpClient } from "./http";
 import { Team } from "@/models/team.models";
@@ -143,8 +144,8 @@ export const getAllInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getUnassignedInquiries = async (page: number, search?: string) => {
@@ -153,8 +154,8 @@ export const getUnassignedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getAssignedInquiries = async (page: number, search?: string) => {
@@ -163,8 +164,8 @@ export const getAssignedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getSolvedInquiries = async (page: number, search?: string) => {
@@ -173,8 +174,8 @@ export const getSolvedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getUnsolvedInquiries = async (page: number, search?: string) => {
@@ -183,8 +184,8 @@ export const getUnsolvedInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getMyInquiries = async (page: number, search?: string) => {
@@ -193,8 +194,8 @@ export const getMyInquiries = async (page: number, search?: string) => {
     url += `&search=${search}`;
   }
 
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(url);
-  return response.data as IPaginationResult<UserInquiry>; 
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(url);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>; 
 }
 
 export const getInquiries = async (page: number, filter?: string, search?: string) => {

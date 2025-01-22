@@ -9,6 +9,7 @@ import {
   UserChatMessageWithUserData, 
   UserInquiry, 
   UserInquiryWithUserData, 
+  UserInquiryWithUserDataFavoriteTeam, 
   UserLikes 
 } from "@/models/user.models";
 import { httpClient, httpClientFormData } from "./http";
@@ -109,8 +110,8 @@ export const getMyChats = async (
 }
 
 export const getMyInquiries = async (page: number) => {
-  const response = await httpClient.get<IPaginationResult<UserInquiry>>(`/api/users/me/inquiries/?page=${page}`);
-  return response.data as IPaginationResult<UserInquiry>;
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(`/api/users/me/inquiries/?page=${page}`);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>;
 }
 
 export const getInquiry = async (inquiryId: string) => {
