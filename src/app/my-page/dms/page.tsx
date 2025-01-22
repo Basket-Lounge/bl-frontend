@@ -32,7 +32,7 @@ const DMsPage: React.FC = () => {
   const userToChatWith = parseInt(searchParams.get("user") || '');
 
   const userChatsQuery = useQuery({
-    queryKey: ['my-page', "DMs", "pagination", page],
+    queryKey: ['my-page', "DMs", "pagination", page, { sort, search }],
     queryFn: async () => {
       return await getMyChats(page, { sort, search });
     },
@@ -63,11 +63,13 @@ const DMsPage: React.FC = () => {
   useEffect(() => {
     if (chatDeleted) {
       setChatDeleted(false);
-      const userId = parseInt(searchParams.get("user") || '');
       router.push(pathname + '?' + createQueryString('user', ''));
       queryClient.removeQueries({
-        queryKey: ['my-page', "DMs", "chat", userId]
+        queryKey: ['my-page', "DMs", "chat", userToChatWith]
       })
+      queryClient.invalidateQueries({
+        queryKey: ['my-page', "DMs", "pagination"]
+      });
     }
   }, [userToChatWith, chatDeleted]);
 

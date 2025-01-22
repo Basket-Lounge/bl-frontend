@@ -41,7 +41,7 @@ const InquiriesPage = () => {
   }
 
   const divClassName = inquiry ? 
-    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:items-start gap-[32px]" : 
     "flex flex-col items-stretch gap-[32px]"
 
   return (
