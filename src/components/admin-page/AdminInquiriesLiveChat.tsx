@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import AdminInquiriesLiveChatHeader from "./AdminInquiriesLiveChatHeader";
 import { useAuthStore } from "@/stores/auth.stores";
 import { getInquiry } from "@/api/admin.api";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IAdminInquiriesLiveChatProps {
@@ -63,8 +64,8 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
     }
   }, [chatQuery.dataUpdatedAt]);
 
-  if (chatQuery.isRefetching) {
-    return <div>Loading...</div>
+  if (chatQuery.isLoading) {
+    return <SpinnerLoading />
   }
 
   return (

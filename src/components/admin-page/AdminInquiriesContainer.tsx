@@ -1,4 +1,4 @@
-import { UserInquiry } from "@/models/user.models";
+import { UserInquiry, UserInquiryWithUserDataFavoriteTeam } from "@/models/user.models";
 import { useEffect, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { 
@@ -15,12 +15,12 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IAdminInquiriesContainerProps {
-  inquiries: UserInquiry[];
+  inquiries: UserInquiryWithUserDataFavoriteTeam[];
   inquiryType: TInquiryChannelType;
 }
 
 const AdminInquiriesContainer = ({ inquiries, inquiryType }: IAdminInquiriesContainerProps) => {
-  const [realInquiries, setRealInquiries] = useState<UserInquiry[]>(inquiries);
+  const [realInquiries, setRealInquiries] = useState<UserInquiryWithUserDataFavoriteTeam[]>(inquiries);
 
   const [, setIsLoading] = useState<boolean>(true);
   const [, setConnected] = useState<boolean>(false);
