@@ -71,6 +71,10 @@ export interface UserChatParticipants {
   user_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
@@ -88,6 +92,10 @@ export interface UserChatMessageWithUserData extends UserChatMessage {
   user_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
 }
 
@@ -127,6 +135,10 @@ export interface InquiryMessage {
   user_type: "User" | "Moderator";
   user_id: number;
   user_username: string;
+  user_favorite_team: {
+    id: string;
+    symbol: string
+  } | null;
 }
 
 export interface UserInquiry {
@@ -138,7 +150,7 @@ export interface UserInquiry {
   last_message?: {
     message: string;
     created_at: string;
-  }
+  } | null;
   unread_messages_count?: number;
   last_read_at: string;
   moderators: UserInquiryModerator[];
@@ -152,18 +164,33 @@ export interface UserInquiryWithUserData extends UserInquiry {
   };
 }
 
+export interface UserInquiryWithUserDataFavoriteTeam extends UserInquiry {
+  user_data: {
+    id: number;
+    username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
+  };
+}
+
 export interface UserInquiryModerator {
   id: string;
   inquiry_data?: UserInquiry;
   moderator_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
   last_read_at: string;
   unread_messages_count?: number;
   assigned_at?: string;
   in_charge?: boolean;
-  last_message?: UserChatMessage;
+  last_message?: UserChatMessage | null;
 }
 
 export interface IReport {
