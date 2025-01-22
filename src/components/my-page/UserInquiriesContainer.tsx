@@ -1,4 +1,4 @@
-import { UserInquiry } from "@/models/user.models";
+import { UserInquiry, UserInquiryWithUserDataFavoriteTeam } from "@/models/user.models";
 import { useEffect, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveInquiriesUpdate } from "@/api/webSocket.api";
@@ -10,11 +10,11 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface IUserInquiriesContainerProps {
-  inquiries: UserInquiry[];
+  inquiries: UserInquiryWithUserDataFavoriteTeam[];
 }
 
 const UserInquiriesContainer = ({ inquiries }: IUserInquiriesContainerProps) => {
-  const [realInquiries, setRealInquiries] = useState<UserInquiry[]>(inquiries);
+  const [realInquiries, setRealInquiries] = useState<UserInquiryWithUserDataFavoriteTeam[]>(inquiries);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);

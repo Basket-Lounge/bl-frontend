@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useContext } from "react";
 import { useStore } from "zustand";
+import ImageButton from "../common/ImageButton";
 
 
 interface IUserDMsChatControlButtonsProps {
@@ -32,46 +33,46 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
     }
   });
 
-  const handleBlockChatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleBlockChatClick = () => {
     blockChatMutation.mutate();
   }
 
-  const handleDeleteChatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleDeleteChatClick = () => {
     deleteChatMutation.mutate();
-  }
-
-  if (deleteChatMutation.isPending) {
-    return <div>채팅 삭제중...</div>
   }
 
   return (
     <div className="flex items-center gap-[8px]">
       {/* a button to delete the chat */}
-      <button
+      <ImageButton
         onClick={handleDeleteChatClick}
+        pending={deleteChatMutation.isPending}
+        disabled={deleteChatMutation.isPending || blockChatMutation.isPending}
+        size="large"
       >
         <Image
           src="/icons/delete_24dp_FFFFFF.svg"
           alt="delete"
           width={18}
           height={24}
-          className="w-auto h-[28px]"
+          className="w-auto xl:h-[28px] w-[20px]"
         />
-      </button>
+      </ImageButton>
       {/* a button to block a user */}
-      <button
+      <ImageButton
         onClick={handleBlockChatClick}
+        pending={blockChatMutation.isPending}
+        disabled={deleteChatMutation.isPending || blockChatMutation.isPending}
+        size="large"
       >
         <Image
           src="/icons/block_24dp_FFFFFF.svg"
-          alt="close"
+          alt="block"
           width={24}
           height={24}
-          className="w-auto h-[28px]"
+          className="w-auto xl:h-[28px] w-[20px]"
         />
-      </button>
+      </ImageButton>
     </div>
   )
 }

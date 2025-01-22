@@ -8,6 +8,7 @@ import { sortUserChatByLastMessageDate } from "@/utils/user.utils";
 import { useQueryClient } from "@tanstack/react-query";
 import CuteErrorMessage from "../common/CuteErrorMessage";
 
+
 interface IUserDMsContainerProps {
   chats: UserChat[];
 }
@@ -17,7 +18,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
+  const [connectionAttempt] = useState<number>(0);
 
   const {
     userId
@@ -36,13 +37,14 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
         return data.token;
       }
     });
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
       setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
+    client.on("error", () => {
       setIsLoading(false);
+      setConnected(false);
       setError("웹소켓 연결 중 오류가 발생했습니다.");
     });
 
@@ -52,22 +54,17 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
+      setError(null);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
+      setConnected(false);
       setError("해당 채널에 접속할 수 없습니다.");
     });
-    subscription.on("join", (ctx) => {
-      console.log(ctx);
-    });
-    subscription.on("leave", (ctx) => {
-      console.log(ctx);
-    });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
       queryClient.removeQueries({
         queryKey: ['my-page', "DMs", "pagination"],
       });
@@ -75,7 +72,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
         realChats, 
         ctx.data, 
       );
-      setRealChats(prevChats => [...sortedChatList]);
+      setRealChats(() => [...sortedChatList]);
     });
 
     subscription.subscribe();
@@ -90,7 +87,7 @@ const UserDMsContainer = ({ chats }: IUserDMsContainerProps) => {
   if (realChats.length === 0) {
     return (
       <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
-        <CuteErrorMessage error="포스트가 없습니다." />
+        <CuteErrorMessage error="채팅 목록이 없습니다." />
       </div>
     );
   }

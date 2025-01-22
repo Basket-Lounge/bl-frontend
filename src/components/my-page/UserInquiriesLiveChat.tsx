@@ -8,6 +8,8 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import SpinnerLoading from "../common/SpinnerLoading";
+import { timeAgoKorean } from "@/utils/common.utils";
+import ImageButton from "../common/ImageButton";
 
 
 interface IUserInquiriesLiveChatProps {
@@ -30,6 +32,8 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
   const [realInquiry, setRealInquiry] = useState<UserInquiryWithUserData>(chatQuery.data);
   const inquiryTypeInKorean = extractInquiryTypeNameInKorean(realInquiry.inquiry_type_data);
 
+  const updatedAt = timeAgoKorean(realInquiry.updated_at);
+
   const createQueryString = useCallback(() => {
     const params = new URLSearchParams(searchParams.toString())
     params.delete('inquiry');
@@ -37,8 +41,7 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
     return params.toString()
   }, [searchParams])
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleClick = () => {
     router.push(pathname + '?' + createQueryString());
   }
 
@@ -55,14 +58,14 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
     }
   }, [chatQuery.data]);
 
-  if (chatQuery.isRefetching) {
+  if (chatQuery.isLoading) {
     return <SpinnerLoading />
   }
 
   return (
     <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
       <div className="p-[24px] flex justify-between items-center relative">
-        <button
+        <ImageButton
           onClick={handleClick}
           className="absolute top-0 right-0 p-[16px] text-white"
         >
@@ -72,12 +75,12 @@ const UserInquiriesLiveChat = ({ inquiryId }: IUserInquiriesLiveChatProps) => {
             width={24}
             height={24}
           />
-        </button>
-        <div className="flex gap-[24px]">
-          <div className="flex flex-col gap-[12px] items-start">
-            <p className="font-semibold text-[16px] line-clamp-1">{realInquiry.title}</p>
-            <p className="text-[14px]">{realInquiry.updated_at}</p>
-            <p className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold">{inquiryTypeInKorean.trim()}</p>
+        </ImageButton>
+        <div className="flex gap-[24px] w-[calc(100%)]">
+          <div className="flex flex-col gap-[12px] w-[calc(100%-88px)]">
+            <p className="font-medium text-[16px] line-clamp-1">{realInquiry.title}</p>
+            <p className="text-[14px]">{updatedAt}</p>
+            <p className="w-fit bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] line-clamp-1 font-medium max-w-[calc(100%)]">{inquiryTypeInKorean.trim()}</p>
           </div>
         </div>
       </div>
