@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/auth.stores";
 import { ThemeProvider } from "@material-tailwind/react";
 import useDebounce from '@/hooks/useDebounce';
 import SpinnerLoading from './SpinnerLoading';
+import { ToastContainer, Zoom } from 'react-toastify';
 
 
 interface IPageSizeControllerStore {
@@ -57,6 +58,18 @@ const PageSizeController = ({ children }: { children: React.ReactNode }) => {
         </div> */}
         <div className="grow mx-auto sm:w-[360px] md:w-[480px] lg:w-[768px] xl:w-[1024px] 2xl:w-[1200px]">
           { authenticationAttempted ? children : <SpinnerLoading /> }
+          <ToastContainer 
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            pauseOnHover
+            theme="light"
+            transition={Zoom}
+          />
         </div>
         <Footer />
       </div>
