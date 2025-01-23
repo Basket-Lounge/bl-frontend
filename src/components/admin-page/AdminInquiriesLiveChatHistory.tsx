@@ -9,6 +9,8 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 import { getInquiryMessages, markInquiryAsRead } from "@/api/admin.api";
 import { sortInquiryMessagesByDate } from "@/utils/user.utils";
 import RegularButton from "../common/RegularButton";
+import { toast } from "react-toastify";
+import SpinnerLoading from "../common/SpinnerLoading";
 
 
 interface IAdminInquiriesLiveChatHistoryProps {
@@ -97,7 +99,9 @@ const AdminInquiriesLiveChatHistory = ({
     });
     client.on("error", () => {
       setIsLoading(false);
-      setError("웹소켓 연결 중 오류가 발생했습니다.");
+      setConnected(false);
+      setError("채팅 연결 중 오류가 발생했습니다.");
+      toast.error("채팅 연결 중 오류가 발생했습니다.");
     });
 
     const subscription = client.newSubscription(`users/inquiries/${inquiryId}`, {
@@ -109,10 +113,13 @@ const AdminInquiriesLiveChatHistory = ({
     subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
+      setError(null);
     });
     subscription.on("error", () => {
       setIsLoading(false);
+      setConnected(false);
       setError("해당 채널에 접속할 수 없습니다.");
+      toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
     });
     subscription.on("publication", (ctx) => {
       if (ctx.data.type === "message") {
@@ -131,7 +138,7 @@ const AdminInquiriesLiveChatHistory = ({
       subscription.unsubscribe();
       client.disconnect();
     }
-  }, [connectionAttempt]);
+  }, [connectionAttempt, inquiryId]);
 
   useEffect(() => {
     if (elementRef.current) {
@@ -153,11 +160,7 @@ const AdminInquiriesLiveChatHistory = ({
 
   if (isLoading) {
     return (
-      <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[20px]">
-          채팅 연결 중...
-        </p>
-      </div>
+      <SpinnerLoading />
     );
   }
 

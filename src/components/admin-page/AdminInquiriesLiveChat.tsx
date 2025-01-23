@@ -1,9 +1,9 @@
-import {  updateInquiry, updateInquiryModerator } from "@/utils/user.utils";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { updateInquiry, updateInquiryModerator } from "@/utils/user.utils";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { UserInquiryWithUserData } from "@/models/user.models";
 import AdminInquiriesLiveChatHistory from "./AdminInquiriesLiveChatHistory";
 import AdminInquiriesLiveChatInput from "./AdminInquiriesLiveChatInput";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AdminInquiriesLiveChatHeader from "./AdminInquiriesLiveChatHeader";
 import { useAuthStore } from "@/stores/auth.stores";
 import { getInquiry } from "@/api/admin.api";
@@ -20,49 +20,67 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
     queryKey: ['admin', 'inquiries', 'chat', inquiryId],
     queryFn: async () => {
       return await getInquiry(inquiryId);
-    }
+    },
+    staleTime: Infinity
   });
 
-  const [realInquiry, setRealInquiry] = useState<UserInquiryWithUserData>(chatQuery.data);
   const {
     userId
   } = useAuthStore();
 
-  const updateInquiryState = (newInquiry: UserInquiryWithUserData) => {
-    const updatedInquiry = updateInquiry(realInquiry, newInquiry);
-    setRealInquiry({...updatedInquiry});
-  }
+  const queryClient = useQueryClient();
+  const updateInquiryState = useCallback((newInquiry: UserInquiryWithUserData) => {
+    const oldData = queryClient.getQueryData<UserInquiryWithUserData>(
+      ['admin', 'inquiries', 'chat', inquiryId]
+    );
 
-  // Update Inquiry whenever a new update is received via WebSocket
-  const updateInquiryMod = (newInquiry: UserInquiryWithUserData) => {
-    const updatedInquiry = updateInquiryModerator(realInquiry, newInquiry);
-    setRealInquiry({...updatedInquiry});
-  }
+    if (oldData == undefined) {
+      return;
+    }
 
-  const isUserModerator = useCallback(() => {
-    for (const moderator of realInquiry.moderators) {
+    const updatedInquiry = updateInquiry(oldData, newInquiry);
+    queryClient.setQueryData(
+      ['admin', 'inquiries', 'chat', inquiryId],
+      () => {
+        return { ...updatedInquiry };
+      }
+    );
+  }, [queryClient, inquiryId]);
+
+  const updateInquiryMod = useCallback((newInquiry: UserInquiryWithUserData) => {
+    const oldData = queryClient.getQueryData<UserInquiryWithUserData>(
+      ['admin', 'inquiries', 'chat', inquiryId]
+    );
+
+    if (oldData == undefined) {
+      return;
+    }
+
+    const updatedInquiry = updateInquiryModerator(oldData, newInquiry);
+    queryClient.setQueryData(
+      ['admin', 'inquiries', 'chat', inquiryId],
+      () => {
+        return { ...updatedInquiry };
+      }
+    );
+  }, [queryClient, inquiryId]);
+
+  const isUserModerator = useMemo(() => {
+    for (const moderator of chatQuery.data.moderators) {
       if (moderator.moderator_data.id === userId && moderator.in_charge) {
         return true;
       }
     }
     return false;
-  }, [realInquiry.moderators, userId]);
+  }, [chatQuery.data.moderators, userId]);
 
-  // Update Inquiry whenever a new Inquiry is selected from the list
+  // Update Inquiry whenever a new inquiry is selected from the list
   useEffect(() => {
     if (inquiryId !== currentInquiryId) {
       setCurrentInquiryId(inquiryId);
       chatQuery.refetch();
     }
   }, [inquiryId]);
-
-  // Update Inquiry whenever a new Inquiry is received from the API
-  // This gets triggered right after the refetch() call inside the useEffect above
-  useEffect(() => {
-    if (chatQuery.isSuccess) {
-      setRealInquiry(chatQuery.data)
-    }
-  }, [chatQuery.dataUpdatedAt]);
 
   if (chatQuery.isLoading) {
     return <SpinnerLoading />
@@ -71,19 +89,19 @@ const AdminInquiriesLiveChat = ({ inquiryId }: IAdminInquiriesLiveChatProps) => 
   return (
     <div className="bg-color3 rounded-md divide-y divide-white overflow-auto">
       <AdminInquiriesLiveChatHeader
-        inquiryType={realInquiry.inquiry_type_data}
-        title={realInquiry.title}
-        updatedAt={realInquiry.updated_at}
-        inquiryModerators={realInquiry.moderators}
-        solved={realInquiry.solved}
+        title={chatQuery.data.title}
+        updatedAt={chatQuery.data.updated_at}
+        inquiryType={chatQuery.data.inquiry_type_data}
+        inquiryModerators={chatQuery.data.moderators}
+        solved={chatQuery.data.solved}
       />
       <AdminInquiriesLiveChatHistory
         inquiryId={inquiryId}
         updateInquiryState={updateInquiryState}
         updateInquiryModerator={updateInquiryMod}
-        solved={realInquiry.solved}
+        solved={chatQuery.data.solved}
       />
-      { (isUserModerator() && !realInquiry.solved) && (
+      { (isUserModerator && !chatQuery.data.solved) && (
         <div className="p-[24px]">
           <AdminInquiriesLiveChatInput />
         </div>

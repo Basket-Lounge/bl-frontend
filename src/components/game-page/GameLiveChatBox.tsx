@@ -7,6 +7,9 @@ import GameLiveChatBoxMessage from "./GameLiveChatBoxMessage";
 import GameLiveChatBoxInput from "./GameLiveChatBoxInput";
 import { useStore } from "zustand";
 import { GameStoreContext } from "@/stores/games.stores";
+import SpinnerLoading from "../common/SpinnerLoading";
+import RegularButton from "../common/RegularButton";
+import { toast } from "react-toastify";
 
 
 const GameLiveChatBox = () => {
@@ -22,9 +25,9 @@ const GameLiveChatBox = () => {
   const store = useContext(GameStoreContext);
   const setSubscriptionToken = useStore(store, (state) => state.setSubscriptionToken);
 
-  // const reconnect = () => {
-  //   setConnectionAttempt(attempt => attempt + 1);
-  // };
+  const handleRetryClick = () => {
+    setConnectionAttempt(attempt => attempt + 1);
+  };
 
   useEffect(() => {
     const client = new Centrifuge(
@@ -43,7 +46,9 @@ const GameLiveChatBox = () => {
     });
     client.on("error", (ctx) => {
       setIsLoading(false);
-      setError("웹소켓 연결 중 오류가 발생했습니다.");
+      setConnected(false);
+      setError("채팅 서버 연결 중 오류가 발생했습니다.");
+      toast.error("채팅 서버 연결 중 오류가 발생했습니다.");
     });
 
     const subscription = client.newSubscription(`games/${gameId}/live-chat`, {
@@ -56,13 +61,15 @@ const GameLiveChatBox = () => {
     subscription.on("subscribed", (ctx) => {
       setIsLoading(false);
       setConnected(true);
+      setError(null);
     });
     subscription.on("error", (ctx) => {
       setIsLoading(false);
+      setConnected(false);
       setError("해당 채널에 접속할 수 없습니다.");
+      toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
     });
     subscription.on("publication", (ctx) => {
-      console.log(ctx);
       setMessages((prevMessages) => [...prevMessages, ctx.data]);
     });
 
@@ -76,11 +83,22 @@ const GameLiveChatBox = () => {
   }, [connectionAttempt]);
 
   if (isLoading) {
-    return <p>채팅 로딩중...</p>
+    return <SpinnerLoading />
   }
 
-  if (error) {
-    return <p>{error}</p>
+  if (error || connected === false) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-[16px]">
+        <p className="font-bold text-[20px]">
+          {error}
+        </p>
+        <RegularButton
+          onClick={handleRetryClick}
+        >
+          다시 시도
+        </RegularButton>
+      </div>
+    );
   }
 
   return (
