@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import ButtonLoading from "../common/ButtonLoading";
+import { toast } from "react-toastify";
 
 
 interface IAdminInquiriesLiveChatHeaderSolveButtonProps {
@@ -19,12 +20,18 @@ const AdminInquiriesLiveChatHeaderSolveButton = (
     mutationFn: () => {
       return markInquiryAsSolved(inquiryId);
     },
+    onError: () => {
+      toast.error('문의 처리에 실패했습니다. 다시 시도해주세요.');
+    }
   });
 
   const markInquiryAsUnresolvedMutation = useMutation({
     mutationFn: () => {
       return markInquiryAsUnsolved(inquiryId);
     },
+    onError: () => {
+      toast.error('문의 처리 취소에 실패했습니다. 다시 시도해주세요.');
+    }
   });
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {

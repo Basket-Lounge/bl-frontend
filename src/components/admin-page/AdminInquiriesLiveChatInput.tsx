@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import RegularButton from "../common/RegularButton";
+import { toast } from "react-toastify";
 
 
 const AdminInquiriesLiveChatInput = () => {
@@ -17,6 +18,9 @@ const AdminInquiriesLiveChatInput = () => {
     },
     onSuccess: () => {
       setMessage('');
+    },
+    onError: () => {
+      toast.error('메시지 전송에 실패했습니다. 다시 시도해주세요.');
     }
   });
 

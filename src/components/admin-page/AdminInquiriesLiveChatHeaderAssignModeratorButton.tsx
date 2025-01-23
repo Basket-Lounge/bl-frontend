@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import ButtonLoading from "../common/ButtonLoading";
+import { toast } from "react-toastify";
 
 
 interface IAdminInquiriesLiveChatHeaderAssignModeratorButtonProps {
@@ -32,12 +33,18 @@ const AdminInquiriesLiveChatHeaderAssignModeratorButton = (
     mutationFn: () => {
       return assignInquiry(inquiryId);
     },
+    onError: () => {
+      toast.error('담당자 지정에 실패했습니다. 다시 시도해주세요.');
+    }
   });
 
   const unassignMutation = useMutation({
     mutationFn: () => {
       return unassignInquiry(inquiryId);
     },
+    onError: () => {
+      toast.error('담당자 해제에 실패했습니다. 다시 시도해주세요.');
+    }
   });
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
