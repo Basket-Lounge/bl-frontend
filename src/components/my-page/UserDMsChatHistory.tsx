@@ -1,9 +1,9 @@
-import { UserChatMessageWithUserData } from "@/models/user.models";
+import { UserChat, UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatHistoryEntry from "./UserDMsChatHistoryEntry";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveUserChat } from "@/api/webSocket.api";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserChatMessages, markChatAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import CuteErrorMessage from "../common/CuteErrorMessage";
@@ -44,6 +44,23 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
       return cursor;
     }
   });
+
+  const queryClient = useQueryClient();
+  const updateInquiryState = useCallback((chatUpdate: UserChat) => {
+    const oldData = queryClient.getQueryData<UserChat>(
+      ['my-page', 'DMs', 'chat', userId]
+    );
+
+    if (oldData) {
+      queryClient.setQueryData<UserChat>(
+        ['my-page', 'DMs', 'chat', userId],
+        {
+          ...oldData,
+          ...chatUpdate
+        }
+      );
+    }
+  }, [userId]);
 
   const sortedInitialMessages = useMemo(() => {
     return sortUserChatMessagesByDate(userChatMessagesQuery.data?.pages.map((page) => page.results).flat() || []);
@@ -119,7 +136,11 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
       toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
     });
     subscription.on("publication", (ctx) => {
-      setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
+      if (ctx.data.type === "message") {
+        setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
+      } else if (ctx.data.type === "chat_update") {
+        updateInquiryState(ctx.data);
+      }
     });
 
     subscription.subscribe();
@@ -129,7 +150,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
       subscription.unsubscribe();
       client.disconnect();
     }
-  }, [connectionAttempt]);
+  }, [connectionAttempt, chatId]);
 
   useEffect(() => {
     if (elementRef.current) {

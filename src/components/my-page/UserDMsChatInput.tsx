@@ -20,7 +20,7 @@ const UserDMsChatInput = () => {
       setMessage('');
     },
     onError: () => {
-      toast.error('메시지 전송에 실패했습니다.');
+      toast.error('메시지 전송에 실패했습니다. 다시 시도해주세요.');
     }
   });
 
