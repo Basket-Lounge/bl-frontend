@@ -36,6 +36,7 @@ const DMsPage: React.FC = () => {
     queryFn: async () => {
       return await getMyChats(page, { sort, search });
     },
+    staleTime: Infinity
   });
 
   const createQueryString = useCallback(
@@ -64,6 +65,7 @@ const DMsPage: React.FC = () => {
     if (chatDeleted) {
       setChatDeleted(false);
       router.push(pathname + '?' + createQueryString('user', ''));
+
       queryClient.removeQueries({
         queryKey: ['my-page', "DMs", "chat", userToChatWith]
       })
@@ -80,14 +82,20 @@ const DMsPage: React.FC = () => {
     }
   }, [searchParams]);
 
+  if (userChatsQuery.isLoading) {
+    return (
+      <div className="flex flex-col gap-[24px] items-stretch">
+        <UserDMsFilter />
+        <UserChatLoading />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-[24px] items-stretch">
       <UserDMsFilter />
       <div className={divClassName}>
-        {(userChatsQuery.isRefetching || userChatsQuery.isLoading) ?
-          <UserChatLoading /> :
-          <UserDMsContainer chats={userChatsQuery.data!.results} />
-        }
+        <UserDMsContainer chats={userChatsQuery.data!.results} />
         {isNaN(userToChatWith) ? null : (
           <Suspense fallback={<SpinnerLoading />}>
             <UserDMsChat userId={userToChatWith} />

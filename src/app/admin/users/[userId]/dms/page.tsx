@@ -79,7 +79,7 @@ const DMsPage: React.FC = () => {
     }
   }, [sort, search, page]);
 
-  if (userChatsQuery.isLoading || userChatsQuery.isRefetching) {
+  if (userChatsQuery.isLoading) {
     return <SpinnerLoading />;
   }
 
