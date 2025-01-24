@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getTodayGames } from "@/api/game.api";
 import TodayGamesListController from "./TodayGamesListController";
 import TodayGameSkeletonsContainer from "./TodayGameSkeletonsContainer";
@@ -15,7 +15,7 @@ export default function TodayGamesContainer() {
   });
 
 
-  if (todayGamesQuery.isLoading || todayGamesQuery.isRefetching) {
+  if (todayGamesQuery.isLoading) {
     return (
       <section>
         <h3 className="text-[20px] font-bold">오늘의 경기</h3>

@@ -1,14 +1,16 @@
-import { UserChatMessageWithUserData } from "@/models/user.models";
+import { UserChat, UserChatMessageWithUserData } from "@/models/user.models";
 import UserDMsChatHistoryEntry from "./UserDMsChatHistoryEntry";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Centrifuge } from "centrifuge";
 import { getConnectionToken, getSubscriptionTokenForLiveUserChat } from "@/api/webSocket.api";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getUserChatMessages, markChatAsRead } from "@/api/user.api";
 import useDebounce from "@/hooks/useDebounce";
 import CuteErrorMessage from "../common/CuteErrorMessage";
 import SpinnerLoading from "../common/SpinnerLoading";
 import { sortUserChatMessagesByDate } from "@/utils/user.utils";
+import RegularButton from "../common/RegularButton";
+import { toast } from "react-toastify";
 
 
 interface IUserDMsChatHistoryProps {
@@ -21,6 +23,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
 
   const [sortedMessages, setSortedMessages] = useState<UserChatMessageWithUserData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [connected, setConnected] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
@@ -42,6 +45,23 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
     }
   });
 
+  const queryClient = useQueryClient();
+  const updateInquiryState = useCallback((chatUpdate: UserChat) => {
+    const oldData = queryClient.getQueryData<UserChat>(
+      ['my-page', 'DMs', 'chat', userId]
+    );
+
+    if (oldData) {
+      queryClient.setQueryData<UserChat>(
+        ['my-page', 'DMs', 'chat', userId],
+        {
+          ...oldData,
+          ...chatUpdate
+        }
+      );
+    }
+  }, [userId]);
+
   const sortedInitialMessages = useMemo(() => {
     return sortUserChatMessagesByDate(userChatMessagesQuery.data?.pages.map((page) => page.results).flat() || []);
   }, [userChatMessagesQuery.data]);
@@ -49,6 +69,9 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
   const markAsReadMutation = useMutation({
     mutationFn: async () => {
       return markChatAsRead(userId);
+    },
+    onError: () => {
+      toast.error("메시지를 읽지 못했습니다. 다시 시도해주세요.");
     }
   });
 
@@ -60,15 +83,20 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
     userChatMessagesQuery.fetchNextPage();
   }, 300);
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     markAsReadDebounceCallback();
   }
 
   const handleScroll = (e: Event) => {
     const element = e.target as HTMLDivElement;
     if (element.scrollTop === 0) {
-      loadPreviousMessages();
+      if (userChatMessagesQuery.isFetching === false)
+        loadPreviousMessages();
     }
+  }
+
+  const handleRetryClick = () => {
+    setConnectionAttempt(connectionAttempt + 1);
   }
 
   useEffect(() => {
@@ -78,13 +106,16 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
         return data.token;
       }
     });
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
+      setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
+    client.on("error", () => {
       setIsLoading(false);
-      setError("웹소켓 연결 중 오류가 발생했습니다.");
+      setConnected(false);
+      setError("채팅 서버에 연결할 수 없습니다. 다시 시도해주세요.");
+      toast.error("채팅 서버에 연결할 수 없습니다. 다시 시도해주세요.");
     });
 
     const subscription = client.newSubscription(`users/chats/${chatId}`, {
@@ -93,15 +124,23 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
+      setConnected(true);
       setIsLoading(false);
+      setError(null);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
-      setError("해당 채널에 접속할 수 없습니다.");
+      setConnected(false);
+      setError("해당 채널에 접속할 수 없습니다. 다시 시도해주세요."); 
+      toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
     });
     subscription.on("publication", (ctx) => {
-      setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
+      if (ctx.data.type === "message") {
+        setSortedMessages((prevMessages) => [...prevMessages, ctx.data]);
+      } else if (ctx.data.type === "chat_update") {
+        updateInquiryState(ctx.data);
+      }
     });
 
     subscription.subscribe();
@@ -111,7 +150,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
       subscription.unsubscribe();
       client.disconnect();
     }
-  }, [connectionAttempt]);
+  }, [connectionAttempt, chatId]);
 
   useEffect(() => {
     if (elementRef.current) {
@@ -137,12 +176,17 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
     );
   }
 
-  if (error) {
+  if (error || connected === false) {
     return (
       <div className="h-[500px] flex flex-col items-center justify-center gap-[16px]">
         <p className="font-bold text-[20px]">
           {error}
         </p>
+        <RegularButton
+          onClick={handleRetryClick}
+        >
+          다시 시도
+        </RegularButton>
       </div>
     );
   }
@@ -157,7 +201,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
 
   return (
     <div 
-      className="p-[24px] flex flex-col items-stretch gap-[24px] h-[500px] overflow-auto"
+      className="p-[24px] flex flex-col items-stretch gap-[24px] h-[500px] overflow-x-hidden overflow-y-auto"
       ref={elementRef}
       onClick={handleClick}
     >

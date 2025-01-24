@@ -13,7 +13,7 @@ const TodayPopularPostsContainer = () => {
     queryFn: () => getPopularPosts()
   });
 
-  if (popularPostsQuery.isLoading || popularPostsQuery.isRefetching) {
+  if (popularPostsQuery.isLoading) {
     return (
       <section>
         <h3 className="text-[20px] font-bold">현재 HOT한 게시물 🔥</h3>

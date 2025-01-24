@@ -2,6 +2,8 @@ import { createInquiryMessage } from "@/api/admin.api";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import RegularButton from "../common/RegularButton";
+import { toast } from "react-toastify";
 
 
 const AdminInquiriesLiveChatInput = () => {
@@ -16,11 +18,13 @@ const AdminInquiriesLiveChatInput = () => {
     },
     onSuccess: () => {
       setMessage('');
+    },
+    onError: () => {
+      toast.error('메시지 전송에 실패했습니다. 다시 시도해주세요.');
     }
   });
 
-  const handleSendMessage = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSendMessage = () => {
     if (!inquiryId) return;
     if (message.trim() === '') return;
 
@@ -28,22 +32,23 @@ const AdminInquiriesLiveChatInput = () => {
   };
 
   return (
-    <div className="border border-white rounded-full py-[12px] px-[20px] flex items-center">
+    <div className="border border-white rounded-full py-[8px] xl:py-[12px] px-[20px] flex items-center">
       <input
         type="text"
         placeholder="메시지를 입력하세요"
-        className="bg-transparent text-white outline-none grow"
+        className="bg-transparent text-white outline-none grow xl:text-[16px] text-[14px]"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         disabled={sendMessageMutation.isPending}
       />
-      <button 
-        className="bg-color1 text-white rounded-full px-[16px] py-[8px] ml-[16px]"
+      <RegularButton
         onClick={handleSendMessage}
+        pending={sendMessageMutation.isPending}
         disabled={sendMessageMutation.isPending}
+        size="small"
       >
-        {sendMessageMutation.isPending ? '전송중...' : '전송'}
-      </button>
+        전송
+      </RegularButton>
     </div>
   )
 }

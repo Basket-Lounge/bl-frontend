@@ -10,7 +10,7 @@ import SpinnerLoading from "@/components/common/SpinnerLoading";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
 import { TInquiryChannelType } from "@/models/admin.models";
 import { AdminPageStoreContext } from "@/stores/admin.stores";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useContext, useEffect } from "react";
 import { useStore } from "zustand";
@@ -30,11 +30,12 @@ const AdminInquiriesPage = () => {
   const inquiriesArgumentsModified = useStore(store, (state) => state.inquiriesArgumentsModified);
   const setInquiriesArgumentsModified = useStore(store, (state) => state.setInquiriesArgumentsModified);
 
-  const adminInquiriesQuery = useQuery({
-    queryKey: ['admin', "inquiries", "pagination", page],
+  const adminInquiriesQuery = useSuspenseQuery({
+    queryKey: ['admin', "inquiries", "pagination", page, { filter, search }],
     queryFn: async () => {
       return await getInquiries(page, filter, search);
     },
+    staleTime: Infinity
   });
 
   const createQueryString = useCallback(
@@ -53,7 +54,7 @@ const AdminInquiriesPage = () => {
   }
 
   const divClassName = inquiry ? 
-    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:items-start gap-[32px]" : 
     "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
@@ -63,11 +64,11 @@ const AdminInquiriesPage = () => {
     }
   }, [filter, page, search]);
 
-  if (adminInquiriesQuery.isRefetching || adminInquiriesQuery.isLoading) {
+  if (adminInquiriesQuery.isLoading) {
     return (
       <div className="flex flex-col gap-[24px] items-stretch">
         <AdminInquiriesFilter />
-        <div className="h-[120px] w-[100%] flex items-center justify-center animate-pulse bg-color3 rounded-md" />
+        <SpinnerLoading />
       </div>
     )
   }
@@ -77,7 +78,7 @@ const AdminInquiriesPage = () => {
       <AdminInquiriesFilter />
       <div className={divClassName}>
         <AdminInquiriesContainer 
-          inquiries={adminInquiriesQuery.data!.results} 
+          inquiries={adminInquiriesQuery.data.results} 
           inquiryType={filter}
         />
         {inquiry ? (
@@ -89,10 +90,10 @@ const AdminInquiriesPage = () => {
       <TeamPostsPagination 
         currentPageNumber={page}
         previousCallback={
-          adminInquiriesQuery.data!.previous ? () => handlePageChange(page - 1) : undefined
+          adminInquiriesQuery.data.previous ? () => handlePageChange(page - 1) : undefined
         }
         nextCallback={
-          adminInquiriesQuery.data!.next ? () => handlePageChange(page + 1) : undefined
+          adminInquiriesQuery.data.next ? () => handlePageChange(page + 1) : undefined
         }
       />
     </section>

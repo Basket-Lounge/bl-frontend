@@ -5,6 +5,8 @@ import AdminInquiriesLiveChatHeaderSolveButton from "./AdminInquiriesLiveChatHea
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import Image from "next/image";
+import ImageButton from "../common/ImageButton";
+import { timeAgoKorean } from "@/utils/common.utils";
 
 
 interface IAdminInquiriesLiveChatHeaderProps {
@@ -23,6 +25,7 @@ const AdminInquiriesLiveChatHeader = (
   const searchParams = useSearchParams();
 
   const inquiryTypeInKorean = extractInquiryTypeNameInKorean(inquiryType);
+  const updatedAtInKorean = timeAgoKorean(updatedAt);
   const moderatorsInCharge = findInquiryModeratorInCharge(inquiryModerators);
 
   const bgColor = solved ? "bg-[#16A34A]" : "bg-color3";
@@ -34,14 +37,13 @@ const AdminInquiriesLiveChatHeader = (
     return params.toString()
   }, [searchParams])
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleClick = () => {
     router.push(pathname + '?' + createQueryString());
   }
 
   return (
     <div className={"p-[24px] flex justify-between items-center relative gap-[24px] " + bgColor}>
-      <button
+      <ImageButton
         onClick={handleClick}
         className="absolute top-0 right-0 p-[16px] text-white"
       >
@@ -51,19 +53,19 @@ const AdminInquiriesLiveChatHeader = (
           width={24}
           height={24}
         />
-      </button>
-      <div className="flex flex-col items-start gap-[12px] overflow-x-hidden grow">
+      </ImageButton>
+      <div className="flex flex-col items-start gap-[12px] overflow-x-hidden grow w-[calc(100%-88px)]">
         <div className="flex flex-col gap-[12px] items-start">
-          <p className="font-semibold text-[16px] line-clamp-1">{title}</p>
-          <p className="text-[14px]">{updatedAt}</p>
+          <p className="font-medium text-[16px] line-clamp-1">{title}</p>
+          <p className="text-[14px]">{updatedAtInKorean}</p>
         </div>
-        <div className="flex flex-col gap-[12px] items-start grow whitespace-nowrap">
-          <p className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold w-fit">{inquiryTypeInKorean.trim()}</p>
+        <div className="flex flex-col gap-[12px] items-start max-w-[calc(100%)]">
+          <p className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-medium line-clamp-1 max-w-[calc(100%)]">{inquiryTypeInKorean.trim()}</p>
           {inquiryModerators.length === 0 && (
-            <p className="grow bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold">담당자 없음</p>
+            <p className="grow bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-medium line-clamp-1 max-w-[calc(100%)]">담당자 없음</p>
           )}
           {inquiryModerators.length > 0 && moderatorsInCharge.map((moderator) => (
-            <p key={moderator.id} className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold w-fit">중재자: {moderator.moderator_data.username}</p>
+            <p key={moderator.id} className="bg-white rounded-full text-color1 text-[14px] py-[2px] px-[32px] font-semibold line-clamp-1 max-w-[calc(100%)]">중재자: {moderator.moderator_data.username}</p>
           ))}
         </div>
       </div>

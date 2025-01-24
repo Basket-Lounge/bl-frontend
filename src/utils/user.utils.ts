@@ -1,4 +1,4 @@
-import { InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator, UserInquiryWithUserData } from "@/models/user.models";
+import { InquiryMessage, InquiryType, UserChat, UserChatMessage, UserChatMessageWithUserData, UserChatParticipants, UserInquiry, UserInquiryModerator, UserInquiryWithUserData, UserInquiryWithUserDataFavoriteTeam } from "@/models/user.models";
 
 
 export const translateRoleNameToKorean = (role: string) => {
@@ -28,6 +28,12 @@ export const createChannelNameForPrivateChat = (chatId: string, participants: Us
 }
 
 export const sortUserChatMessagesByDate = (messages: UserChatMessageWithUserData[]) => {
+  return messages.sort((a, b) => {
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  });
+}
+
+export const sortInquiryMessagesByDate = (messages: InquiryMessage[]) => {
   return messages.sort((a, b) => {
     return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
@@ -65,8 +71,8 @@ export const sortUserInquiryMessagesByDate = (messages: UserChatMessage[]) => {
 }
 
 export const sortUserInquiriesByLastMessageDate = (
-  inquiries: UserInquiry[],
-  newInquiry: UserInquiry,
+  inquiries: UserInquiryWithUserDataFavoriteTeam[],
+  newInquiry: UserInquiryWithUserDataFavoriteTeam,
 ) => {
   const newInquiryIndex = inquiries.findIndex((inquiry) => inquiry.id === newInquiry.id);
   if (newInquiryIndex === -1) {
@@ -102,7 +108,7 @@ export const getLastMessageFromUserChat = (chat: UserChat, username: string) => 
 }
 
 export const getLastMessageFromUserInquiry = (inquiry: UserInquiry) => {
-  let recentModeratorMessage: UserChatMessage | undefined;
+  let recentModeratorMessage: UserChatMessage | null | undefined;
   inquiry.moderators.forEach((moderator: UserInquiryModerator) => {
     if (!recentModeratorMessage) {
       recentModeratorMessage = moderator.last_message;
@@ -115,11 +121,47 @@ export const getLastMessageFromUserInquiry = (inquiry: UserInquiry) => {
     }
   });
 
+  if (!recentModeratorMessage && !inquiry.last_message) {
+    return;
+  }
+
   const userlastMessage = inquiry.last_message?.created_at || '2000-01-01T00:00:00Z';
 
   return new Date(userlastMessage).getTime() > new Date(recentModeratorMessage?.created_at || '2000-01-01T00:00:00Z').getTime() ? 
     inquiry.last_message : 
     recentModeratorMessage;
+}
+
+export const getProfilePictureFromLastInquiryMessage = (inquiry: UserInquiryWithUserDataFavoriteTeam) => {
+  const userData = inquiry.user_data;
+  const lastMessage = inquiry.last_message;
+
+  let lastInquiryModeratorMessage: UserChatMessage | null | undefined;
+  let lastInquiryModerator: UserInquiryModerator | null | undefined;
+
+  inquiry.moderators.forEach((moderator: UserInquiryModerator) => {
+    if (!lastInquiryModeratorMessage) {
+      lastInquiryModeratorMessage = moderator.last_message;
+      lastInquiryModerator = moderator;
+    } else {
+      const oldDate = new Date(lastInquiryModeratorMessage.created_at).getTime();
+      const newDate = new Date(moderator.last_message?.created_at || '2000-01-01T00:00:00Z').getTime();
+      if (newDate > oldDate) {
+        lastInquiryModeratorMessage = moderator.last_message;
+        lastInquiryModerator = moderator;
+      }
+    }
+  });
+
+  if (!lastInquiryModeratorMessage && !lastMessage) {
+    return;
+  }
+
+  const userlastMessage = lastMessage?.created_at || '2000-01-01T00:00:00Z';
+  
+  return new Date(userlastMessage).getTime() > new Date(lastInquiryModeratorMessage?.created_at || '2000-01-01T00:00:00Z').getTime() ? 
+    userData :
+    lastInquiryModerator?.moderator_data;
 }
 
 export const extractInquiryTypeNameInEnglish = (inquiryType: InquiryType) => {

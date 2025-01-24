@@ -66,7 +66,7 @@ const PostPage = () => {
         </div>
       </div>
       <p
-        className="bg-transparent text-white outline-none grow text-[16px] leading-4 my-[24px]"
+        className="bg-transparent text-white outline-none grow text-[16px] leading-relaxed my-[24px]"
       >
         {postQuery.data.content}
       </p>

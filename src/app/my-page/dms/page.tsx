@@ -32,10 +32,11 @@ const DMsPage: React.FC = () => {
   const userToChatWith = parseInt(searchParams.get("user") || '');
 
   const userChatsQuery = useQuery({
-    queryKey: ['my-page', "DMs", "pagination", page],
+    queryKey: ['my-page', "DMs", "pagination", page, { sort, search }],
     queryFn: async () => {
       return await getMyChats(page, { sort, search });
     },
+    staleTime: Infinity
   });
 
   const createQueryString = useCallback(
@@ -57,17 +58,20 @@ const DMsPage: React.FC = () => {
   }
 
   const divClassName = !isNaN(userToChatWith) ?
-    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:items-start gap-[32px]" : 
     "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
     if (chatDeleted) {
       setChatDeleted(false);
-      const userId = parseInt(searchParams.get("user") || '');
       router.push(pathname + '?' + createQueryString('user', ''));
+
       queryClient.removeQueries({
-        queryKey: ['my-page', "DMs", "chat", userId]
+        queryKey: ['my-page', "DMs", "chat", userToChatWith]
       })
+      queryClient.invalidateQueries({
+        queryKey: ['my-page', "DMs", "pagination"]
+      });
     }
   }, [userToChatWith, chatDeleted]);
 
@@ -78,14 +82,20 @@ const DMsPage: React.FC = () => {
     }
   }, [searchParams]);
 
+  if (userChatsQuery.isLoading) {
+    return (
+      <div className="flex flex-col gap-[24px] items-stretch">
+        <UserDMsFilter />
+        <UserChatLoading />
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-[24px] items-stretch">
       <UserDMsFilter />
       <div className={divClassName}>
-        {(userChatsQuery.isRefetching || userChatsQuery.isLoading) ?
-          <UserChatLoading /> :
-          <UserDMsContainer chats={userChatsQuery.data!.results} />
-        }
+        <UserDMsContainer chats={userChatsQuery.data!.results} />
         {isNaN(userToChatWith) ? null : (
           <Suspense fallback={<SpinnerLoading />}>
             <UserDMsChat userId={userToChatWith} />

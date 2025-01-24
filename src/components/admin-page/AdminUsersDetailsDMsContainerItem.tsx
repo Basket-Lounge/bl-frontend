@@ -32,7 +32,7 @@ const AdminUsersDetailsDMsContainerItem = (
   const unreadCount = otherUser?.unread_messages_count || 0;
   const lastMessage : UserChatMessage | undefined = getLastMessageFromUserChat(chat, username || '');
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = () => {
     if (!otherUser) return;
     router.push(
       pathname + '?' + createQueryString('chat', chat.id)

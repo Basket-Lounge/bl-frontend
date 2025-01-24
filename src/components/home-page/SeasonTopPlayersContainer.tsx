@@ -13,7 +13,7 @@ export default function SeasonTopPlayersContainer() {
     queryFn: () => getTop10PlayersThisSeason()
   });
 
-  if (top10PlayersQuery.isLoading || top10PlayersQuery.isRefetching) {
+  if (top10PlayersQuery.isLoading) {
     return (
       <section>
         <h3 className="text-[20px] font-bold">2024-25 평균 득점 TOP 10</h3>

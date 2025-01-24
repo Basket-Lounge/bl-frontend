@@ -71,6 +71,10 @@ export interface UserChatParticipants {
   user_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
   messages?: UserChatMessage[];
   last_message?: UserChatMessage;
@@ -78,16 +82,20 @@ export interface UserChatParticipants {
 }
 
 export interface UserChatMessage {
-  id: string;
+  id?: string;
+  updated_at?: string;
   message: string;
   created_at: string;
-  updated_at: string;
 }
 
 export interface UserChatMessageWithUserData extends UserChatMessage {
   user_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
 }
 
@@ -119,18 +127,30 @@ export interface InquiryCreateErrors {
   non_field_errors?: string[];
 }
 
+export interface InquiryMessage {
+  id: string;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  user_type: "User" | "Moderator";
+  user_id: number;
+  user_username: string;
+  user_favorite_team: {
+    id: string;
+    symbol: string
+  } | null;
+}
+
 export interface UserInquiry {
   id: string;
   title: string;
   inquiry_type_data: InquiryType;
   created_at: string;
   updated_at: string;
-  user_data?: {
-    id: number;
-    username: string;
-  };
-  last_message?: UserChatMessage;
-  messages?: UserChatMessage[];
+  last_message?: {
+    message: string;
+    created_at: string;
+  } | null;
   unread_messages_count?: number;
   last_read_at: string;
   moderators: UserInquiryModerator[];
@@ -144,19 +164,33 @@ export interface UserInquiryWithUserData extends UserInquiry {
   };
 }
 
+export interface UserInquiryWithUserDataFavoriteTeam extends UserInquiry {
+  user_data: {
+    id: number;
+    username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
+  };
+}
+
 export interface UserInquiryModerator {
   id: string;
   inquiry_data?: UserInquiry;
   moderator_data: {
     id: number;
     username: string;
+    favorite_team: {
+      id: string;
+      symbol: string
+    } | null;
   };
   last_read_at: string;
+  unread_messages_count?: number;
   assigned_at?: string;
   in_charge?: boolean;
-  messages?: UserChatMessage[];
-  last_message?: UserChatMessage;
-  unread_messages_count?: number;
+  last_message?: UserChatMessage | null;
 }
 
 export interface IReport {

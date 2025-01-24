@@ -58,7 +58,7 @@ const DMsPage: React.FC = () => {
   }
 
   const divClassName = chatId ? 
-    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:item-start gap-[32px]" : 
+    "flex flex-col-reverse items-stretch lg:grid grid-cols-2 lg:items-start gap-[32px]" : 
     "flex flex-col items-stretch gap-[32px]"
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const DMsPage: React.FC = () => {
     }
   }, [sort, search, page]);
 
-  if (userChatsQuery.isLoading || userChatsQuery.isRefetching) {
+  if (userChatsQuery.isLoading) {
     return <SpinnerLoading />;
   }
 

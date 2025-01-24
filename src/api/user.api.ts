@@ -1,4 +1,5 @@
 import { 
+  InquiryMessage,
   InquiryType, 
   IReportType, 
   IRole, 
@@ -6,7 +7,9 @@ import {
   MyPageComment, 
   UserChat, 
   UserChatMessageWithUserData, 
+  UserInquiry, 
   UserInquiryWithUserData, 
+  UserInquiryWithUserDataFavoriteTeam, 
   UserLikes 
 } from "@/models/user.models";
 import { httpClient, httpClientFormData } from "./http";
@@ -107,8 +110,8 @@ export const getMyChats = async (
 }
 
 export const getMyInquiries = async (page: number) => {
-  const response = await httpClient.get(`/api/users/me/inquiries/?page=${page}`);
-  return response.data;
+  const response = await httpClient.get<IPaginationResult<UserInquiryWithUserDataFavoriteTeam>>(`/api/users/me/inquiries/?page=${page}`);
+  return response.data as IPaginationResult<UserInquiryWithUserDataFavoriteTeam>;
 }
 
 export const getInquiry = async (inquiryId: string) => {
@@ -164,6 +167,17 @@ export const getUserChatMessages = async (
   );
 
   return response.data as ICursorPaginationResult<UserChatMessageWithUserData>;
+}
+
+export const getUserInquiryMessages = async (
+  cursor: string,
+  inquiryId: string
+) => {
+  const response = await httpClient.get<ICursorPaginationResult<InquiryMessage>>(
+    `/api/users/me/inquiries/${inquiryId}/messages/` + (cursor ? `?cursor=${cursor}` : '')
+  );
+
+  return response.data as ICursorPaginationResult<InquiryMessage>;
 }
 
 export const createUserChat = async (userId: number) => {
