@@ -11,10 +11,11 @@ interface IDropdownButtonProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
+  [key: string]: any;
 }
 
 const DropdownButton : React.FC<IDropdownButtonProps> = (
-  {text, children, size='medium', bgColor, textColor, className, disabled}
+  {text, children, size='medium', bgColor, textColor, className, disabled, ...props}
 ) => {
   const backgroundColor = bgColor || 'bg-color1';
   const selectedTextColor = textColor || 'text-white';
@@ -34,6 +35,7 @@ const DropdownButton : React.FC<IDropdownButtonProps> = (
             <button
               className={`${backgroundColor} ${selectedTextColor} ${textSize} rounded-full justify-center py-[12px] px-[24px] font-medium ${className}`}
               disabled={disabled}
+              {...props}
             >
               {text}
             </button>

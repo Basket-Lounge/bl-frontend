@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ImageButton from "./ImageButton";
 
 interface IPaginationProps {
   currentPageNumber: number;
@@ -20,15 +21,13 @@ const Pagination = ({
   disabled
 }: IPaginationProps) => {
 
-  const handlePreviousClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handlePreviousClick = () => {
     if (previousCallback) {
       previousCallback();
     }
   }
 
-  const handleNextClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleNextClick = () => {
     if (nextCallback) {
       nextCallback();
     }
@@ -39,12 +38,13 @@ const Pagination = ({
   }
 
   return (
-    <div className="">
-      <div className="flex px-[24px] py-[16px] rounded-full bg-color3 w-fit mx-auto items-center gap-[24px]">
-        {(firstPageCallback && currentPageNumber !== 1) && (
-        <button
+    <div className="flex w-fit mx-auto items-center gap-[24px] py-[12px] border border-white rounded-full px-[24px] my-[16px]">
+      {(firstPageCallback && currentPageNumber !== 1) && (
+        <ImageButton
           onClick={firstPageCallback}
           disabled={disabled}
+          aria-label="first-page-button"
+          aria-disabled={disabled}
         >
           <Image
             src="/icons/first_page_24dp_FFFFFF.svg"
@@ -52,12 +52,14 @@ const Pagination = ({
             width={24}
             height={24}
           />
-        </button>
-        )}
-        {previousCallback && (
-        <button
+        </ImageButton>
+      )}
+      {previousCallback && (
+        <ImageButton
           onClick={handlePreviousClick}
           disabled={disabled}
+          aria-label="previous-page-button"
+          aria-disabled={disabled}
         >
           <Image
             src="/icons/arrow_back_24dp.svg"
@@ -65,13 +67,20 @@ const Pagination = ({
             width={24}
             height={24}
           />
-        </button>
-        )}
-        <span className="rounded-full p-[6px] bg-color1 text-white font-bold">{currentPageNumber}</span>
-        {nextCallback && (
-        <button
+        </ImageButton>
+      )}
+      <span 
+        className="rounded-full text-white font-bold" 
+        aria-label="current-page-number"
+      >
+        {currentPageNumber}
+      </span>
+      {nextCallback && (
+        <ImageButton
           onClick={handleNextClick}
           disabled={disabled}
+          aria-label="next-page-button"
+          aria-disabled={disabled}
         >
           <Image
             src="/icons/arrow_forward_24dp.svg"
@@ -79,12 +88,14 @@ const Pagination = ({
             width={24}
             height={24}
           />
-        </button>
-        )}
-        {(lastPageCallback && currentPageNumber !== lastPageNumber) && (
-        <button
+        </ImageButton>
+      )}
+      {(lastPageCallback && currentPageNumber !== lastPageNumber) && (
+        <ImageButton
           onClick={lastPageCallback}
           disabled={disabled}
+          aria-label="last-page-button"
+          aria-disabled={disabled}
         >
           <Image
             src="/icons/last_page_24dp_FFFFFF.svg"
@@ -92,9 +103,8 @@ const Pagination = ({
             width={24}
             height={24}
           />
-        </button>
-        )}
-      </div>
+        </ImageButton>
+      )}
     </div>
   );
 }

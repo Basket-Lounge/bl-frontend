@@ -6,9 +6,13 @@ import { useCallback, useState } from "react";
 
 interface ISearchBoxProps {
   pressEnterCallback?: () => void;
+  [key: string]: any;
 }
 
-const SearchBox = ({ pressEnterCallback }: ISearchBoxProps) => {
+const SearchBox = ({ 
+  pressEnterCallback,
+  ...props
+}: ISearchBoxProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,7 +47,7 @@ const SearchBox = ({ pressEnterCallback }: ISearchBoxProps) => {
   };
 
   return (
-    <div className="bg-white rounded-full py-[12px] px-[20px] flex items-center">
+    <div className="bg-white rounded-full py-[12px] px-[20px] flex items-center" {...props}>
       <input
         type="text"
         placeholder="검색어를 입력하세요"
