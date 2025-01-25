@@ -111,6 +111,7 @@ const TeamPostsPostCommentsSortButtonOptionsContainer = () => {
   return (
     <div 
       className="absolute w-[350px] bg-color3 rounded-md p-[24px] z-10 flex flex-col gap-[16px] top-[150%] right-0"
+      aria-label="sort-options"
     >
       <div className="flex flex-col gap-[16px]">
         <SortButtonOption

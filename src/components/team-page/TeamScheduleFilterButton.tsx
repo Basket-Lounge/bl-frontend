@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
@@ -8,9 +8,14 @@ interface ITeamScheduleFilterButtonProps {
 };
 
 const TeamScheduleFilterButton : React.FC<ITeamScheduleFilterButtonProps> = ({ name, queryKey }) => {
-  const store = useContext(TeamStoreContext);
-  const currentScheduleFilterValue = useStore(store, (state) => state.currentScheduleFilterValue);
-  const updateCurrentScheduleFilterValue = useStore(store, (state) => state.updateCurrentScheduleFilterValue);
+  // const store = useContext(TeamStoreContext);
+  // const currentScheduleFilterValue = useStore(store, (state) => state.currentScheduleFilterValue);
+  // const updateCurrentScheduleFilterValue = useStore(store, (state) => state.updateCurrentScheduleFilterValue);
+
+  const {
+    currentScheduleFilterValue,
+    updateCurrentScheduleFilterValue
+  } = useTeamStore();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

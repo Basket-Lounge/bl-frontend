@@ -1,19 +1,27 @@
-import { TeamWithLikes } from "@/models/team.models";
+'use client';
+
 import { extractTeamEnglishName, extractTeamKoreanName } from "@/utils/team.utils";
 import Image from "next/image";
 import TeamHeaderLikeButton from "./TeamHeaderLikeButton";
+import { useParams } from "next/navigation";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getTeamGeneralInfo } from "@/api/team.api";
 
 
-interface ITeamHeaderProps {
-  team: TeamWithLikes;
-}
+export default function TeamHeader() {
+  const { teamId } = useParams<{ teamId: string }>();
+  const headerQuery = useSuspenseQuery({
+    queryKey: ["team", teamId],
+    queryFn: async () => {
+      return await getTeamGeneralInfo(teamId);
+    }
+  });
 
-export default function TeamHeader({ team }: ITeamHeaderProps) {
-  const EnglishName = extractTeamEnglishName(team);
-  const KoreanName = extractTeamKoreanName(team);
-  const leagueRank = team.stats?.PlayoffRank || 0;
-  const wins = team.stats?.WINS || 0;
-  const losses = team.stats?.LOSSES || 0;
+  const EnglishName = extractTeamEnglishName(headerQuery.data);
+  const KoreanName = extractTeamKoreanName(headerQuery.data);
+  const leagueRank = headerQuery.data.stats?.PlayoffRank || 0;
+  const wins = headerQuery.data.stats?.WINS || 0;
+  const losses = headerQuery.data.stats?.LOSSES || 0;
 
   return (
     <div className="flex gap-[24px] lg:gap-[48px] items-start">
@@ -21,7 +29,7 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
       <div className="w-[128px] h-[128px] lg:w-[156px] lg:h-[156px] rounded-full relative">
         <Image
           className="w-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
-          src={'/logos/' + team.symbol.toLowerCase() + '.svg'}
+          src={'/logos/' + headerQuery.data.symbol.toLowerCase() + '.svg'}
           alt="team-logo"
           width={20}
           height={20}
@@ -43,7 +51,7 @@ export default function TeamHeader({ team }: ITeamHeaderProps) {
           </div>
         </div>
       </div>
-      <TeamHeaderLikeButton liked={team.liked || false} likesCount={team.likes_count} />
+      <TeamHeaderLikeButton liked={headerQuery.data.liked || false} likesCount={headerQuery.data.likes_count} />
     </div>
   )
 }

@@ -1,6 +1,4 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
-import { useContext } from "react";
-import { useStore } from "zustand";
+import { useTeamStore } from "@/stores/teams.stores";
 import FilterButton from "../common/FilterButton";
 import SearchBox from "../common/SearchBox";
 import TeamPostsSortButtonOptionsContainer from "./TeamPostsSortButtonOptionsContainer";
@@ -8,21 +6,23 @@ import TeamPostsGoToCreateButton from "./TeamPostsGoToCreateButton";
 
 
 const TeamPostsFilter = () => {
-  const store = useContext(TeamStoreContext);
-  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+  const { setPostsArgumentsModified } = useTeamStore();
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end">
+      <div className="flex gap-[24px]" aria-label="team-posts-filter-buttons">
         <FilterButton name="정렬">
           <TeamPostsSortButtonOptionsContainer />
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
         <TeamPostsGoToCreateButton />
-        <SearchBox pressEnterCallback={() => setPostsArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setPostsArgumentsModified(true)} 
+          aria-label="search-team-posts"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

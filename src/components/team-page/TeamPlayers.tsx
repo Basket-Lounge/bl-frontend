@@ -4,14 +4,18 @@ import { useParams } from "next/navigation";
 import TeamPlayersFilter from "./TeamPlayersFilter";
 import TeamPlayersContainer from "./TeamPlayersContainer";
 import { Suspense, useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import TeamPlayersPlayerDetails from "./TeamPlayersPlayerDetails";
 
 
 export default function TeamPlayers() {
-  const store = useContext(TeamStoreContext);
-  const currentPlayerId = useStore(store, (state) => state.currentPlayerId);
+  // const store = useContext(TeamStoreContext);
+  // const currentPlayerId = useStore(store, (state) => state.currentPlayerId);
+
+  const {
+    currentPlayerId
+  } = useTeamStore();
 
   const { teamId } = useParams();
   const teamPlayersQuery = useSuspenseQuery({

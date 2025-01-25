@@ -72,20 +72,23 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
   }, [replyAdded]);
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch rounded-md bg-color3">
+    <div className="flex flex-col gap-[24px] items-stretch">
       <TeamPostsPostCommentsReplyInput
         commentId={comment.id}
       />
       {( postCommentRepliesQuery.isLoading || postCommentRepliesQuery.isRefetching ) && (
         <SpinnerLoading />
       )}
-      {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && 
-        postCommentRepliesQuery.data.results.map((reply) => (
-        <TeamPostsPostCommentsReply
-          key={reply.id}
-          reply={reply}
-        />
-      ))}
+      {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && (
+        <ul className="flex flex-col items-stretch divide-y-[1px] divide-white/25 pl-[24px]">
+          {postCommentRepliesQuery.data.results.map((reply) => (
+            <TeamPostsPostCommentsReply
+              key={reply.id}
+              reply={reply}
+            />
+          ))}
+        </ul>
+      )}
       {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && (
         <Pagination
           currentPageNumber={postCommentRepliesQuery.data.current_page}

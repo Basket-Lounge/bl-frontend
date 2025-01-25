@@ -5,7 +5,7 @@ import TeamPostsEditButton from "./TeamPostsEditButton";
 import { editTeamPost, getTeamPostStatusForCreate } from "@/api/team.api";
 import { useParams, useRouter } from "next/navigation";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { TeamPostError } from "@/models/team.models";
 import { AxiosError } from "axios";
@@ -13,11 +13,18 @@ import SpinnerLoading from "../common/SpinnerLoading";
 
 
 const TeamPostsEditButtonContainer = () => {
-  const store = useContext(TeamStoreContext);
-  const updateTitle = useStore(store, (state) => state.updatePostsEditTitle);
-  const updateContent = useStore(store, (state) => state.updatePostsEditContent);
-  const updateTitleError = useStore(store, (state) => state.updatePostsEditTitleError);
-  const updateContentError = useStore(store, (state) => state.updatePostsEditContentError);
+  // const store = useContext(TeamStoreContext);
+  // const updateTitle = useStore(store, (state) => state.updatePostsEditTitle);
+  // const updateContent = useStore(store, (state) => state.updatePostsEditContent);
+  // const updateTitleError = useStore(store, (state) => state.updatePostsEditTitleError);
+  // const updateContentError = useStore(store, (state) => state.updatePostsEditContentError);
+
+  const {
+    updatePostsEditTitle: updateTitle,
+    updatePostsEditContent: updateContent,
+    updatePostsEditTitleError: updateTitleError,
+    updatePostsEditContentError: updateContentError
+  } = useTeamStore();
 
   const router = useRouter();
   const { teamId, postId } = useParams<{ teamId: string, postId: string }>();

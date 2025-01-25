@@ -4,20 +4,19 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import TeamPostsCreateButton from "./TeamPostsCreateButton";
 import { getTeamPostStatusForCreate, publishTeamPost } from "@/api/team.api";
 import { useParams, useRouter } from "next/navigation";
-import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
-import { useStore } from "zustand";
+import { useTeamStore } from "@/stores/teams.stores";
 import { TeamPostError } from "@/models/team.models";
 import { AxiosError } from "axios";
 import SpinnerLoading from "../common/SpinnerLoading";
 
 
 const TeamPostsCreateButtonContainer = () => {
-  const store = useContext(TeamStoreContext);
-  const updateTitle = useStore(store, (state) => state.updatePostsCreateTitle);
-  const updateContent = useStore(store, (state) => state.updatePostsCreateContent);
-  const updateTitleError = useStore(store, (state) => state.updatePostsCreateTitleError);
-  const updateContentError = useStore(store, (state) => state.updatePostsCreateContentError);
+  const {
+    updatePostsCreateTitle: updateTitle,
+    updatePostsCreateContent: updateContent,
+    updatePostsCreateTitleError: updateTitleError,
+    updatePostsCreateContentError: updateContentError
+  } = useTeamStore();
 
   const router = useRouter();
   const { teamId } = useParams<{ teamId: string }>();

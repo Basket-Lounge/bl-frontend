@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { Player } from "@/models/player.models";
 import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import Image from "next/image";
@@ -11,8 +11,12 @@ interface ITeamPlayersPlayerDetailsProps {
 }
 
 const TeamPlayersPlayerDetails : React.FC<ITeamPlayersPlayerDetailsProps> = ({ player }) => {
-  const store = useContext(TeamStoreContext);
-  const updateCurrentPlayerId = useStore(store, (state) => state.updateCurrentPlayerId);
+  // const store = useContext(TeamStoreContext);
+  // const updateCurrentPlayerId = useStore(store, (state) => state.updateCurrentPlayerId);
+
+  const {
+    updateCurrentPlayerId
+  } = useTeamStore();
 
   const handleGoBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

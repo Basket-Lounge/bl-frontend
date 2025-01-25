@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { useStore } from "zustand";
 import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useAuthStore } from "@/stores/auth.stores";
-import ButtonLoading from "../common/ButtonLoading";
+import ImageButton from "../common/ImageButton";
 
 
 interface ITeamPostsPostCommentsItemLikesRepliesButtonsContainerProps {
@@ -73,8 +73,7 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
     }
   })
 
-  const handleReplyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleReplyButtonClick = () => {
     // Load replies for the first time when the reply button is clicked
     if (isReplyOpen === false) {
       setNoRefresh(true);
@@ -84,8 +83,7 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
   }
 
   // For clicking the like button
-  const handleLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleLikeButtonClick = () => {
     if (!isAuthenticated) {
       return;
     }
@@ -99,10 +97,13 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
 
   return (
     <div className="flex items-center gap-[24px]">
-      <button 
-        className="flex gap-[16px] items-center"
+      <ImageButton
+        className="flex gap-[12px] items-center"
         onClick={handleLikeButtonClick}
         disabled={likeMutation.isPending}
+        pending={likeMutation.isPending}
+        aria-label="like-button"
+        aria-disabled={likeMutation.isPending}
       >
         {isLiked ? (
           <Image
@@ -110,7 +111,6 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
             alt="avatar"
             width={20}
             height={20}
-            className="rounded-full"
           />
         ) : (
           <Image
@@ -118,28 +118,25 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
             alt="avatar"
             width={20}
             height={20}
-            className="rounded-full"
           />
         )}
-        {likeMutation.isPending ? (
-          <ButtonLoading />
-        ) : (
-          <span className="text-white">{likesCount}</span>
-        )}
-      </button>
-      <button 
-        className="flex gap-[16px] items-center"
+        <span className="text-white">{likesCount}</span>
+      </ImageButton>
+      <ImageButton
+        className="flex gap-[12px] items-center"
         onClick={handleReplyButtonClick}
+        aria-label="reply-button"
+        aria-disabled={likeMutation.isPending}
+        disabled={likeMutation.isPending}
       >
         <Image
           src="/icons/comment_24dp_FFFFFF.svg"
           alt="avatar"
           width={20}
           height={20}
-          className="rounded-full"
         />
         <span className="text-white">{repliesCount}</span>
-      </button>
+      </ImageButton>
     </div>
   );
 }

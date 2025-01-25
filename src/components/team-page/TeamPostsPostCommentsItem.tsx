@@ -78,7 +78,7 @@ const TeamPostsPostCommentsItem = ({
 
   return (
     <PostCommentReplyContext.Provider value={store}>
-      <div className="flex flex-col gap-[24px] items-stretch rounded-md bg-color3 p-[24px]">
+      <li className="flex flex-col gap-[24px] items-stretch px-[24px] py-[16px]">
         <TeamPostsPostCommentsItemUser userData={realComment.user_data} />
         <p className="text-white text-[14px] leading-4">{realComment.content}</p>
         <TeamPostsPostCommentsItemLikesRepliesButtonsContainer
@@ -90,7 +90,7 @@ const TeamPostsPostCommentsItem = ({
             comment={realComment}
           />
         )}
-      </div>
+      </li>
     </PostCommentReplyContext.Provider>
   );
 }

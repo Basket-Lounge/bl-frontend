@@ -1,7 +1,7 @@
 import { Player } from "@/models/player.models";
 import TeamPlayersPlayer from "./TeamPlayersPlayer";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { filterPlayersByPosition } from "@/utils/player.utils";
 import TeamPlayersFilter from "./TeamPlayersFilter";
@@ -12,8 +12,12 @@ interface ITeamPlayersContainerProps {
 }
 
 const TeamPlayersContainer : React.FC<ITeamPlayersContainerProps> = ({ players }) => {
-  const store = useContext(TeamStoreContext);
-  const playersFilterValue = useStore(store, (state) => state.playersFilterValue);
+  // const store = useContext(TeamStoreContext);
+  // const playersFilterValue = useStore(store, (state) => state.playersFilterValue);
+
+  const {
+    playersFilterValue
+  } = useTeamStore();
 
   const filteredPlayers = filterPlayersByPosition(players, playersFilterValue);
 

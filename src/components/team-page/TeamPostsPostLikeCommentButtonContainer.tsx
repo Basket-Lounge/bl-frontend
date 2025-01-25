@@ -1,15 +1,14 @@
 'use client'
 
 import { addTeamPostLike, removeTeamPostLike } from "@/api/team.api";
-import { TeamPostCommentLikes } from "@/models/team.models";
+import { TeamPost, TeamPostCommentLikes } from "@/models/team.models";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
 import { useAuthStore } from "@/stores/auth.stores";
 import { useStore } from "zustand";
-import ButtonLoading from "../common/ButtonLoading";
+import ImageButton from "../common/ImageButton";
 
 
 interface ITeamPostsPostLikeCommentButtonContainerProps {
@@ -23,8 +22,6 @@ const TeamPostsPostLikeCommentButtonContainer = ({
 }: ITeamPostsPostLikeCommentButtonContainerProps) => {
   const queryClient = useQueryClient();
   const { teamId, postId } = useParams();
-  const [realLikesCount, setRealLikesCount] = useState<number>(likesCount);
-  const [realLiked, setRealLiked] = useState<boolean>(liked);
 
   const {
     isAuthenticated
@@ -32,38 +29,44 @@ const TeamPostsPostLikeCommentButtonContainer = ({
 
   const postLikeMutation = useMutation<TeamPostCommentLikes>({
     mutationFn: () => {
-      if (realLiked) {
+      if (liked) {
         return removeTeamPostLike(teamId as string, postId as string);
       }
 
       return addTeamPostLike(teamId as string, postId as string);
     },
-    onSuccess: (data) => {
-      setRealLikesCount(data.likes_count);
-      setRealLiked(data.liked || false);
-      queryClient.removeQueries({queryKey: ["team", teamId as string, "posts", postId as string, "post"]});
-      queryClient.removeQueries({queryKey: ["team", teamId as string, "posts", "pagination"],});
-      queryClient.removeQueries({queryKey: ['my-page', "posts", "pagination"]});
+    onSuccess: (data: TeamPostCommentLikes) => {
+      queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", postId as string, "post"]});
+      queryClient.invalidateQueries({queryKey: ["team", teamId as string, "posts", "pagination"],});
+      queryClient.invalidateQueries({queryKey: ['my-page', "posts", "pagination"]});
+      queryClient.setQueryData(
+        ["team", teamId, "posts", postId, "post"],
+        (oldData: TeamPost) => {
+          return {
+            ...oldData,
+            likes_count: data.likes_count,
+            liked: data.liked
+          }
+        }
+      )
     }
   });
 
-  const handleLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!isAuthenticated) {
-      return;
-    }
-
+  const handleLikeButtonClick = () => {
     postLikeMutation.mutate();
   }
 
   return (
     <div className="flex items-center gap-[24px]">
-      <button 
-        className="flex items-center text-[16px] gap-[16px] bg-color3 rounded-full py-[8px] px-[16px]"
+      <ImageButton
+        size='small'
         onClick={handleLikeButtonClick}
-        disabled={postLikeMutation.isPending}
+        disabled={!isAuthenticated}
+        aria-disabled={postLikeMutation.isPending}
+        pending={postLikeMutation.isPending}
+        className="flex items-center text-[16px] gap-[12px] px-[16px] py-[2px] rounded-full border border-white"
       >
-        {realLiked ? (
+        {liked ? (
           <Image
             src='/icons/favorite_fill_24dp_FFFFFF.svg'
             alt="avatar"
@@ -77,25 +80,25 @@ const TeamPostsPostLikeCommentButtonContainer = ({
             alt="avatar"
             width={20}
             height={20}
-            className="rounded-full"
           />
         )}
-        {postLikeMutation.isPending ? (
-          <ButtonLoading />
-        ) : (
-          <span>{realLikesCount}</span>
-        )}
-      </button>
-      <div className="flex items-center text-[16px] gap-[16px] bg-color3 rounded-full py-[8px] px-[16px]">
+        <span>{likesCount}</span>
+      </ImageButton>
+      <ImageButton
+        size='small'
+        onClick={handleLikeButtonClick}
+        disabled={true}
+        aria-disabled={true}
+        className="flex items-center text-[16px] gap-[12px] px-[16px] py-[2px] rounded-full border border-white"
+      >
         <Image
           src='/icons/comment_24dp_FFFFFF.svg'
           alt="avatar"
           width={20}
           height={20}
-          className="rounded-full"
         />
         <span>{commentsCount}</span>
-      </div>
+      </ImageButton>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { TeamPostStatus } from "@/models/team.models";
 import { extractStatusKoreanName } from "@/utils/team.utils";
 import { TeamPostValidation } from "@/utils/validation.utils";
@@ -15,11 +15,17 @@ const TeamPostsEditButton = ({
   status,
   callback,
 }: ITeamPostsEditButtonProps) => {
-  const store = useContext(TeamStoreContext);
-  const title = useStore(store, (state) => state.postsEditTitle);
-  const content = useStore(store, (state) => state.postsEditContent);
-  const setTitleError = useStore(store, (state) => state.updatePostsEditTitleError);
-  const setContentError = useStore(store, (state) => state.updatePostsEditContentError);
+  // const store = useContext(TeamStoreContext);
+  // const title = useStore(store, (state) => state.postsEditTitle);
+  // const content = useStore(store, (state) => state.postsEditContent);
+  // const setTitleError = useStore(store, (state) => state.updatePostsEditTitleError);
+  // const setContentError = useStore(store, (state) => state.updatePostsEditContentError);
+  const {
+    postsEditTitle: title,
+    postsEditContent: content,
+    updatePostsEditTitleError: setTitleError,
+    updatePostsEditContentError: setContentError
+  } = useTeamStore();
 
   const koreanName = extractStatusKoreanName(status);
 

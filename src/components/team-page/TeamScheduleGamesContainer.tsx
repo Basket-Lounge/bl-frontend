@@ -1,7 +1,9 @@
+'use client'
+
 import TeamScheduleGame from "./TeamScheduleGame";
 import { useParams } from "next/navigation";
 import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useStore } from "zustand";
 import { useQuery } from "@tanstack/react-query";
 import { getGamesForTeam } from "@/api/game.api";
@@ -11,8 +13,12 @@ import TeamScheduleGamesSkeletons from "./TeamScheduleGamesSkeletons";
 
 const TeamScheduleGamesContainer = () => {
   const { teamId } = useParams();
-  const store = useContext(TeamStoreContext);
-  const currentFilterValue = useStore(store, (state) => state.currentScheduleFilterValue);
+  // const store = useContext(TeamStoreContext);
+  // const currentFilterValue = useStore(store, (state) => state.currentScheduleFilterValue);
+
+  const {
+    currentScheduleFilterValue: currentFilterValue
+  } = useTeamStore();
 
   const scheduleQuery = useQuery({
     queryKey: ["team", teamId, "schedule"],

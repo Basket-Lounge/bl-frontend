@@ -1,3 +1,5 @@
+'use client'
+
 import TeamScheduleFilterButton from "./TeamScheduleFilterButton";
 
 const TeamScheduleFilter = () => {

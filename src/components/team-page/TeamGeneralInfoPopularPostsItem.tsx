@@ -10,7 +10,7 @@ const TeamGeneralInfoPopularPostsItem = (
   { post }: TeamGeneralInfoPopularPostsItemProps
 ) => {
   return (
-    <div className="p-[24px] rounded-md bg-color3">
+    <li className="p-[24px] rounded-md bg-color3 block">
       <h3 className="text-[16px] font-semibold">
         {post.title}
       </h3>
@@ -44,7 +44,7 @@ const TeamGeneralInfoPopularPostsItem = (
           </p>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 
