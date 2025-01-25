@@ -17,8 +17,6 @@ interface IAdminPageStore {
   userArgumentsModified: boolean;
   setUserArgumentsModified: (modified: boolean) => void;
 
-  postsPaginationpage: number;
-  setPostsPaginationPage: (page: number) => void;
   lastModifiedPostId: string | null;
   setLastModifiedPostId: (postId: string | null) => void;
   postsArgumentsModified: boolean;
@@ -54,14 +52,6 @@ export const AdminPageStore = createStore<IAdminPageStore>((set) => ({
   userArgumentsModified: false,
   setUserArgumentsModified: (modified: boolean) => {
     set({ userArgumentsModified: modified });
-  },
-
-  postsPaginationpage: 1,
-  setPostsPaginationPage: (page: number) => {
-    if (page < 1) {
-      return;
-    }
-    set({ postsPaginationpage: page })
   },
 
   lastModifiedPostId: null,
@@ -130,15 +120,6 @@ interface IUserManagementStore {
   prevIntroduction: string;
   setPrevIntroduction: (value: string) => void;
 
-  // Posts Pagination
-  postsPaginationpage: number;
-  setPostsPaginationPage: (page: number) => void;
-  postsFilterValue: TTeamPostsFilter;
-  updatePostsFilterValue: (value: TTeamPostsFilter) => void;
-  commentsPaginationPage: number;
-  setCommentsPaginationPage: (page: number) => void;
-  commentsFilterValue: TTeamPostsFilter;
-  updateCommentsFilterValue: (value: TTeamPostsFilter) => void;
 }
 
 export const UserManagementStore = createStore<IUserManagementStore>((set) => ({
@@ -174,25 +155,6 @@ export const UserManagementStore = createStore<IUserManagementStore>((set) => ({
   setIntroduction: (value: string) => set({ introduction: value }),
   prevIntroduction: "",
   setPrevIntroduction: (value: string) => set({ prevIntroduction: value }),
-
-  postsPaginationpage: 1,
-  setPostsPaginationPage: (page: number) => {
-    if (page < 1) {
-      return;
-    }
-    set({ postsPaginationpage: page })
-  },
-  postsFilterValue: "all",
-  updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
-  commentsPaginationPage: 1,
-  setCommentsPaginationPage: (page: number) => {
-    if (page < 1) {
-      return;
-    }
-    set({ commentsPaginationPage: page });
-  },
-  commentsFilterValue: "all",
-  updateCommentsFilterValue: (value) => set({ commentsFilterValue: value }),
 }));
 
 export const UserManagementStoreContext = createContext(UserManagementStore);

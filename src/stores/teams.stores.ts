@@ -1,6 +1,8 @@
-import { TTeamPostsFilter } from "@/models/team.models";
+'use client'
+
 import { createContext } from "react";
-import { createStore } from "zustand";
+import { create, createStore } from "zustand";
+import { devtools } from "zustand/middleware";
 
 interface ITeamStore {
   currentScheduleFilterValue: string;
@@ -12,11 +14,6 @@ interface ITeamStore {
 
   postsArgumentsModified: boolean;
   setPostsArgumentsModified: (value: boolean) => void;
-
-  postsFilterValue: TTeamPostsFilter;
-  updatePostsFilterValue: (value: TTeamPostsFilter) => void;
-  searchValue: string;
-  updateSearchValue: (value: string) => void;
 
   // Creating posts
   postsCreateTitle: string;
@@ -49,10 +46,6 @@ export const TeamStore = createStore<ITeamStore>((set) => ({
 
   postsArgumentsModified: false,
   setPostsArgumentsModified: (value) => set({ postsArgumentsModified: value }),
-  postsFilterValue: "all",
-  updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
-  searchValue: "",
-  updateSearchValue: (value) => set({ searchValue: value }),
 
   postsCreateTitle: "",
   updatePostsCreateTitle: (value) => set({ postsCreateTitle: value }),
@@ -72,5 +65,37 @@ export const TeamStore = createStore<ITeamStore>((set) => ({
   postsEditContentError: "",
   updatePostsEditContentError: (value) => set({ postsEditContentError: value }),
 }));
+
+export const useTeamStore = create<ITeamStore>()(
+  devtools((set) => ({
+    currentScheduleFilterValue: "0",
+    updateCurrentScheduleFilterValue: (value) => set({ currentScheduleFilterValue: value }),
+    playersFilterValue: "A",
+    updatePlayersFilterValue: (value) => set({ playersFilterValue: value }),
+    currentPlayerId: null,
+    updateCurrentPlayerId: (id) => set({ currentPlayerId: id }),
+
+    postsArgumentsModified: false,
+    setPostsArgumentsModified: (value) => set({ postsArgumentsModified: value }),
+
+    postsCreateTitle: "",
+    updatePostsCreateTitle: (value) => set({ postsCreateTitle: value }),
+    postsCreateTitleError: "",
+    updatePostsCreateTitleError: (value) => set({ postsCreateTitleError: value }),
+    postsCreateContent: "",
+    updatePostsCreateContent: (value) => set({ postsCreateContent: value }),
+    postsCreateContentError: "",
+    updatePostsCreateContentError: (value) => set({ postsCreateContentError: value }),
+
+    postsEditTitle: "",
+    updatePostsEditTitle: (value) => set({ postsEditTitle: value }),
+    postsEditTitleError: "",
+    updatePostsEditTitleError: (value) => set({ postsEditTitleError: value }),
+    postsEditContent: "",
+    updatePostsEditContent: (value) => set({ postsEditContent: value }),
+    postsEditContentError: "",
+    updatePostsEditContentError: (value) => set({ postsEditContentError: value }),
+  }))
+)
 
 export const TeamStoreContext = createContext(TeamStore);

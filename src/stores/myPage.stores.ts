@@ -33,14 +33,6 @@ interface IMyPageStore {
   allTeams: Team[];
   setAllTeams: (value: Team[]) => void;
 
-  postsPaginationpage: number;
-  setPostsPaginationPage: (page: number) => void;
-  postsFilterValue: TTeamPostsFilter;
-  updatePostsFilterValue: (value: TTeamPostsFilter) => void;
-  commentsPaginationPage: number;
-  setCommentsPaginationPage: (page: number) => void;
-  commentsFilterValue: TTeamPostsFilter;
-  updateCommentsFilterValue: (value: TTeamPostsFilter) => void;
   commentsDeleted: boolean;
   setCommentsDeleted: (value: boolean) => void;
 
@@ -111,23 +103,6 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
   allTeams: [],
   setAllTeams: (value: Team[]) => set({ allTeams: value }),
 
-  postsPaginationpage: 1,
-  setPostsPaginationPage: (page: number) => {
-    if (page < 1) {
-      return;
-    }
-    set({ postsPaginationpage: page })
-  },
-  postsFilterValue: "all",
-  updatePostsFilterValue: (value) => set({ postsFilterValue: value }),
-  commentsPaginationPage: 1,
-  setCommentsPaginationPage: (page: number) => {
-    if (page < 1) {
-      return;
-    }
-    set({ commentsPaginationPage: page });
-  },
-
   postArgumentsModified: false,
   setPostArgumentsModified: (modified) => set({ postArgumentsModified: modified }),
   lastModifiedPostId: null,
@@ -135,8 +110,6 @@ export const MyPageStore = createStore<IMyPageStore>((set) => ({
 
   commentArgumentsModified: false,
   setCommentArgumentsModified: (modified) => set({ commentArgumentsModified: modified }),
-  commentsFilterValue: "all",
-  updateCommentsFilterValue: (value) => set({ commentsFilterValue: value }),
   commentsDeleted: false,
   setCommentsDeleted: (value) => set({ commentsDeleted: value }),
 
