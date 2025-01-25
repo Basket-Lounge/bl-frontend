@@ -11,16 +11,19 @@ const UserCommentsFilter = () => {
   const setCommentsArgumentsModified = useStore(store, (state) => state.setCommentsArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="user-comments-filter">
+      <div className="flex gap-[24px]" aria-label="user-comments-filter-buttons">
         <FilterButton name="정렬">
           <UserCommentsSortButtonOptionsContainer />
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setCommentsArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setCommentsArgumentsModified(true)} 
+          aria-label="search-user-comments"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -11,16 +11,19 @@ const UserPostsFilter = () => {
   const setPostArgumentsModified = useStore(store, (state) => state.setPostArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="user-posts-filter">
+      <div className="flex gap-[24px]" aria-label="user-posts-filter-buttons">
         <FilterButton name="정렬">
           <UserPostsSortButtonOptionsContainer />
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setPostArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setPostArgumentsModified(true)} 
+          aria-label="search-user-posts"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

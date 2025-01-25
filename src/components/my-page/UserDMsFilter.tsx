@@ -11,17 +11,20 @@ const UserDMsFilter = () => {
   const setChatArgumentsModified = useStore(store, (state) => state.setChatArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="user-dms-filter">
+      <div className="flex gap-[24px]" aria-label="user-dms-filter-buttons">
         <p className="text-[20px] font-bold">개인 채팅</p>
         <FilterButton name="정렬">
           <UserDMsSortButtonOptionsContainer />
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setChatArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setChatArgumentsModified(true)} 
+          aria-label="search-user-dms"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 
