@@ -7,7 +7,6 @@ import TeamPlayersPlayerDetailsExtraInfo from "@/components/team-page/TeamPlayer
 import TeamPlayersPlayerDetailsGameStats from "@/components/team-page/TeamPlayersPlayerDetailsGameStats";
 import TeamPlayersPlayerDetailsSeasonStats from "@/components/team-page/TeamPlayersPlayerDetailsSeasonStats";
 import { Player } from "@/models/player.models";
-import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -21,14 +20,16 @@ const TeamPlayersPlayerDetails = () => {
     queryKey: ["team", teamId, "players"],
     queryFn: async () => {
       return await getPlayersFromTeam(teamId as string);
-    }
+    },
+    staleTime: 86400000
   });
 
   const playerSeasonStatsQuery = useQuery({
     queryKey: ["player", playerId, "season-stats"],
     queryFn: async () => {
       return await getPlayerSeasonStats(teamId as string, playerId as string);
-    }
+    },
+    staleTime: 86400000
   });
 
   const playerLast5GamesStatsQuery = useQuery({
@@ -42,7 +43,8 @@ const TeamPlayersPlayerDetails = () => {
     queryKey: ["player", playerId, "career-stats"],
     queryFn: async () => {
       return await getPlayerCareerStats(teamId as string, playerId as string);
-    }
+    },
+    staleTime: 86400000
   });
 
   const store = useContext(pageSizeControllerStoreContext);

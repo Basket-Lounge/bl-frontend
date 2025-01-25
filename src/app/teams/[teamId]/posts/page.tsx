@@ -6,11 +6,10 @@ import TeamPostsContainer from "@/components/team-page/TeamPostsContainer";
 import TeamPostsContainerSkeleton from "@/components/team-page/TeamPostsContainerSkeleton";
 import TeamPostsFilter from "@/components/team-page/TeamPostsFilter";
 import TeamPostsPagination from "@/components/team-page/TeamPostsPagination";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { useTeamStore } from "@/stores/teams.stores";
 import { useQuery } from "@tanstack/react-query"
 import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useContext, useEffect } from "react";
-import { useStore } from "zustand";
+import { useCallback, useEffect } from "react";
 
 
 export default function TeamPosts() {
@@ -23,12 +22,13 @@ export default function TeamPosts() {
   const sort = searchParams.get('sort') || '';
   const search = searchParams.get('search') || '';
 
-  const store = useContext(TeamStoreContext);
-  const postsArgumentsModified = useStore(store, (state) => state.postsArgumentsModified);
-  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+  const {
+    postsArgumentsModified,
+    setPostsArgumentsModified
+  } = useTeamStore();
 
   const teamPostsQuery = useQuery({
-    queryKey: ['team', teamId, "posts", "pagination", page],
+    queryKey: ['team', teamId, "posts", "pagination", page, { sort, search }],
     queryFn: async () => {
       return await getTeamPosts(
         teamId as string, 

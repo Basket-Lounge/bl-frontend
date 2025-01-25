@@ -2,7 +2,7 @@
 
 import { getTeamPost, getTeamPostStatusForCreate } from "@/api/team.api";
 import { useAuthStore } from "@/stores/auth.stores";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { notFound, useParams } from "next/navigation";
 import { useContext, useEffect } from "react";
@@ -11,15 +11,20 @@ import { useStore } from "zustand";
 
 export default function TeamEditLayout({children}: {children: React.ReactNode}) {
   const { teamId, postId } = useParams<{ teamId: string, postId: string }>();
-  const store = useContext(TeamStoreContext);
 
   const {
     userId,
     isAuthenticated
   } = useAuthStore();
 
-  const updateTitle = useStore(store, (state) => state.updatePostsEditTitle);
-  const updateContent = useStore(store, (state) => state.updatePostsEditContent);
+  // const store = useContext(TeamStoreContext);
+  // const updateTitle = useStore(store, (state) => state.updatePostsEditTitle);
+  // const updateContent = useStore(store, (state) => state.updatePostsEditContent);
+
+  const {
+    updatePostsEditTitle: updateTitle,
+    updatePostsEditContent: updateContent
+  } = useTeamStore();
 
   useSuspenseQuery({
     queryKey: ["team", "post-status", "create"],

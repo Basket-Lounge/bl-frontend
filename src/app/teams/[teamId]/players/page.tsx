@@ -1,9 +1,7 @@
 'use client'
 
 import TeamPlayersPlayer from "@/components/team-page/TeamPlayersPlayer";
-import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
-import { useStore } from "zustand";
+import { useTeamStore } from "@/stores/teams.stores";
 import { filterPlayersByPosition } from "@/utils/player.utils";
 import TeamPlayersFilter from "@/components/team-page/TeamPlayersFilter";
 import { useParams } from "next/navigation";
@@ -12,8 +10,9 @@ import { getPlayersFromTeam } from "@/api/player.api";
 
 
 const TeamPlayersContainer = () => {
-  const store = useContext(TeamStoreContext);
-  const playersFilterValue = useStore(store, (state) => state.playersFilterValue);
+  const {
+    playersFilterValue
+  } = useTeamStore();
   const { teamId } = useParams();
 
   const teamPlayersQuery = useSuspenseQuery({

@@ -1,9 +1,21 @@
-'use client'
+import { getPlayersFromTeam } from "@/api/player.api";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-export default function TeamPlayers({children}: {children: React.ReactNode}) {
+export default async function TeamPlayers({params, children}: {
+  params: {teamId: string},
+  children: React.ReactNode
+}) {
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ["team", params.teamId, "players"],
+    queryFn: () => {
+      return getPlayersFromTeam(params.teamId);
+    }
+  });
+
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <HydrationBoundary state={dehydrate(queryClient)}>
       {children}
-    </div>
+    </HydrationBoundary>
   )
 }
