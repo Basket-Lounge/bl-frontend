@@ -12,8 +12,8 @@ const AdminUsersFilter = () => {
   const setUserArgumentsModified = useStore(store, (state) => state.setUserArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="admin-users-filter">
+      <div className="flex gap-[24px]" aria-label="admin-users-filter-buttons">
         <FilterButton name="유형 필터">
           <AdminUsersTypeFilterButtonOptionsContainer />
         </FilterButton>
@@ -22,9 +22,12 @@ const AdminUsersFilter = () => {
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setUserArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setUserArgumentsModified(true)} 
+          aria-label="search-users"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

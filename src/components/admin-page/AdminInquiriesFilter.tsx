@@ -11,16 +11,19 @@ const AdminInquiriesFilter = () => {
   const setInquiriesArgumentsModified = useStore(store, (state) => state.setInquiriesArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="admin-inquiries-filter">
+      <div className="flex gap-[24px]" aria-label="admin-inquiries-filter-buttons">
         <FilterButton name="상태 필터">
           <AdminInquiriesTypeFilterButtonOptionsContainer />
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setInquiriesArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setInquiriesArgumentsModified(true)} 
+          aria-label="search-inquiries"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

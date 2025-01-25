@@ -12,8 +12,8 @@ const AdminReportsFilter = () => {
   const setReportsArgumentsModified = useStore(store, (state) => state.setReportsArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="admin-reports-filter">
+      <div className="flex gap-[24px]" aria-label="admin-reports-filter-buttons">
         <FilterButton name="상태 필터">
           <AdminReportsStatusFilterButtonOptionsContainer />
         </FilterButton>
@@ -22,9 +22,12 @@ const AdminReportsFilter = () => {
         </FilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setReportsArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setReportsArgumentsModified(true)} 
+          aria-label="search-reports"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 
