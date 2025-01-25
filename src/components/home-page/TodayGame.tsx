@@ -36,7 +36,7 @@ export default function TodayGame({ game }: ITodayGameProps) {
         gameStatusId={game.game_status_id}
       />
       {game.game_status_id == 1 && (
-        <p className="text=lg:text-[16px] font-medium text-center">{gameDate} {gameTime}</p>
+        <p className="text-[16px] font-medium text-center">{gameDate} {gameTime}</p>
       )}
       {game.game_status_id == 2 && (
         <p className="text-[16px] font-medium text-center">{game.game_status_text}</p>

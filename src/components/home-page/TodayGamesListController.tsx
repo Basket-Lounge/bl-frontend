@@ -78,24 +78,6 @@ export default function TodayGamesListController(
       onPointerLeaveCapture={undefined}
       className="mt-[16px] w-full"
       navigation={handleNavigation}
-      // navigation={({ setActiveIndex, activeIndex, length }) => {
-      //   if (length === 1) return null;
-      //   // if (activeIndex >= length) setActiveIndex(0);
-
-      //   return (
-      //     <div className="absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2">
-      //       {new Array(length).fill("").map((_, i) => (
-      //         <span
-      //           key={i}
-      //           className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
-      //             activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
-      //           }`}
-      //           // onClick={() => setActiveIndex(i)}
-      //         />
-      //       ))}
-      //     </div>
-      //   )
-      // }}
     >
       {divideGames(filterTodayGames(games)).map((gamesList, index) => (
         <div key={index} className={"gap-[16px] mx-auto " + className}>
