@@ -146,6 +146,11 @@ export const deleteTeamPost = async (teamId: string, postId: string) => {
   return response.data;
 }
 
+export const hideOrUnhideTeamPost = async (teamId: string, postId: string) => {
+  const response = await httpClient.patch(`/api/teams/${teamId}/posts/${postId}/hidden/`);
+  return response.data;
+}
+
 export const getTeamPost = async (teamId: string, postId: string) => {
   const response = await httpClient.get<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`);
   return response.data;
