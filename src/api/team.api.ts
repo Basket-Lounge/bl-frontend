@@ -44,13 +44,8 @@ export const updateUserFavoriteTeams = async (teams: Team[]) => {
   return response.data;
 }
 
-export const addUserFavoriteTeam = async (teamId: string) => {
-  const response = await httpClient.post<TTeamLikesResult>(`/api/users/me/favorite-teams/${teamId}/`);
-  return response.data as TTeamLikesResult;
-}
-
-export const removeUserFavoriteTeam = async (teamId: string) => {
-  const response = await httpClient.delete<TTeamLikesResult>(`/api/users/me/favorite-teams/${teamId}/`);
+export const addOrRemoveUserFavoriteTeam = async (teamId: string) => {
+  const response = await httpClient.patch<TTeamLikesResult>(`/api/users/me/favorite-teams/${teamId}/`);
   return response.data as TTeamLikesResult;
 }
 
@@ -60,8 +55,8 @@ export const getPopularPosts = async () => {
 }
 
 export const getTeamPopularPosts = async (teamId: string) => {
-  const response = await httpClient.get<TeamPost[]>(`/api/teams/${teamId}/posts/popular/`);
-  return response.data as TeamPost[];
+  const response = await httpClient.get<IPaginationResult<TeamPost>>(`/api/teams/${teamId}/posts/popular/`);
+  return response.data as IPaginationResult<TeamPost>;
 }
 
 export const getTeamGeneralInfo = async (teamId: string) => {
@@ -133,11 +128,21 @@ export const publishTeamPost = async (
 export const editTeamPost = async (
   teamId: string,
   postId: string,
-  title: string,
-  content: string,
-  status: number
+  data: {
+    title?: string,
+    content?: string,
+    status?: number
+  }
 ) => {
-  const response = await httpClient.patch<TeamPost>(`/api/teams/${teamId}/posts/${postId}/`, { title, content, status });
+  const { title, content, status } = data;
+  if (!title && !content && !status) {
+    throw new Error('No data to update');
+  }
+
+  const response = await httpClient.patch<TeamPost>(
+    `/api/teams/${teamId}/posts/${postId}/`, 
+    { title, content, status }
+  );
   return response.data;
 }
 
@@ -220,6 +225,15 @@ export const getTeamPostComment = async (
   return response.data;
 }
 
+export const hideOrUnhideTeamPostComment = async (
+  teamId: string,
+  postId: string,
+  commentId: string
+) => {
+  const response = await httpClient.patch(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/hidden/`);
+  return response.data;
+}
+
 export const likeTeamPostComment = async (
   teamId: string,
   postId: string,
@@ -255,5 +269,25 @@ export const publishTeamPostCommentReply = async (
   content: string
 ) => {
   const response = await httpClient.post(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/`, { content });
+  return response.data;
+}
+
+export const hideOrUnhideTeamPostCommentReply = async (
+  teamId: string,
+  postId: string,
+  commentId: string,
+  replyId: string
+) => {
+  const response = await httpClient.patch(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/${replyId}/hidden/`);
+  return response.data;
+}
+
+export const deleteTeamPostCommentReply = async (
+  teamId: string,
+  postId: string,
+  commentId: string,
+  replyId: string
+) => {
+  const response = await httpClient.delete(`/api/teams/${teamId}/posts/${postId}/comments/${commentId}/replies/${replyId}/`);
   return response.data;
 }
