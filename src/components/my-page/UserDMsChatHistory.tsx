@@ -204,6 +204,7 @@ const UserDMsChatHistory = ({ chatId, userId }: IUserDMsChatHistoryProps) => {
       className="p-[24px] flex flex-col items-stretch gap-[24px] h-[500px] overflow-x-hidden overflow-y-auto"
       ref={elementRef}
       onClick={handleClick}
+      aria-label="chat-messages"
     >
       {userChatMessagesQuery.isFetchingNextPage && (
         <SpinnerLoading />

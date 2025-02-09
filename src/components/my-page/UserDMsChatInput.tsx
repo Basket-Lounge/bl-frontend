@@ -39,12 +39,15 @@ const UserDMsChatInput = () => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         disabled={sendMessageMutation.isPending}
+        aria-label="chat-input"
       />
       <RegularButton
         onClick={handleSendMessage}
         pending={sendMessageMutation.isPending}
         disabled={sendMessageMutation.isPending}
         size="small"
+        aria-label="send-message-button"
+        aria-disabled={sendMessageMutation.isPending}
       >
         전송
       </RegularButton>

@@ -42,9 +42,11 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
   }
 
   return (
-    <div className="flex items-center gap-[8px]">
+    <div className="flex items-center gap-[16px]" aria-label="chat-control-buttons">
       {/* a button to delete the chat */}
       <ImageButton
+        aria-label="delete-chat"
+        aria-disabled={deleteChatMutation.isPending || blockChatMutation.isPending}
         onClick={handleDeleteChatClick}
         pending={deleteChatMutation.isPending}
         disabled={deleteChatMutation.isPending || blockChatMutation.isPending}
@@ -53,13 +55,15 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
         <Image
           src="/icons/delete_24dp_FFFFFF.svg"
           alt="delete"
-          width={18}
-          height={24}
-          className="w-auto xl:h-[28px] w-[20px]"
+          width={20}
+          height={28}
+          className="xl:h-[28px] w-[24px] h-[24px] xl:w-[28px]"
         />
       </ImageButton>
       {/* a button to block a user */}
       <ImageButton
+        aria-label="block-user"
+        aria-disabled={blockChatMutation.isPending || deleteChatMutation.isPending}
         onClick={handleBlockChatClick}
         pending={blockChatMutation.isPending}
         disabled={deleteChatMutation.isPending || blockChatMutation.isPending}
@@ -69,8 +73,8 @@ const UserDMsChatControlButtons = ({ userId }: IUserDMsChatControlButtonsProps) 
           src="/icons/block_24dp_FFFFFF.svg"
           alt="block"
           width={24}
-          height={24}
-          className="w-auto xl:h-[28px] w-[20px]"
+          height={28}
+          className="xl:h-[28px] w-[24px] h-[24px] xl:w-[28px]"
         />
       </ImageButton>
     </div>

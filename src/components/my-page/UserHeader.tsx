@@ -19,7 +19,7 @@ export default function UserHeader({ user }: IUserHeaderProps) {
     <div className="flex gap-[48px] items-start justify-between">
       {/* Team Logo */}
       <div className="flex gap-[48px] items-start">
-        <div className="w-[156px] h-[156px] rounded-full bg-white relative">
+        <div className="w-[156px] h-[156px] rounded-full relative">
           { user.favorite_team && (
             <Image
               className="w-auto h-[70%] absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"

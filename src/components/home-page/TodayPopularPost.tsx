@@ -41,13 +41,13 @@ const TodayPopularPost = ({ post }: ITodayPopularPostProps) => {
           </button>
           <div className="mt-[16px] flex items-center gap-[16px]">
             <div className="w-[40px] bg-transparent rounded-full relative my-[24px]">
-              <Image
+              {/* <Image
                 className="w-full h-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%]"
                 src={`/logos/${post.user_data.favorite_team.symbol}.svg`}
                 alt={post.user_data.favorite_team.symbol}
                 width={20}
                 height={20}
-              />
+              /> */}
             </div>
             <p className="text-[16px]">{post.user_data.username}</p>
           </div>

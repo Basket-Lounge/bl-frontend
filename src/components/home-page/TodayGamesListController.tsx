@@ -78,6 +78,7 @@ export default function TodayGamesListController(
       onPointerLeaveCapture={undefined}
       className="mt-[16px] w-full"
       navigation={handleNavigation}
+      aria-label="today-games-carousel"
     >
       {divideGames(filterTodayGames(games)).map((gamesList, index) => (
         <div key={index} className={"gap-[16px] mx-auto " + className}>

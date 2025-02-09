@@ -24,7 +24,10 @@ export default function TodayGame({ game }: ITodayGameProps) {
 
   const gameInProgressEffect = game.game_status_id != 2 ? "bg-color3" : "animate-fadeFrom3To2";
   return (
-    <div className={"p-[24px] rounded-md flex flex-col gap-[16px] relative " + gameInProgressEffect}>
+    <div 
+      className={"p-[24px] rounded-md flex flex-col gap-[16px] relative " + gameInProgressEffect}
+      aria-label="today-game"
+    >
       <TeamGeneralInfoGameBoxTeam 
         team={game.visitor_team} 
         lineScore={game.visitor_team.linescore as LineScore} 
