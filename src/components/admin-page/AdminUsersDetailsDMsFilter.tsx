@@ -11,16 +11,19 @@ const AdminUsersDetailsDMsFilter = () => {
   const setChatArgumentsModified = useStore(store, (state) => state.setChatArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="admin-users-details-dms-filter">
+      <div className="flex gap-[24px]" aria-label="admin-users-details-dms-filter-buttons">
         <AdminFilterButton name="정렬">
           <AdminUsersDetailsDMsSortButtonOptionsContainer />
         </AdminFilterButton>
       </div>
       <div className="flex gap-[24px] items-center">
-        <SearchBox pressEnterCallback={() => setChatArgumentsModified(true)} />
+        <SearchBox 
+          pressEnterCallback={() => setChatArgumentsModified(true)} 
+          aria-label="search-users-dms"
+        />
       </div>
-    </div>
+    </section>
   );
 }
 

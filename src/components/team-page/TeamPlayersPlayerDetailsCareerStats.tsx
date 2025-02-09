@@ -16,13 +16,14 @@ export default function TeamPlayersPlayerDetailsCareerStats({stats}: ITeamPlayer
 
   return (
     <div
-      className="mt-[16px] p-[24px] bg-color3 rounded-md flex"
+      className="mt-[16px] p-[24px] rounded-md flex border border-white/25"
     >
       <div className="divide-y divide-white">
         <div className="py-[16px] text-[14px] lg:text-[16px]">
           <p className="w-[150px] lg:w-[200px] font-semibold">Season</p>
         </div>
-        { stats.length > 0 && stats.map((seasonStats, index) => (
+        { stats.length > 0 && stats.map((seasonStats) => (
+          // eslint-disable-next-line react/jsx-key
           <div className="py-[16px]">
             <p className="w-[150px] lg:w-[200px] font-semibold">{seasonStats.season_id}</p>
           </div>

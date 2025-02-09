@@ -1,13 +1,19 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
 
 const TeamPostsCreateContent = () => {
-  const store = useContext(TeamStoreContext);
-  const content = useStore(store, (state) => state.postsCreateContent);
-  const setContent = useStore(store, (state) => state.updatePostsCreateContent);
-  const contentError = useStore(store, (state) => state.postsCreateContentError);
+  // const store = useContext(TeamStoreContext);
+  // const content = useStore(store, (state) => state.postsCreateContent);
+  // const setContent = useStore(store, (state) => state.updatePostsCreateContent);
+  // const contentError = useStore(store, (state) => state.postsCreateContentError);
+
+  const {
+    postsCreateContent: content,
+    updatePostsCreateContent: setContent,
+    postsCreateContentError: contentError
+  } = useTeamStore();
 
   return (
     <div className="flex flex-col items-stretch gap-[16px]">

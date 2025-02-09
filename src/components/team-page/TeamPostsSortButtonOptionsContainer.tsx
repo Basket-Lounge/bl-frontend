@@ -1,8 +1,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useContext, useState } from "react";
-import { useStore } from "zustand";
+import { useCallback, useState } from "react";
 import SortButtonOption from "../common/SortButtonOption";
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { useTeamStore } from "@/stores/teams.stores";
 
 
 const TeamPostsSortButtonOptionsContainer = () => {
@@ -25,8 +24,7 @@ const TeamPostsSortButtonOptionsContainer = () => {
     createdAtIndex !== -1 ? (sort[createdAtIndex] === 'created_at' ? true : false) : null
   );
 
-  const store = useContext(TeamStoreContext);
-  const setPostsArgumentsModified = useStore(store, (state) => state.setPostsArgumentsModified);
+  const { setPostsArgumentsModified } = useTeamStore();
 
   const handletitleSortClick = (sort: string) => {
     if (sort === 'asc') {

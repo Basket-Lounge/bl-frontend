@@ -1,7 +1,6 @@
 import { 
   getTeamPostCommentReplies, 
 } from "@/api/team.api";
-import { TeamPostComment} from "@/models/team.models";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useContext, useEffect } from "react";
@@ -11,11 +10,12 @@ import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useStore } from "zustand";
 import Pagination from "../common/Pagination";
 import SpinnerLoading from "../common/SpinnerLoading";
+import { AxiosError } from "axios";
 
 
 const TeamPostsPostCommentsItemRepliesContainer = ({
-  comment
-}: {comment: TeamPostComment}) => {
+  commentId
+}: {commentId: string}) => {
   const { teamId, postId } = useParams();
 
   const store = useContext(PostCommentReplyContext);
@@ -30,7 +30,9 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
     noRefresh,
     isReplyOpen,
     replyAdded,
+    replyModified,
     updateReplyAdded,
+    updateReplyModified,
   } = useStore(store);
 
   // For fetching replies to a comment
@@ -41,7 +43,7 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
       "posts", 
       postId as string, 
       "comments", 
-      comment.id,
+      commentId,
       "replies",
       repliesPage
     ],
@@ -49,19 +51,26 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
       const replies = await getTeamPostCommentReplies(
         teamId as string, 
         postId as string, 
-        comment.id,
+        commentId,
         repliesPage
       );
       updateRepliesCount(replies.count);
       return replies;
+    },
+    throwOnError: (error: AxiosError) => {
+      if (error.response?.status === 404) {
+        updateReplyModified(true);
+        updateRepliesPage(1);
+      }
+      return false
     },
     enabled: noRefresh,
   });
 
   // For handling pagination of replies
   const handlePagination = (pageNumber: number) => {
+    updateReplyModified(true);
     updateRepliesPage(pageNumber);
-    postCommentRepliesQuery.refetch();
   }
 
   useEffect(() => {
@@ -71,21 +80,33 @@ const TeamPostsPostCommentsItemRepliesContainer = ({
     }
   }, [replyAdded]);
 
+  useEffect(() => {
+    if (replyModified) {
+      updateReplyModified(false);
+      postCommentRepliesQuery.refetch();
+    }
+  }, [repliesPage]);
+
+
   return (
-    <div className="flex flex-col gap-[24px] items-stretch rounded-md bg-color3">
+    <div className="flex flex-col gap-[24px] items-stretch" aria-label="replies">
       <TeamPostsPostCommentsReplyInput
-        commentId={comment.id}
+        commentId={commentId}
       />
       {( postCommentRepliesQuery.isLoading || postCommentRepliesQuery.isRefetching ) && (
         <SpinnerLoading />
       )}
-      {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && 
-        postCommentRepliesQuery.data.results.map((reply) => (
-        <TeamPostsPostCommentsReply
-          key={reply.id}
-          reply={reply}
-        />
-      ))}
+      {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && (
+        <ul className="flex flex-col items-stretch divide-y-[1px] divide-white/25 pl-[24px]" aria-label="replies-list">
+          {postCommentRepliesQuery.data.results.map((reply) => (
+            <TeamPostsPostCommentsReply
+              key={reply.id}
+              reply={reply}
+              commentId={commentId}
+            />
+          ))}
+        </ul>
+      )}
       {( postCommentRepliesQuery.isSuccess && isReplyOpen ) && (
         <Pagination
           currentPageNumber={postCommentRepliesQuery.data.current_page}

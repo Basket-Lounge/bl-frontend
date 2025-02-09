@@ -1,8 +1,8 @@
-import { PlayerSeasonStats } from "@/models/player.models"
+import { PlayerCareerStats } from "@/models/player.models";
 
 
 interface ITeamPlayersPlayerDetailsSeasonStatsProps {
-  stats: PlayerSeasonStats | undefined;
+  stats: PlayerCareerStats | undefined;
 }
 
 const TeamPlayersPlayerDetailsSeasonStats : React.FC<ITeamPlayersPlayerDetailsSeasonStatsProps> = ({ stats }) => {
@@ -12,9 +12,11 @@ const TeamPlayersPlayerDetailsSeasonStats : React.FC<ITeamPlayersPlayerDetailsSe
       </div>
     )
   }
+  
+  console.log(stats);
 
   return (
-    <div className="mt-[16px] flex p-[24px] px-[24px] lg:px-[48px] bg-color3 rounded-md justify-center lg:justify-between items-center flex-wrap lg:flex-nowrap gap-[24px]">
+    <div className="mt-[16px] flex p-[24px] px-[24px] lg:px-[48px] rounded-md justify-center lg:justify-between items-center flex-wrap lg:flex-nowrap gap-[24px] border border-white/25">
       <div className="text-center">
         <p className="text-[14px] lg:text-[16px]">GP</p>
         <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{stats.games_played}</p>
@@ -41,15 +43,15 @@ const TeamPlayersPlayerDetailsSeasonStats : React.FC<ITeamPlayersPlayerDetailsSe
       </div>
       <div className="text-center">
         <p className="text-[14px] lg:text-[16px]">FG%</p>
-        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.field_goals_percentage).toFixed(1) || '0.0'}</p>
+        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.field_goals_percentage * 100).toFixed(1) || '0.0'}</p>
       </div>
       <div className="text-center">
         <p className="text-[14px] lg:text-[16px]">3P%</p>
-        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.three_pointers_percentage).toFixed(1) || '0.0'}</p>
+        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.three_point_field_goals_percentage * 100).toFixed(1) || '0.0'}</p>
       </div>
       <div className="text-center">
         <p className="text-[14px] lg:text-[16px]">FT%</p>
-        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.free_throws_percentage).toFixed(1) || '0.0'}</p>
+        <p className="text-[20px] lg:text-[24px] font-medium mt-[4px]">{(stats.free_throws_percentage * 100).toFixed(1) || '0.0'}</p>
       </div>
     </div>
   );

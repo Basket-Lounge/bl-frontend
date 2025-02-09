@@ -10,7 +10,7 @@ import UserAccountSettingsUsernameChange from "@/components/my-page/UserAccountS
 
 const AccountSettingsPage = () => {
   return (
-    <div className="flex flex-col gap-[32px] items-stretch">
+    <section className="flex flex-col gap-[32px] items-stretch" aria-label="account-settings">
       <UserAccountSettingsTeamLikes />
       <div className="lg:flex gap-[32px] items-stretch">
         <UserAccountSettingsIntroduction />
@@ -22,7 +22,7 @@ const AccountSettingsPage = () => {
         </div>
       </div>
       <UserAccountSettingsSubmitButton />
-    </div>
+    </section>
   );
 }
 

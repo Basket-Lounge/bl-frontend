@@ -174,7 +174,7 @@ export interface TeamPost {
         favorite_team: {
             id: number;
             symbol: string;
-        }
+        } | null;
     },
     team_data: {
         id: number;
@@ -227,6 +227,10 @@ export interface TeamPostComment {
     user_data: {
         id: number;
         username: string;
+        favorite_team: {
+            id: number;
+            symbol: string;
+        } | null;
     };
     status_data: {
         id: number;
@@ -242,6 +246,10 @@ export interface TeamPostCommentReply {
     user_data: {
         id: number;
         username: string;
+        favorite_team: {
+            id: number;
+            symbol: string;
+        } | null;
     };
     status_data: {
         id: number;

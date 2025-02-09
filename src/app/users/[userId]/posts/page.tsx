@@ -58,10 +58,10 @@ export default function UserPostsPage() {
 
   if (teamPostsQuery.isLoading || teamPostsQuery.isRefetching) {
     return (
-      <div className="flex flex-col gap-[16px] items-stretch">
+      <section className="flex flex-col gap-[16px] items-stretch" data-testid="user-posts-page">
         <UserPostsFilter />
         <TeamPostsContainerSkeleton />
-      </div>
+      </section>
     );
   }
 
@@ -74,7 +74,7 @@ export default function UserPostsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-[16px] items-stretch">
+    <section className="flex flex-col gap-[16px] items-stretch" data-testid="user-posts-page">
       <UserPostsFilter />
       <TeamPostsContainer posts={teamPostsQuery.data!.results} />
       <TeamPostsPagination 
@@ -86,6 +86,6 @@ export default function UserPostsPage() {
           teamPostsQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   );
 }

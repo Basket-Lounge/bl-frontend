@@ -6,9 +6,9 @@ import UserGeneralInfoTeamLikes from "@/components/user-page/UserGeneralInfoTeam
 
 export default function UserGeneralInfoPage() {
   return (
-    <div className="flex flex-col gap-[32px] items-stretch">
+    <section className="flex flex-col gap-[32px] items-stretch" aria-label="user-general-info">
       <UserGeneralInfoTeamLikes />
       <UserGeneralInfoIntroduction />
-    </div>
+    </section>
   );
 }

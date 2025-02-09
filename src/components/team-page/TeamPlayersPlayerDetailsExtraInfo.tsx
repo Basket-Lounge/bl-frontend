@@ -13,36 +13,36 @@ const TeamPlayersPlayerDetailsExtraInfo = (
 
   return (
     <div className="flex items-center gap-[16px] flex-wrap grow">
-      <div className="px-[32px] py-[4px] rounded-full bg-color3">
+      <div className="px-[32px] py-[4px] rounded-full border border-white/25">
         <p className="text-[14px] text-white font-bold">{playerPosition}</p>
       </div>
       {player.height && (
-        <div className="px-[32px] py-[4px] rounded-full bg-color3">
+        <div className="px-[32px] py-[4px] rounded-full border border-white/25">
           <p className="text-[14px] text-white font-bold">{player.height}</p>
         </div>
       )}
       {player.weight && (
-        <div className="px-[32px] py-[4px] rounded-full bg-color3">
+        <div className="px-[32px] py-[4px] rounded-full border border-white/25">
           <p className="text-[14px] text-white font-bold">{player.weight} lbs</p>
         </div>
       )}
       {player.country && (
-        <div className="px-[32px] py-[4px] rounded-full bg-color3">
+        <div className="px-[32px] py-[4px] rounded-full border border-white/25">
           <p className="text-[14px] text-white font-bold">{player.country}</p>
         </div>
       )}
       {player.college && (
-        <div className="px-[32px] py-[4px] rounded-full bg-color3">
+        <div className="px-[32px] py-[4px] rounded-full border border-white/25">
           <p className="text-[14px] text-white font-bold">{player.college}</p>
         </div>
       )}
       {player.draft_year && (
-      <div className="px-[32px] py-[4px] rounded-full bg-color3">
+      <div className="px-[32px] py-[4px] rounded-full border border-white/25">
         <p className="text-[14px] text-white font-bold">{player.draft_year}년 드래프트</p>
       </div>
       )}
       {player.draft_round && player.draft_number && (
-      <div className="px-[32px] py-[4px] rounded-full bg-color3">
+      <div className="px-[32px] py-[4px] rounded-full border border-white/25">
         <p className="text-[14px] text-white font-bold">{player.draft_round}라운드 {player.draft_number}순위 지명</p>
       </div>
       )}

@@ -5,7 +5,7 @@ import AllGamesTeamsFilterButtonOptionsContainer from "./AllGamesTeamsFilterButt
 
 const AllGamesFilter = () => {
   return (
-    <div className="flex justify-between items-end">
+    <div className="flex justify-between items-end" aria-label="all-games-filter">
       <div className="flex gap-[24px]">
         <FilterButton name="날짜 필터">
           <AllGamesDateRangeFilterButtonOptionsContainer />

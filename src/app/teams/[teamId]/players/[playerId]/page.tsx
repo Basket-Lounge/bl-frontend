@@ -7,42 +7,45 @@ import TeamPlayersPlayerDetailsExtraInfo from "@/components/team-page/TeamPlayer
 import TeamPlayersPlayerDetailsGameStats from "@/components/team-page/TeamPlayersPlayerDetailsGameStats";
 import TeamPlayersPlayerDetailsSeasonStats from "@/components/team-page/TeamPlayersPlayerDetailsSeasonStats";
 import { Player } from "@/models/player.models";
-import { getPositionInKoreanFromAbbreviation } from "@/utils/player.utils";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
 
 const TeamPlayersPlayerDetails = () => {
-  const { teamId, playerId } = useParams();
+  const router = useRouter();
+  const { teamId, playerId } = useParams<{ teamId: string, playerId: string }>();
   const teamPlayersQuery = useSuspenseQuery({
     queryKey: ["team", teamId, "players"],
     queryFn: async () => {
       return await getPlayersFromTeam(teamId as string);
-    }
+    },
+    staleTime: 86400000
   });
 
   const playerSeasonStatsQuery = useQuery({
     queryKey: ["player", playerId, "season-stats"],
     queryFn: async () => {
-      return await getPlayerSeasonStats(teamId as string, playerId as string);
-    }
+      return await getPlayerSeasonStats(teamId, playerId);
+    },
+    staleTime: 86400000
   });
 
   const playerLast5GamesStatsQuery = useQuery({
     queryKey: ["player", playerId, "last-5-games-stats"],
     queryFn: async () => {
-      return await getPlayerLast5GamesStats(teamId as string, playerId as string);
+      return await getPlayerLast5GamesStats(teamId, playerId);
     }
   });
 
   const playerCareerStatsQuery = useQuery({
     queryKey: ["player", playerId, "career-stats"],
     queryFn: async () => {
-      return await getPlayerCareerStats(teamId as string, playerId as string);
-    }
+      return await getPlayerCareerStats(teamId, playerId);
+    },
+    staleTime: 86400000
   });
 
   const store = useContext(pageSizeControllerStoreContext);
@@ -55,11 +58,14 @@ const TeamPlayersPlayerDetails = () => {
 
   const handleGoBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    window.history.back();
+    router.back();
   };
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section 
+      className="flex flex-col gap-[24px] items-stretch"
+      aria-label="player-details"
+    >
       <button className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit" onClick={handleGoBackClick}>
         👈 선수 목록으로 돌아가기
       </button>
@@ -75,7 +81,7 @@ const TeamPlayersPlayerDetails = () => {
             />
           </div> 
           {/* Team Name */}
-          <div className="flex flex-col gap-[16px] w-min grow">
+          <div className="flex gap-[48px] w-min grow">
             <div className="flex items-center gap-[24px]">
               <h1 className="text-white text-[40px] font-medium">#{selectedPlayer.jersey_number || '-'}</h1>
               <div className="flex flex-col items-start gap-[4px]">
@@ -88,15 +94,6 @@ const TeamPlayersPlayerDetails = () => {
             )}
           </div>
         </div>
-        {/* <div className="bg-color3 rounded-lg text-[16px] p-[12px] font-medium flex gap-[12px]">
-          <Image
-            src={"/icons/favorite_border_24dp_FFFFFF.svg"}
-            alt="favorite"
-            width={24}
-            height={24}
-          />
-          24
-        </div> */}
       </div>
       {pageWidth <= 768 && (
         <TeamPlayersPlayerDetailsExtraInfo player={selectedPlayer} />
@@ -113,7 +110,7 @@ const TeamPlayersPlayerDetails = () => {
         <h3 className="text-white text-[20px] font-bold">선수 커리어 스탯</h3>
         <TeamPlayersPlayerDetailsCareerStats stats={playerCareerStatsQuery.data} />
       </div>
-    </div>
+    </section>
   )
 }
 

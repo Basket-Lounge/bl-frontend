@@ -6,10 +6,11 @@ import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/reac
 interface IFilterButtonProps {
   name: string;
   children?: React.ReactNode;
+  [key: string]: any;
 };
 
 const FilterButton : React.FC<IFilterButtonProps> = (
-  { name, children }
+  { name, children, ...props }
 ) => {
   return (
     <Suspense fallback={<LoadingButton />}>
@@ -22,6 +23,7 @@ const FilterButton : React.FC<IFilterButtonProps> = (
           <PopoverHandler>
             <button
               className={"text-[14px] font-semibold px-[32px] py-[2px] rounded-full bg-color3 text-white"}
+              {...props}
             >
               {name}
             </button>

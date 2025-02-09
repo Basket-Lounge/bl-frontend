@@ -17,11 +17,11 @@ const TeamPostsContainer = ({ posts }: ITeamPostsContainerProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <ul className="flex flex-col items-stretch divide-y-[1px] divide-white/25 border-t-[1px] border-b-[1px] border-white/25">
       {posts.map((post) => (
         <TeamPostsContainerItem key={post.id} post={post} />
       ))}
-    </div>
+    </ul>
   );
 }
 

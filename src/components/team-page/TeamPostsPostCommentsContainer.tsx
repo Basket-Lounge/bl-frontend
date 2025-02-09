@@ -5,8 +5,9 @@ import { useParams, usePathname, useRouter, useSearchParams } from "next/navigat
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { getTeamPostComments } from "@/api/team.api";
 import TeamPostsPostCommentsItem from "./TeamPostsPostCommentsItem";
-import TeamPostsPagination from "./TeamPostsPagination";
 import SpinnerLoading from "../common/SpinnerLoading";
+import CuteErrorMessage from "../common/CuteErrorMessage";
+import Pagination from "../common/Pagination";
 
 
 interface IPostCommentsStore {
@@ -45,7 +46,7 @@ const TeamPostsPostCommentsContainer = () => {
   const setPostCommentsArgumentsModified = useStore(PostCommentsStore, (state) => state.setPostCommentsArgumentsModified);
 
   const postCommentsQuery = useQuery({
-    queryKey: ["team", teamId as string, "posts", postId as string, "comments", page],
+    queryKey: ["team", teamId as string, "posts", postId as string, "comments", page, { sort }],
     queryFn: async () => {
       return await getTeamPostComments(
         teamId as string, 
@@ -55,6 +56,7 @@ const TeamPostsPostCommentsContainer = () => {
       );
     },
     placeholderData: keepPreviousData,
+    staleTime: 86400000, 
   });
 
   const createQueryString = useCallback(
@@ -85,40 +87,65 @@ const TeamPostsPostCommentsContainer = () => {
     )
   }
 
-  if (postCommentsQuery.isError) {
+  if (postCommentsQuery.isError || postCommentsQuery.data === undefined) {
     return (
-      <div className="bg-color3 rounded-md p-[24px] flex items-center justify-center">
-        <p className="text-white text-[16px] font-semibold">댓글을 불러오는 중 오류가 발생했습니다.</p>
+      <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
+        <CuteErrorMessage
+          error="댓글을 불러오는 중 오류가 발생했습니다. 다시 시도해주세요."
+        />
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-[16px] item-stretch">
+    <section className="flex flex-col gap-[16px] item-stretch" aria-label="post-comments">
       <TeamPostsPostCommentsFilter 
         count={postCommentsQuery.data?.count || 0} 
       />
-      {postCommentsQuery.data?.results.length === 0 && (
-        <div className="bg-color3 rounded-md p-[24px]">
-          <p className="text-white text-[16px] font-semibold">댓글이 없습니다.</p>
+      {postCommentsQuery.data?.results.length === 0 ? (
+        <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
+          <CuteErrorMessage
+            error="댓글이 없습니다."
+          />
         </div>
+      ) : (
+        <ul 
+          className="flex flex-col items-stretch divide-y-[1px] divide-white/25 border-t-[1px] border-b-[1px] border-white/25"
+          aria-label="post-comments-list"
+        >
+          {postCommentsQuery.data?.results.map((comment) => (
+            <TeamPostsPostCommentsItem
+              key={comment.id}
+              comment={comment}
+            />
+          ))}
+        </ul>
       )}
-      {postCommentsQuery.data?.results.map((comment) => (
-        <TeamPostsPostCommentsItem
-          key={comment.id}
-          comment={comment}
-        />
-      ))}
-      <TeamPostsPagination
-        currentPageNumber={page}
+      <Pagination
+        currentPageNumber={postCommentsQuery.data.current_page || 1}
+        lastPageNumber={postCommentsQuery.data.last_page}
+        firstPageCallback={
+          () => handlePageChange(1)
+        }
         previousCallback={
-          postCommentsQuery.data?.previous ? () => handlePageChange(page - 1) : undefined
+          postCommentsQuery.data.previous ?
+            () => handlePageChange(page - 1) :
+            undefined
         }
         nextCallback={
-          postCommentsQuery.data?.next ? () => handlePageChange(page + 1) : undefined
+          postCommentsQuery.data.next ?
+            () => handlePageChange(page + 1) :
+            undefined
+        }
+        lastPageCallback={
+          () => handlePageChange(postCommentsQuery.data.last_page)
+        }
+        disabled={
+          (postCommentsQuery.data.next === null && postCommentsQuery.data.previous === null) ||
+          (postCommentsQuery.isLoading || postCommentsQuery.isRefetching)
         }
       />
-    </div>
+    </section>
   );
 }
 

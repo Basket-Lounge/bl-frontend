@@ -55,7 +55,7 @@ const InquiriesPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="my-inquiries">
       <UserInquiriesFilter />
       <div className={divClassName}>
         <UserInquiriesContainer inquiries={userInquiriesQuery.data.results} />
@@ -74,7 +74,7 @@ const InquiriesPage = () => {
           userInquiriesQuery.data.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   );
 }
 

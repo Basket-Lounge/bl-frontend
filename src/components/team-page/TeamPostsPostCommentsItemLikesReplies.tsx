@@ -4,27 +4,23 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { likeTeamPostComment, unlikeTeamPostComment } from "@/api/team.api";
 import { useParams } from "next/navigation";
 import { PostCommentsContext } from "./TeamPostsPostCommentsContainer";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useStore } from "zustand";
 import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useAuthStore } from "@/stores/auth.stores";
-import ButtonLoading from "../common/ButtonLoading";
+import ImageButton from "../common/ImageButton";
 
 
 interface ITeamPostsPostCommentsItemLikesRepliesButtonsContainerProps {
-  isLiked: boolean;
   commentId: string;
 }
 
 
 const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
-  isLiked,
   commentId
 }: ITeamPostsPostCommentsItemLikesRepliesButtonsContainerProps) => {
   const { teamId, postId } = useParams();
   const queryClient = useQueryClient();
-
-  const [liked, setLiked] = useState<boolean>(isLiked);
 
   const store = useContext(PostCommentReplyContext);
 
@@ -35,6 +31,8 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
   const {
     likesCount,
     updateLikesCount,
+    liked,
+    updateLiked,
     repliesCount,
     isReplyOpen,
     updateIsReplyOpen,
@@ -66,15 +64,14 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
     },
     onSuccess: (data) => {
       updateLikesCount(data.likes_count);
-      setLiked(data.liked || false);
+      updateLiked(data.liked || false);
       queryClient.removeQueries({
         queryKey: ["team", teamId as string, "posts", postId as string, "comments", page]
       });
     }
   })
 
-  const handleReplyButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleReplyButtonClick = () => {
     // Load replies for the first time when the reply button is clicked
     if (isReplyOpen === false) {
       setNoRefresh(true);
@@ -84,8 +81,7 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
   }
 
   // For clicking the like button
-  const handleLikeButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleLikeButtonClick = () => {
     if (!isAuthenticated) {
       return;
     }
@@ -93,53 +89,48 @@ const TeamPostsPostCommentsItemLikesRepliesButtonsContainer = ({
     likeMutation.mutate();
   }
 
-  useEffect(() => {
-    setLiked(isLiked);
-  }, [isLiked]);
-
   return (
-    <div className="flex items-center gap-[24px]">
-      <button 
-        className="flex gap-[16px] items-center"
+    <div className="flex items-center gap-[24px]" aria-label="like-reply-buttons">
+      <ImageButton
+        className="flex gap-[12px] items-center"
         onClick={handleLikeButtonClick}
         disabled={likeMutation.isPending}
+        pending={likeMutation.isPending}
+        aria-label="like-button"
+        aria-disabled={likeMutation.isPending}
       >
-        {isLiked ? (
+        {liked ? (
           <Image
             src="/icons/favorite_fill_24dp_FFFFFF.svg"
-            alt="avatar"
+            alt="user-liked"
             width={20}
             height={20}
-            className="rounded-full"
           />
         ) : (
           <Image
             src="/icons/favorite_border_24dp_FFFFFF.svg"
-            alt="avatar"
+            alt="user-not-liked"
             width={20}
             height={20}
-            className="rounded-full"
           />
         )}
-        {likeMutation.isPending ? (
-          <ButtonLoading />
-        ) : (
-          <span className="text-white">{likesCount}</span>
-        )}
-      </button>
-      <button 
-        className="flex gap-[16px] items-center"
+        <span className="text-white">{likesCount}</span>
+      </ImageButton>
+      <ImageButton
+        className="flex gap-[12px] items-center"
         onClick={handleReplyButtonClick}
+        aria-label="reply-button"
+        aria-disabled={likeMutation.isPending}
+        disabled={likeMutation.isPending}
       >
         <Image
           src="/icons/comment_24dp_FFFFFF.svg"
-          alt="avatar"
+          alt="replies"
           width={20}
           height={20}
-          className="rounded-full"
         />
-        <span className="text-white">{repliesCount}</span>
-      </button>
+        <span className="text-white" aria-label="replies-count">{repliesCount}</span>
+      </ImageButton>
     </div>
   );
 }

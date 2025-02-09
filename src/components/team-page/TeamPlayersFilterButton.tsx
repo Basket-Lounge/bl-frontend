@@ -1,4 +1,4 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { useContext } from "react";
 import { useStore } from "zustand";
 
@@ -9,9 +9,14 @@ interface ITeamPlayersFilterButtonProps {
 };
 
 const TeamPlayersFilterButton : React.FC<ITeamPlayersFilterButtonProps> = ({ name, queryKey }) => {
-  const store = useContext(TeamStoreContext);
-  const currentPlayersFilterValue = useStore(store, (state) => state.playersFilterValue);
-  const updatePlayersFilterValue = useStore(store, (state) => state.updatePlayersFilterValue);
+  // const store = useContext(TeamStoreContext);
+  // const currentPlayersFilterValue = useStore(store, (state) => state.playersFilterValue);
+  // const updatePlayersFilterValue = useStore(store, (state) => state.updatePlayersFilterValue);
+
+  const {
+    playersFilterValue: currentPlayersFilterValue,
+    updatePlayersFilterValue
+  } = useTeamStore();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

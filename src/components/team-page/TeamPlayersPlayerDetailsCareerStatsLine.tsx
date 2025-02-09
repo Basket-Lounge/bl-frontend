@@ -9,29 +9,29 @@ export default function TeamPlayersPlayerDetailsCareerStatsLine(
   {stats}: ITeamPlayersPlayerDetailsCareerStatsLineProps
 ) {
   return (
-    <div className="py-[16px] w-[1260px] flex">
-      <p className="w-[60px]   text-right">{stats.team_data.symbol}</p>
-      <p className="w-[60px]   text-right">{stats.games_played}</p>
-      <p className="w-[60px]   text-right">{stats.minutes}</p>
-      <p className="w-[60px]   text-right">{stats.points}</p>
-      <p className="w-[60px]   text-right">{stats.assists}</p>
-      <p className="w-[60px]   text-right">{stats.rebounds_total}</p>
-      <p className="w-[60px]   text-right">{stats.field_goals_made}</p>
-      <p className="w-[60px]   text-right">{stats.field_goals_attempted}</p>
-      <p className="w-[60px]   text-right">{(stats.field_goals_percentage * 100).toFixed(1)}</p>
-      <p className="w-[60px]   text-right">{stats.three_point_field_goals_made}</p>
-      <p className="w-[60px]   text-right">{stats.three_point_field_goals_attempted}</p>
-      <p className="w-[60px]   text-right">{(stats.three_point_field_goals_percentage * 100).toFixed(1)}</p>
-      <p className="w-[60px]   text-right">{stats.free_throws_made}</p>
-      <p className="w-[60px]   text-right">{stats.free_throws_attempted}</p>
-      <p className="w-[60px]   text-right">{(stats.free_throws_percentage * 100).toFixed(1)}</p>
-      <p className="w-[60px]   text-right">{stats.rebounds_offensive}</p>
-      <p className="w-[60px]   text-right">{stats.rebounds_defensive}</p>
-      <p className="w-[60px]   text-right">{stats.rebounds_total}</p>
-      <p className="w-[60px]   text-right">{stats.steals}</p>
-      <p className="w-[60px]   text-right">{stats.blocks}</p>
-      <p className="w-[60px]   text-right">{stats.turnovers}</p>
-      <p className="w-[60px]   text-right">{stats.personal_fouls}</p>
+    <div className="py-[16px] w-[1260px] flex" aria-label="season-stats">
+      <p className="w-[60px] text-right" aria-label="team-abbreviation">{stats.team_data.symbol}</p>
+      <p className="w-[60px] text-right" aria-label="total-games-played">{stats.games_played}</p>
+      <p className="w-[60px] text-right" aria-label="average-minutes">{stats.minutes.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="average-points">{(stats.points).toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="average-assists">{stats.assists.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="average-rebounds">{stats.rebounds_total.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="field-goals-made">{stats.field_goals_made.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="field-goals-attempted">{stats.field_goals_attempted.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="field-goals-percentage">{(stats.field_goals_percentage * 100).toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="three-point-field-goals-made">{stats.three_point_field_goals_made.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="three-point-field-goals-attempted">{stats.three_point_field_goals_attempted.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="three-point-field-goals-percentage">{(stats.three_point_field_goals_percentage * 100).toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="free-throws-made">{stats.free_throws_made.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="free-throws-attempted">{stats.free_throws_attempted.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="free-throws-percentage">{(stats.free_throws_percentage * 100).toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="offensive-rebounds">{stats.rebounds_offensive.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="defensive-rebounds">{stats.rebounds_defensive.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="total-rebounds">{stats.rebounds_total.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="steals">{stats.steals.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="blocks">{stats.blocks.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="turnovers">{stats.turnovers.toFixed(1)}</p>
+      <p className="w-[60px] text-right" aria-label="personal-fouls">{stats.personal_fouls.toFixed(1)}</p>
     </div>
   )
 }

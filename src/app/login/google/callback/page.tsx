@@ -64,7 +64,7 @@ const GoogleCallbackPage = () => {
 
   if (submitCodeMutation.isPending) {
     return (
-      <div>
+      <div aria-label="login-processing">
         <p className="text-[24px] font-semibold" ref={loadingTextRef} />
       </div>
     )
@@ -80,7 +80,7 @@ const GoogleCallbackPage = () => {
   }
 
   return (
-    <div>
+    <div aria-label="google-callback-page">
       <h3 className="text-[24px] font-semibold">구글 로그인 페이지 입니다.</h3>
     </div>
   )

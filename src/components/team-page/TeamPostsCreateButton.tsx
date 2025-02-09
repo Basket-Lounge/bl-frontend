@@ -1,9 +1,10 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
+import { TeamStoreContext, useTeamStore } from "@/stores/teams.stores";
 import { TeamPostStatus } from "@/models/team.models";
 import { extractStatusKoreanName } from "@/utils/team.utils";
 import { TeamPostValidation } from "@/utils/validation.utils";
 import { useContext } from "react";
 import { useStore } from "zustand";
+import { toast } from "react-toastify";
 
 
 interface ITeamPostsCreateButtonProps {
@@ -15,11 +16,18 @@ const TeamPostsCreateButton = ({
   status,
   callback,
 }: ITeamPostsCreateButtonProps) => {
-  const store = useContext(TeamStoreContext);
-  const title = useStore(store, (state) => state.postsCreateTitle);
-  const content = useStore(store, (state) => state.postsCreateContent);
-  const setTitleError = useStore(store, (state) => state.updatePostsCreateTitleError);
-  const setContentError = useStore(store, (state) => state.updatePostsCreateContentError);
+  // const store = useContext(TeamStoreContext);
+  // const title = useStore(store, (state) => state.postsCreateTitle);
+  // const content = useStore(store, (state) => state.postsCreateContent);
+  // const setTitleError = useStore(store, (state) => state.updatePostsCreateTitleError);
+  // const setContentError = useStore(store, (state) => state.updatePostsCreateContentError);
+
+  const {
+    postsCreateTitle: title,
+    postsCreateContent: content,
+    updatePostsCreateTitleError: setTitleError,
+    updatePostsCreateContentError: setContentError
+  } = useTeamStore();
 
   const koreanName = extractStatusKoreanName(status);
 
@@ -31,9 +39,11 @@ const TeamPostsCreateButton = ({
 
       const titleError = errorFormat.title?._errors.toString()
       setTitleError(titleError || null);
+      toast.error(titleError || '제목과 관련된 알 수 없는 에러가 발생했습니다.');
 
       const contentError = errorFormat.content?._errors.toString()
       setContentError(contentError || null);
+      toast.error(contentError || '내용과 관련된 알 수 없는 에러가 발생했습니다.');
 
       return;
     }

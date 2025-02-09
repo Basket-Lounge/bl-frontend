@@ -80,7 +80,11 @@ export const displayGameTimeForGameBox = (date: string | Date) => {
   return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
-export const displayLiveGameTimeForGameBox = (liveStatusId: number, livePeriod: number, timeLeftString: string) => {
+export const displayLiveGameTimeForGameBox = (
+  liveStatusId: number, 
+  livePeriod: number, 
+  timeLeftString: string
+) => {
   if (liveStatusId <= 0 && liveStatusId > 3) {
     return '';
   }

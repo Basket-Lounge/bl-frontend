@@ -78,7 +78,7 @@ export default function UserCommentsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="user-comments">
       <UserCommentsFilter />
       <UserCommentsContainer comments={userCommentsQuery.data!.results} />
       <TeamPostsPagination 
@@ -90,6 +90,6 @@ export default function UserCommentsPage() {
           userCommentsQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   )
 }

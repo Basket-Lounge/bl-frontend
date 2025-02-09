@@ -92,7 +92,7 @@ const DMsPage: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="my-chats">
       <UserDMsFilter />
       <div className={divClassName}>
         <UserDMsContainer chats={userChatsQuery.data!.results} />
@@ -113,7 +113,7 @@ const DMsPage: React.FC = () => {
           }
         />
       )}
-    </div>
+    </section>
   );
 }
 

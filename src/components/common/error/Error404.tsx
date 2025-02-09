@@ -15,10 +15,14 @@ export default function Error404({ reset }: IError) {
   };
 
   return (
-    <div className="flex flex-col gap-[24px] items-center justify-center grow py-[48px]">
+    <div 
+      className="flex flex-col gap-[24px] items-center justify-center grow py-[48px]" 
+      aria-errormessage="404"
+      aria-invalid="true"
+    >
       <h1 className="text-gray-400 font-semibold text-[48px]">404</h1>
       <h1 className="text-gray-400 font-semibold text-[32px]">( ꩜ ᯅ ꩜;)⁭ ⁭</h1>
-      <p className="text-gray-400 font-semibold text-[24px]">원하시는 페이지를 찾을 수 없습니다.</p>
+      <p id="404" className="text-gray-400 font-semibold text-[24px]">원하시는 페이지를 찾을 수 없습니다.</p>
       <button 
         className="bg-color1 text-white py-[12px] px-[32px] rounded-full"
         onClick={handleClick}

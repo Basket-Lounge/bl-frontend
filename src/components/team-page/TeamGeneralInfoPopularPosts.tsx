@@ -1,14 +1,19 @@
-import { getPopularPosts } from "@/api/team.api";
+'use client'
+
+import { getTeamPopularPosts } from "@/api/team.api";
 import { useQuery } from "@tanstack/react-query";
 import TeamGeneralInfoPopularPostsItem from "./TeamGeneralInfoPopularPostsItem";
 import { useCallback } from "react";
+import CuteErrorMessage from "../common/CuteErrorMessage";
+import { useParams } from "next/navigation";
 
 
 const TeamGeneralInfoPopularPosts = () => {
+  const { teamId } = useParams<{ teamId: string }>();
   const popularPostsQuery = useQuery({
-    queryKey: ["team", "popular-posts"],
+    queryKey: ["team", teamId, "popular-posts"],
     queryFn: async () => {
-      return await getPopularPosts();
+      return await getTeamPopularPosts(teamId);
     }
   });
 
@@ -20,26 +25,38 @@ const TeamGeneralInfoPopularPosts = () => {
     return popularPostsQuery.data!.results.slice(0, 2);
   }, [popularPostsQuery.data]);
 
-  if (popularPostsQuery.isLoading || popularPostsQuery.isRefetching) {
+  if (popularPostsQuery.isLoading) {
     return (
-      <div className="bg-color3 rounded-md h-[160px] animate-pulse mt-[16px]" />
+      <div className="bg-color3 rounded-md h-[160px] animate-pulse mt-[16px]" aria-label="loading-popular-posts" />
     );
   }
 
-  if (popularPostsQuery.isError) {
+  if (popularPostsQuery.isError || popularPostsQuery.data === undefined) {
     return (
-      <div className="bg-color3 rounded-md h-[160px] flex items-center justify-center mt-[16px]">
-        <p className="text-white text-[16px] font-semibold p-[24px]">데이터를 불러오는 중 오류가 발생했습니다.</p>
+      <div 
+        className="h-[200px] flex flex-col items-center justify-center gap-[16px]"
+        aria-invalid="true"
+        aria-errormessage="error-loading-popular-posts"
+      >
+        <CuteErrorMessage error="인기 게시물을 불러오는 중 오류가 발생했습니다." id="error-loading-popular-posts" />
+      </div>
+    );
+  }
+
+  if (popularPostsQuery.data.results.length === 0) {
+    return (
+      <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]" aria-label="no-popular-posts">
+        <CuteErrorMessage error="인기 게시물이 없습니다." />
       </div>
     );
   }
 
   return (
-    <div className="mt-[16px] flex flex-col items-stretch gap-[16px]">
+    <ul className="mt-[16px] flex flex-col items-stretch gap-[16px]" aria-label="team-popular-posts">
       {getTwoPopularPosts().map((post) => (
         <TeamGeneralInfoPopularPostsItem key={post.id} post={post} />
       ))}
-    </div>
+    </ul>
   )
 }
 

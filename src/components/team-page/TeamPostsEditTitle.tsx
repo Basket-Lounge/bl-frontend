@@ -1,13 +1,12 @@
-import { TeamStoreContext } from "@/stores/teams.stores";
-import { useContext } from "react";
-import { useStore } from "zustand";
+import { useTeamStore } from "@/stores/teams.stores";
 
 
 const TeamPostsEditTitle = () => {
-  const store = useContext(TeamStoreContext);
-  const title = useStore(store, (state) => state.postsEditTitle);
-  const setTitle = useStore(store, (state) => state.updatePostsEditTitle);
-  const titleError = useStore(store, (state) => state.postsEditTitleError);
+  const {
+    postsEditTitle: title,
+    updatePostsEditTitle: setTitle,
+    postsEditTitleError: titleError
+  } = useTeamStore();
 
   return (
     <div className="flex flex-col items-stretch gap-[16px]">

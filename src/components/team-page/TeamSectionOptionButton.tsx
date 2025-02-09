@@ -21,6 +21,7 @@ export default function TeamSectionOptionButton({ name, designatedSection }: ITe
     <button
       className={pathname.includes(designatedSection) ? "font-extrabold text-[16px]" : "font-medium text-[16px]"}
       onClick={handleClick}
+      tabIndex={0}
     >
       {name}
     </button>

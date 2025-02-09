@@ -10,6 +10,7 @@ interface IImageButtonProps {
   onClick?: () => void;
   pending?: boolean;
   disabled?: boolean;
+  [key: string]: any;
 }
 
 const ImageButton = ({ 
@@ -18,7 +19,8 @@ const ImageButton = ({
   onClick,
   pending, 
   disabled, 
-  className 
+  className,
+  ...props
 }: IImageButtonProps) => {
   const spinnerSize = size === 'small' ? 
     'w-[14px] w-[14px]' : size === 'medium' ? 
@@ -31,6 +33,7 @@ const ImageButton = ({
         onClick={onClick}
         className={className}
         disabled={disabled}
+        {...props}
       >
         {pending ? (
           <Spinner 
@@ -51,6 +54,7 @@ const ImageButton = ({
       onClick={onClick}
       className={className}
       disabled={disabled}
+      {...props}
     >
       {pending ? (
         <Spinner 

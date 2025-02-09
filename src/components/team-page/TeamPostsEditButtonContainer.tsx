@@ -4,20 +4,20 @@ import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-q
 import TeamPostsEditButton from "./TeamPostsEditButton";
 import { editTeamPost, getTeamPostStatusForCreate } from "@/api/team.api";
 import { useParams, useRouter } from "next/navigation";
-import { useContext } from "react";
-import { TeamStoreContext } from "@/stores/teams.stores";
-import { useStore } from "zustand";
+import { useTeamStore } from "@/stores/teams.stores";
 import { TeamPostError } from "@/models/team.models";
 import { AxiosError } from "axios";
 import SpinnerLoading from "../common/SpinnerLoading";
+import { toast } from "react-toastify";
 
 
 const TeamPostsEditButtonContainer = () => {
-  const store = useContext(TeamStoreContext);
-  const updateTitle = useStore(store, (state) => state.updatePostsEditTitle);
-  const updateContent = useStore(store, (state) => state.updatePostsEditContent);
-  const updateTitleError = useStore(store, (state) => state.updatePostsEditTitleError);
-  const updateContentError = useStore(store, (state) => state.updatePostsEditContentError);
+  const {
+    updatePostsEditTitle: updateTitle,
+    updatePostsEditContent: updateContent,
+    updatePostsEditTitleError: updateTitleError,
+    updatePostsEditContentError: updateContentError
+  } = useTeamStore();
 
   const router = useRouter();
   const { teamId, postId } = useParams<{ teamId: string, postId: string }>();
@@ -32,7 +32,15 @@ const TeamPostsEditButtonContainer = () => {
 
   const mutation = useMutation({
     mutationFn: (post: { title: string, content: string, status: number }) => {
-      return editTeamPost(teamId, postId, post.title, post.content, post.status)
+      return editTeamPost(
+        teamId, 
+        postId, 
+        {
+          title: post.title, 
+          content: post.content, 
+          status: post.status
+        }
+      );
     },
     onSuccess: () => {
       updateTitle("");
@@ -56,12 +64,24 @@ const TeamPostsEditButtonContainer = () => {
       if (!axiosError.response) {
         updateTitleError("알 수 없는 오류가 발생했습니다.");
         updateContentError("알 수 없는 오류가 발생했습니다.");
+        toast.error("알 수 없는 오류가 발생했습니다.");
         return;
       }
 
       if (axiosError.response.status === 400) {
-        updateTitleError(axiosError.response?.data.title[0][0] || null);
-        updateContentError(axiosError.response?.data.content[0][0] || null);
+        if (axiosError.response.data.title[0][0]) {
+          updateTitleError(axiosError.response.data.title[0][0]);
+          toast.error(axiosError.response.data.title[0][0]);
+        } else {
+          updateTitleError(null);
+        }
+
+        if (axiosError.response.data.content[0][0]) {
+          updateContentError(axiosError.response.data.content[0][0] || null);
+          toast.error(axiosError.response.data.content[0][0]);
+        } else {
+          updateContentError(null);
+        }
       }
     }
   });

@@ -51,11 +51,8 @@ const PageSizeController = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ThemeProvider>
-      <div className='flex flex-col min-h-screen w-full'>
+      <div className='flex flex-col min-h-screen w-full scroll-smooth'>
         <NavBar />
-        {/* <div style={{ width: `${pageWidth}px`, margin: 'auto', flexGrow: 1}}>
-          { authenticationAttempted ? children : <div>Loading...</div> }
-        </div> */}
         <div className="grow mx-auto sm:w-[360px] md:w-[480px] lg:w-[768px] xl:w-[1024px] 2xl:w-[1200px]">
           { authenticationAttempted ? children : <SpinnerLoading /> }
           <ToastContainer 

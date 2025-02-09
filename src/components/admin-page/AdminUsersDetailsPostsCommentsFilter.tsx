@@ -13,8 +13,8 @@ const AdminUsersDetailsPostsCommentsFilter = () => {
   const setCommentArgumentsModified = useStore(store, (state) => state.setCommentArgumentsModified);
 
   return (
-    <div className="flex justify-between items-end">
-      <div className="flex gap-[24px]">
+    <section className="flex justify-between items-end" aria-label="admin-users-details-posts-comments-filter">
+      <div className="flex gap-[24px]" aria-label="admin-users-details-posts-comments-filter-buttons">
         <AdminFilterButton name="상태 필터">
           <AdminUsersDetailsPostsCommentsStatusFilterButtonOptionsContainer />
         </AdminFilterButton>
@@ -28,9 +28,10 @@ const AdminUsersDetailsPostsCommentsFilter = () => {
       <div className="flex gap-[24px] items-center">
         <SearchBox
           pressEnterCallback={() => setCommentArgumentsModified(true)}
+          aria-label="search-users-posts-comments"
         />
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { PostCommentReplyContext } from "./TeamPostsPostCommentsItem";
 import { useStore } from "zustand";
 import { useParams } from "next/navigation";
+import { toast } from "react-toastify";
+import ImageButton from "../common/ImageButton";
 
 
 interface ITeamPostsPostCommentsReplyInputProps {
@@ -48,15 +50,14 @@ const TeamPostsPostCommentsReplyInput = ({
     setReply(e.target.value);
   };
 
-  const handleSubmitClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
+  const handleSubmitClick = () => {
     const validationResults = TeamPostCommentValidation.safeParse({content: reply});
     if (!validationResults.success) {
       const errorFormat = validationResults.error.format();
       
       const contentError = errorFormat.content?._errors.toString();
       setReplyError(contentError || '에러가 발생했습니다.');
+      toast.error('댓글을 저장하는 중 오류가 발생했습니다.');
       return;
     }
 
@@ -66,6 +67,7 @@ const TeamPostsPostCommentsReplyInput = ({
   return (
     <div
       className="p-2.5 w-full bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+      aria-label="reply-input"
     >
       <textarea 
         rows={4}
@@ -73,21 +75,25 @@ const TeamPostsPostCommentsReplyInput = ({
         placeholder="댓글을 입력하세요."
         onChange={handleChange}
         value={reply}
+        aria-label="reply-textarea"
       >
       </textarea>
       { reply && (
       <div className="mt-[8px] flex items-center justify-between">
-        <div>
-        {replyMutation.isPending && <p className="mt-[16px] text-white">저장 중...</p>}
-        {replyError && <p className="mt-[16px] text-red-500">{replyError}</p>}
+        <div aria-invalid={replyError ? 'true' : 'false'} aria-errormessage="reply-submit-error">
+          {replyMutation.isPending && <p className="mt-[16px] text-white">저장 중...</p>}
+          {replyError && <p className="mt-[16px] text-red-500" id="reply-submit-error">{replyError}</p>}
         </div>
-        <button 
+        <ImageButton
           className="bg-color1 text-white py-2 px-4 rounded-full"
           onClick={handleSubmitClick}
           disabled={replyMutation.isPending}
+          pending={replyMutation.isPending}
+          aria-label="reply-submit-button"
+          aria-disabled={replyMutation.isPending}
         >
-          {replyMutation.isPending ? '저장 중...' : '저장'}
-        </button>
+          저장
+        </ImageButton>
       </div>
       )}
     </div>

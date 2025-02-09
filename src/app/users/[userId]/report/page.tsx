@@ -30,7 +30,7 @@ const ReportPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="create-report">
       <button 
         className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit"
         onClick={handleBackButtonClick}
@@ -45,7 +45,7 @@ const ReportPage = () => {
           <UserReportCreateSubmitButton />
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

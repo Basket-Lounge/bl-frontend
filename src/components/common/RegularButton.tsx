@@ -10,6 +10,7 @@ interface IRegularButtonProps {
   onClick?: () => void;
   pending?: boolean;
   disabled?: boolean;
+  [key: string]: unknown;
 }
 
 const RegularButton = ({ 
@@ -21,7 +22,8 @@ const RegularButton = ({
   disabled, 
   bgColor, 
   textColor, 
-  className 
+  className,
+  ...props
 }: IRegularButtonProps) => {
   const backgroundColor = bgColor || 'bg-color1';
   const selectedTextColor = textColor || 'text-white';
@@ -40,7 +42,9 @@ const RegularButton = ({
       <button 
         onClick={onClick}
         className={`${width} ${backgroundColor} ${selectedTextColor} ${textSize} rounded-full justify-center py-[12px] px-[24px] font-medium ${className}`}
+        aria-disabled={disabled}
         disabled={disabled}
+        {...props}
       >
         {pending ? (
           <Spinner 
@@ -60,7 +64,9 @@ const RegularButton = ({
     <button 
       onClick={onClick}
       className={width + " rounded-full justify-center py-[12px] px-[24px] font-medium " + textSize + " " + backgroundColor + " " + selectedTextColor}
+      aria-disabled={disabled}
       disabled={disabled}
+      {...props}
     >
       {pending ? (
         <Spinner 

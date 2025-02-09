@@ -15,10 +15,14 @@ export default function Error403({ reset }: IError) {
   };
 
   return (
-    <div className="flex flex-col gap-[24px] items-center justify-center grow py-[48px]">
+    <div 
+      className="flex flex-col gap-[24px] items-center justify-center grow py-[48px]" 
+      aria-errormessage="403"
+      aria-invalid="true"
+    >
       <h1 className="text-gray-400 font-semibold text-[48px]">403</h1>
       <h1 className="text-gray-400 font-semibold text-[32px]">‧₊˚ ☁️⋅♡🪐༘⋆</h1>
-      <p className="text-gray-400 font-semibold text-[24px]">접근 권한이 없습니다.</p>
+      <p id="403" className="text-gray-400 font-semibold text-[24px]">접근 권한이 없습니다.</p>
       <button 
         className="bg-color1 text-white py-[12px] px-[32px] rounded-full"
         onClick={handleClick}
