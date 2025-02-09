@@ -30,7 +30,7 @@ const CreateInquiryPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="create-inquiry">
       <button 
         className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit"
         onClick={handleBackButtonClick}
@@ -45,7 +45,7 @@ const CreateInquiryPage = () => {
           <UserInquiriesCreateSubmitButton />
         </div>
       )}
-    </div>
+    </section>
   )
 }
 

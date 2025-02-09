@@ -2,9 +2,12 @@ import { TeamPost } from "@/models/team.models";
 import { timeAgoKorean } from "@/utils/common.utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import TeamPostsContainerItemActionPopover from "./TeamPostsContainerItemActionPopover";
-import TeamPostsContainerItemActionPopoverContainer from "./TeamPostsContainerItemActionPopoverContainer";
 import { useAuthStore } from "@/stores/auth.stores";
+import { Suspense } from "react";
+import ButtonLoading from "../common/ButtonLoading";
+import DropdownButton from "../common/DropdownButton";
+import TeamPostsPostItemOptions from "./TeamPostsPostItemOptions";
+import TeamPostsPostItemReaderOptions from "./TeamPostsPostItemReaderOptions";
 
 
 interface ITeamPostsContainerItemProps {
@@ -15,7 +18,8 @@ const TeamPostsContainerItem = ({ post }: ITeamPostsContainerItemProps) => {
   const router = useRouter();
 
   const {
-    isAuthenticated
+    isAuthenticated,
+    userId
   } = useAuthStore();
 
   const userFavTeamSymbol = post.user_data.favorite_team?.symbol;
@@ -64,7 +68,7 @@ const TeamPostsContainerItem = ({ post }: ITeamPostsContainerItemProps) => {
             className="flex gap-[16px] items-center" 
             aria-label="user-info"
           >
-            {userFavTeamSymbol === null ? (
+            {userFavTeamSymbol == null ? (
               <div 
                 className="w-[32px] h-[32px] overflow-hidden rounded-full relative bg-white"
                 aria-label="user-info"
@@ -74,7 +78,7 @@ const TeamPostsContainerItem = ({ post }: ITeamPostsContainerItemProps) => {
                 onKeyDown={handleUserKeyDown}
               >
                 <div 
-                  className="w-full h-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-center font-semibold text-[16px] xl:text-[20px] text-color1"
+                  className="w-full h-auto absolute top-[50%] left-[50%] transform -translate-x-[50%] -translate-y-[50%] text-center font-semibold text-[16px] text-color1"
                   aria-label="user-username-initial"
                 >
                   {post.user_data.username.slice(0, 1) || 'U'}
@@ -111,14 +115,34 @@ const TeamPostsContainerItem = ({ post }: ITeamPostsContainerItemProps) => {
           </div>
           <p className="text-[14px] text-white/75" aria-label="uploaded-date">{uploadDateInKorean}</p>
         </div>
-        {isAuthenticated && (
-          <TeamPostsContainerItemActionPopover>
-            <TeamPostsContainerItemActionPopoverContainer 
-              teamId={post.team_data.id.toString()} 
-              postId={post.id}
-            />
-          </TeamPostsContainerItemActionPopover>
-        )}
+        <Suspense fallback={<ButtonLoading />}>
+          {isAuthenticated && (
+            <DropdownButton 
+              emptyStyle={true}
+              aria-label="post-actions"
+            >
+              <Image
+                src="/icons/settings_24dp_FFFFFF.svg"
+                alt="ellipsis"
+                width={24}
+                height={24}
+              />
+            {userId === post.user_data.id ? (
+              <TeamPostsPostItemOptions 
+                postId={post.id} 
+                teamId={post.team_data.id.toString()} 
+                moveBack={false}
+              />
+            ) : (
+              <TeamPostsPostItemReaderOptions 
+                postId={post.id} 
+                teamId={post.team_data.id.toString()} 
+                moveBack={false}
+              />
+            )}
+            </DropdownButton>
+          )}
+        </Suspense>
       </div>
       <h3 
         className="text-white text-[20px] font-semibold" 

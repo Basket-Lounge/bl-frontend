@@ -1,17 +1,19 @@
 'use client'
 
-import { getPopularPosts } from "@/api/team.api";
+import { getTeamPopularPosts } from "@/api/team.api";
 import { useQuery } from "@tanstack/react-query";
 import TeamGeneralInfoPopularPostsItem from "./TeamGeneralInfoPopularPostsItem";
 import { useCallback } from "react";
 import CuteErrorMessage from "../common/CuteErrorMessage";
+import { useParams } from "next/navigation";
 
 
 const TeamGeneralInfoPopularPosts = () => {
+  const { teamId } = useParams<{ teamId: string }>();
   const popularPostsQuery = useQuery({
-    queryKey: ["team", "popular-posts"],
+    queryKey: ["team", teamId, "popular-posts"],
     queryFn: async () => {
-      return await getPopularPosts();
+      return await getTeamPopularPosts(teamId);
     }
   });
 

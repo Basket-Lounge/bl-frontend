@@ -14,7 +14,7 @@ const EditPostPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="edit-post">
       <h1 className="text-[24px] font-bold">포스트 수정하기</h1>
       <button 
         className="text-white bg-color1 py-[12px] px-[32px] rounded-full w-fit"
@@ -25,7 +25,7 @@ const EditPostPage = () => {
       <TeamPostsEditTitle />
       <TeamPostsEditContent />
       <TeamPostsEditButtonContainer />
-    </div>
+    </section>
   )
 }
 

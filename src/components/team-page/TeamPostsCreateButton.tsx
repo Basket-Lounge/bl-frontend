@@ -4,6 +4,7 @@ import { extractStatusKoreanName } from "@/utils/team.utils";
 import { TeamPostValidation } from "@/utils/validation.utils";
 import { useContext } from "react";
 import { useStore } from "zustand";
+import { toast } from "react-toastify";
 
 
 interface ITeamPostsCreateButtonProps {
@@ -38,9 +39,11 @@ const TeamPostsCreateButton = ({
 
       const titleError = errorFormat.title?._errors.toString()
       setTitleError(titleError || null);
+      toast.error(titleError || '제목과 관련된 알 수 없는 에러가 발생했습니다.');
 
       const contentError = errorFormat.content?._errors.toString()
       setContentError(contentError || null);
+      toast.error(contentError || '내용과 관련된 알 수 없는 에러가 발생했습니다.');
 
       return;
     }

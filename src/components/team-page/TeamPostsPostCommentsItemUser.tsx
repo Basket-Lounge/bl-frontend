@@ -40,7 +40,7 @@ const TeamPostsPostCommentsItemUser = ({ userData }: TeamPostsPostCommentsItemUs
   }
 
   return (
-    <div className="flex items-center gap-[24px]">
+    <div className="flex items-center gap-[16px]">
       {userFavTeamSymbol == null ? (
         <div 
           className="w-[32px] h-[32px] overflow-hidden rounded-full relative bg-white"

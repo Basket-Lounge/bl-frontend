@@ -26,15 +26,15 @@ export default async function TeamSchedule({ params }: { params: { teamId: strin
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="flex flex-col gap-[24px] items-stretch">
-        <div>
+        <section aria-label="last-4-games">
           <h3 className="text-white text-[20px] font-bold">최근 4경기 결과</h3>
           <TeamGeneralInfoRecentGames />
-        </div>
-        <div>
+        </section>
+        <section aria-label="season-schedule">
           <h3 className="text-white text-[20px] font-bold">2024-25시즌 전체 스케쥴</h3>
           <TeamScheduleFilter />
           <TeamScheduleGamesContainer />
-        </div>
+        </section>
       </div>
     </HydrationBoundary>
   )

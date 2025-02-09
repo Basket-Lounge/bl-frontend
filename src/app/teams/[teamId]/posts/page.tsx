@@ -78,7 +78,7 @@ export default function TeamPosts() {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="team-posts">
       <TeamPostsFilter />
       <TeamPostsContainer posts={teamPostsQuery.data!.results} />
       <TeamPostsPagination 
@@ -90,6 +90,6 @@ export default function TeamPosts() {
           teamPostsQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   )
 }

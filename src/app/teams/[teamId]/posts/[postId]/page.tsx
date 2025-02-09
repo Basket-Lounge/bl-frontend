@@ -1,15 +1,18 @@
 'use client'
 
 import { getTeamPost } from "@/api/team.api";
+import ButtonLoading from "@/components/common/ButtonLoading";
 import DropdownButton from "@/components/common/DropdownButton";
 import TeamPostsPostCommentInput from "@/components/team-page/TeamPostsPostCommentInput";
 import TeamPostsPostCommentsContainer from "@/components/team-page/TeamPostsPostCommentsContainer";
 import TeamPostsPostOptions from "@/components/team-page/TeamPostsPostItemOptions";
+import TeamPostsPostItemReaderOptions from "@/components/team-page/TeamPostsPostItemReaderOptions";
 import TeamPostsPostLikeCommentButtonContainer from "@/components/team-page/TeamPostsPostLikeCommentButtonContainer";
 import { useAuthStore } from "@/stores/auth.stores";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 
 const PostPage = () => {
@@ -58,21 +61,35 @@ const PostPage = () => {
           >
             {postQuery.data.title}
           </h1>
-          {userId === postQuery.data.user_data.id && (
-            <DropdownButton 
-              text={
+          <Suspense fallback={<ButtonLoading />}>
+            {userId === postQuery.data.user_data.id ? (
+              <DropdownButton 
+                emptyStyle={true}
+                aria-label="post-actions"
+              >
                 <Image
                   src="/icons/settings_24dp_FFFFFF.svg"
                   alt="ellipsis"
                   width={24}
                   height={24}
                 />
-              }
-              aria-label="post-actions"
-            >
-              <TeamPostsPostOptions postId={postId} teamId={teamId} />
-            </DropdownButton>
-          )}
+                <TeamPostsPostOptions postId={postId} teamId={teamId} moveBack={true} />
+              </DropdownButton>
+            ) : (
+              <DropdownButton
+                emptyStyle={true}
+                aria-label="post-actions"
+              >
+                <Image
+                  src="/icons/settings_24dp_FFFFFF.svg"
+                  alt="ellipsis"
+                  width={24}
+                  height={24}
+                />
+                <TeamPostsPostItemReaderOptions postId={postId} teamId={teamId} moveBack={true} />
+              </DropdownButton>
+            )}
+          </Suspense>
         </div>
         <div className="flex items-center gap-[16px]">
           {userFavTeamSymbol == null ? (

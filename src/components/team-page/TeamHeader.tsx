@@ -14,7 +14,8 @@ export default function TeamHeader() {
     queryKey: ["team", teamId],
     queryFn: async () => {
       return await getTeamGeneralInfo(teamId);
-    }
+    },
+    staleTime: 3600000,
   });
 
   const EnglishName = extractTeamEnglishName(headerQuery.data);
@@ -24,7 +25,7 @@ export default function TeamHeader() {
   const losses = headerQuery.data.stats?.LOSSES || 0;
 
   return (
-    <div className="flex gap-[24px] lg:gap-[48px] items-start">
+    <section className="flex gap-[24px] lg:gap-[48px] items-start" aria-label="team-header">
       {/* Team Logo */}
       <div className="w-[128px] h-[128px] lg:w-[156px] lg:h-[156px] rounded-full relative">
         <Image
@@ -35,23 +36,22 @@ export default function TeamHeader() {
           height={20}
         />
       </div>
-      {/* Team Name */}
       <div className="flex flex-col gap-[16px] grow">
-        <div className="flex flex-col items-start gap-[8px]">
-          <h3 className="text-white text-[20px] lg:text-[24px] font-medium">The Home of</h3>
-          <h1 className="text-white text-[24px] lg:text-[32px] font-bold">{EnglishName}</h1>
-          <h3 className="text-white text-[20px] lg:text-[24px] font-medium">{KoreanName}</h3>
+        <div className="flex flex-col items-start gap-[8px]" aria-label="team-name">
+          {/* <h3 className="text-white text-[20px] lg:text-[24px] font-medium">The Home of</h3> */}
+          <h1 className="text-white text-[24px] lg:text-[32px] font-semibold" aria-label="team-name-english">{EnglishName}</h1>
+          <h3 className="text-white text-[20px] lg:text-[24px] font-medium" aria-label="team-name-korean">{KoreanName}</h3>
         </div>
-        <div className="flex items-center gap-[16px] lg:gap-[24px] flex-wrap">
-          <div className="px-[32px] py-[4px] rounded-full bg-white">
+        <div className="flex items-center gap-[16px] lg:gap-[24px] flex-wrap" aria-label="team-stats">
+          <div className="px-[32px] py-[4px] rounded-full bg-white" aria-label="team-rank">
             <p className="text-[14px] text-color1 font-bold">지구 {leagueRank}위</p>
           </div>
-          <div className="px-[32px] py-[4px] rounded-full bg-white">
+          <div className="px-[32px] py-[4px] rounded-full bg-white" aria-label="team-record">
             <p className="text-[14px] text-color1 font-bold">{wins} - {losses}</p>
           </div>
         </div>
       </div>
       <TeamHeaderLikeButton liked={headerQuery.data.liked || false} likesCount={headerQuery.data.likes_count} />
-    </div>
+    </section>
   )
 }

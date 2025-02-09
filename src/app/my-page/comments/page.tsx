@@ -83,7 +83,7 @@ const CommentsPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch">
+    <section className="flex flex-col gap-[24px] items-stretch" aria-label="user-comments">
       <UserCommentsFilter />
       <UserCommentsContainer comments={userCommentsQuery.data!.results} />
       <TeamPostsPagination 
@@ -95,7 +95,7 @@ const CommentsPage = () => {
           userCommentsQuery.data!.next ? () => handlePageChange(page + 1) : undefined
         }
       />
-    </div>
+    </section>
   )
 }
 

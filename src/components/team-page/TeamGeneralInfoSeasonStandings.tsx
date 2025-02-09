@@ -49,7 +49,7 @@ const TeamGeneralInfoSeasonStandings = () => {
   }
 
   return (
-    <div className="rounded-md bg-color3 overflow-hidden" aria-label="team-season-standings">
+    <div className="rounded-md border border-white/25 overflow-hidden" aria-label="team-season-standings">
       <div className="px-[24px] py-[24px]">
         <p className="text-[16px] font-bold" aria-label="conference-name">{
           getTeamConferenceInKorean(standingsQuery.data!, parseInt(teamId as string))

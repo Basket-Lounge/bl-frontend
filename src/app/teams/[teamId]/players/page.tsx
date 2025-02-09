@@ -25,14 +25,14 @@ const TeamPlayersContainer = () => {
   const filteredPlayers = filterPlayersByPosition(teamPlayersQuery.data, playersFilterValue);
 
   return (
-    <div className="flex flex-col items-stretch gap-[24px]">
+    <section className="flex flex-col items-stretch gap-[24px]" aria-label="team-players">
       <TeamPlayersFilter />
       <div className="w-full gap-[32px] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4">
         {filteredPlayers.map(player => (
           <TeamPlayersPlayer key={player.id} player={player} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 

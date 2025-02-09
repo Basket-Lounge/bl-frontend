@@ -102,24 +102,25 @@ const TeamPostsPostCommentsContainer = () => {
       <TeamPostsPostCommentsFilter 
         count={postCommentsQuery.data?.count || 0} 
       />
-      {postCommentsQuery.data?.results.length === 0 && (
+      {postCommentsQuery.data?.results.length === 0 ? (
         <div className="h-[200px] flex flex-col items-center justify-center gap-[16px]">
           <CuteErrorMessage
             error="댓글이 없습니다."
           />
         </div>
+      ) : (
+        <ul 
+          className="flex flex-col items-stretch divide-y-[1px] divide-white/25 border-t-[1px] border-b-[1px] border-white/25"
+          aria-label="post-comments-list"
+        >
+          {postCommentsQuery.data?.results.map((comment) => (
+            <TeamPostsPostCommentsItem
+              key={comment.id}
+              comment={comment}
+            />
+          ))}
+        </ul>
       )}
-      <ul 
-        className="flex flex-col items-stretch divide-y-[1px] divide-white/25 border-t-[1px] border-b-[1px] border-white/25"
-        aria-label="post-comments-list"
-      >
-        {postCommentsQuery.data?.results.map((comment) => (
-          <TeamPostsPostCommentsItem
-            key={comment.id}
-            comment={comment}
-          />
-        ))}
-      </ul>
       <Pagination
         currentPageNumber={postCommentsQuery.data.current_page || 1}
         lastPageNumber={postCommentsQuery.data.last_page}

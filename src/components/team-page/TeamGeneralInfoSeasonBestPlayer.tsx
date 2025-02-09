@@ -4,12 +4,13 @@ import { getPlayersFromTeam } from "@/api/player.api";
 import { Player } from "@/models/player.models";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 const TeamGeneralInfoSeasonBestPlayer = () => {
+  const router = useRouter();
   const { teamId } = useParams();
   const [bestPlayer, setBestPlayer] = useState<Player | null>(null);
 
@@ -28,6 +29,10 @@ const TeamGeneralInfoSeasonBestPlayer = () => {
     });
 
     return bestPlayer;
+  }
+
+  const handlePlayerNameClick = () => {
+    router.push(`players/${bestPlayer!.id}`);
   }
 
   useEffect(() => {
@@ -55,7 +60,10 @@ const TeamGeneralInfoSeasonBestPlayer = () => {
   }
 
   return (
-    <div className="rounded-md bg-color3 flex flex-col items-stretch gap-[24px] p-[24px]" aria-label="team-season-best-player">
+    <div 
+      className="rounded-md flex flex-col items-stretch gap-[24px] p-[24px] border border-white/25"
+      aria-label="team-season-best-player"
+    >
       <p className="text-[16px] font-bold">이번 시즌 최고의 선수</p>
       <div className="flex items-center gap-[32px]">
         <div className="w-[96px] h-[96px] overflow-hidden bg-white rounded-full relative">
@@ -71,6 +79,9 @@ const TeamGeneralInfoSeasonBestPlayer = () => {
           <h3 
             className="text-white text-[16px] lg:text-[20px] font-semibold"
             aria-label="player-name"
+            role="button"
+            tabIndex={0}
+            onClick={handlePlayerNameClick}
           >
             {bestPlayer!.first_name} {bestPlayer!.last_name}
           </h3>

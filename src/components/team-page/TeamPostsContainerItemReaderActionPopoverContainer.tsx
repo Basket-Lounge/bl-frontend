@@ -4,13 +4,13 @@ import { hideOrUnhideTeamPost } from "@/api/team.api";
 import { useSearchParams } from "next/navigation";
 
 
-interface ITeamPostsContainerItemActionPopoverContainerProps {
+interface ITeamPostsContainerItemReaderActionPopoverContainerProps {
   teamId: string;
   postId: string;
 }
 
-const TeamPostsContainerItemActionPopoverContainer = (
-  {teamId, postId}: ITeamPostsContainerItemActionPopoverContainerProps
+const TeamPostsContainerItemReaderActionPopoverContainer = (
+  {teamId, postId}: ITeamPostsContainerItemReaderActionPopoverContainerProps
 ) => {
   const searchParams = useSearchParams();
   const sort = searchParams.get('sort') || '';
@@ -53,7 +53,7 @@ const TeamPostsContainerItemActionPopoverContainer = (
   }
 
   return (
-    <div className="flex flex-col items-start bg-white rounded-md text-color1">
+    <div className="flex flex-col items-start bg-black rounded-md text-white">
       <TextButton 
         text="숨기기"
         size="small"
@@ -67,4 +67,4 @@ const TeamPostsContainerItemActionPopoverContainer = (
   );
 }
 
-export default TeamPostsContainerItemActionPopoverContainer;
+export default TeamPostsContainerItemReaderActionPopoverContainer;

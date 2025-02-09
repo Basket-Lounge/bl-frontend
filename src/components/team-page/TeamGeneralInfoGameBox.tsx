@@ -28,7 +28,7 @@ const TeamGeneralInfoGameBox : React.FC<ITeamaGeneralInfoGameBoxProps> = ({
   const gameTime = gameDateTime[1] + " " + gameDateTime[2];
 
   return (
-    <div className="flex flex-col gap-[24px] items-stretch p-[24px] bg-color3 rounded-md">
+    <div className="flex flex-col gap-[24px] items-stretch p-[24px] rounded-md border border-white/25">
       <TeamGeneralInfoGameBoxTeam 
         team={game.visitor_team} 
         lineScore={awayTeamLineScore} 

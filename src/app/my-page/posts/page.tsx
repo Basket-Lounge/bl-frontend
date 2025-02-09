@@ -82,7 +82,7 @@ const PostsPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-[16px] items-stretch">
+    <section className="flex flex-col gap-[16px] items-stretch" aria-label="user-posts">
       <UserPostsFilter />
       <UserPostsContainer posts={teamPostsQuery.data!.results} />
       <Pagination
@@ -98,7 +98,7 @@ const PostsPage = () => {
         lastPageCallback={() => handlePageChange(teamPostsQuery.data!.last_page)}
         disabled={teamPostsQuery.isLoading || teamPostsQuery.isRefetching}
       />
-    </div>
+    </section>
   );
 }
 

@@ -36,7 +36,7 @@ const TeamGeneralInfoFranchiseInfo = () => {
 
   return (
     <div 
-      className="mt-[16px] p-[24px] flex flex-col gap-[24px] items-stretch rounded-md bg-color3"
+      className="mt-[16px] p-[24px] flex flex-col gap-[24px] items-stretch rounded-md border border-white/25"
       aria-label="team-franchise-info"
     >
       <div className="flex justify-between items-center text-[16px]" aria-label="team-franchise-info-start-year">

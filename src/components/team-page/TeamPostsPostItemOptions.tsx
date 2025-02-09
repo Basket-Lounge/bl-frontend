@@ -1,18 +1,28 @@
-import { deleteTeamPost } from "@/api/team.api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteTeamPost, editTeamPost, getTeamPostStatus } from "@/api/team.api";
+import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import ImageButton from "../common/ImageButton";
 
 
-interface ITeamPostsPostOptionsProps {
+interface ITeamPostsPostItemOptionsProps {
   postId: string;
   teamId: string;
+  moveBack?: boolean;
 }
 
-const TeamPostsPostOptions = (
-  { postId, teamId }: ITeamPostsPostOptionsProps
+const TeamPostsPostItemOptions = (
+  { postId, teamId, moveBack }: ITeamPostsPostItemOptionsProps
 ) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const teamStatusesQuery = useSuspenseQuery({
+    queryKey: ['team', teamId, 'statuses'],
+    queryFn: async () => {
+      return await getTeamPostStatus();
+    },
+    staleTime: 86400000,
+  });
 
   const deletePostMutation = useMutation({
     mutationFn: () => {
@@ -29,36 +39,82 @@ const TeamPostsPostOptions = (
         queryKey: ['my-page', "posts", "pagination"],
       })
 
-      router.back();
+      if (moveBack)
+        router.back();
     }
   });
 
-  const handleDeletePostClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const hidePostMutation = useMutation({
+    mutationFn: () => {
+      return editTeamPost(
+        teamId, 
+        postId, 
+        { 
+          status: teamStatusesQuery.data?.find(status => status.name === 'hidden')?.id || 0
+        }
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["team", teamId, "posts", postId, "post"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["team", teamId, "posts", "pagination"]
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['my-page', "posts", "pagination"],
+      })
+      
+      if (moveBack)
+        router.back();
+    }
+  });
+
+  const handleDeletePostClick = () => {
     deletePostMutation.mutate();
   }
 
-  const handleEditPostClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleHidePostClick = () => {
+    hidePostMutation.mutate();
+  }
+
+  const handleEditPostClick = () => {
     router.push(`/teams/${teamId}/posts/${postId}/edit`);
   }
 
   return (
-    <div className="bg-color1 text-white rounded-md flex flex-col absolute right-0 top-[100%] z-10 w-max">
-      <button 
-        className="text-white font-medium p-[16px] hover:bg-color4"
+    <div className="bg-color1 text-white rounded-md flex flex-col absolute right-0 top-[100%] z-10 w-max text-center">
+      <ImageButton
+        className="text-white font-medium p-[16px] hover:bg-color4 text-[14px]"
         onClick={handleDeletePostClick}
+        pending={deletePostMutation.isPending}
+        disabled={deletePostMutation.isPending || hidePostMutation.isPending}
+        aria-label="delete-post-button"
+        aria-disabled={deletePostMutation.isPending || hidePostMutation.isPending}
       >
         삭제하기
-      </button>
-      <button 
-        className="text-white font-medium p-[16px] hover:bg-color4"
+      </ImageButton>
+      <ImageButton
+        className="text-white font-medium p-[16px] hover:bg-color4 text-[14px]"
+        onClick={handleHidePostClick}
+        pending={hidePostMutation.isPending}
+        disabled={hidePostMutation.isPending || deletePostMutation.isPending}
+        aria-label="hide-post-button"
+        aria-disabled={hidePostMutation.isPending || deletePostMutation.isPending}
+      >
+        숨기기
+      </ImageButton>
+      <ImageButton
+        className="text-white font-medium p-[16px] hover:bg-color4 text-[14px]"
         onClick={handleEditPostClick}
+        aria-label="edit-post-button"
+        disabled={deletePostMutation.isPending}
+        aria-disabled={deletePostMutation.isPending}
       >
         수정하기
-      </button>
+      </ImageButton>
     </div>
   );
 }
 
-export default TeamPostsPostOptions;
+export default TeamPostsPostItemOptions;
