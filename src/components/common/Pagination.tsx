@@ -9,6 +9,7 @@ interface IPaginationProps {
   nextCallback?: () => void;
   lastPageCallback?: () => void;
   disabled?: boolean;
+  [key: string]: any;
 }
 
 const Pagination = ({
@@ -18,7 +19,8 @@ const Pagination = ({
   previousCallback,
   nextCallback,
   lastPageCallback,
-  disabled
+  disabled,
+  ...props
 }: IPaginationProps) => {
 
   const handlePreviousClick = () => {
@@ -38,7 +40,10 @@ const Pagination = ({
   }
 
   return (
-    <div className="flex w-fit mx-auto items-center gap-[24px] py-[12px] border border-white rounded-full px-[24px] my-[16px]">
+    <div 
+      className="flex w-fit mx-auto items-center gap-[24px] py-[12px] border border-white rounded-full px-[24px] my-[16px]"
+      {...props}
+    >
       {(firstPageCallback && currentPageNumber !== 1) && (
         <ImageButton
           onClick={firstPageCallback}

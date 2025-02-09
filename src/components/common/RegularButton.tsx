@@ -10,7 +10,7 @@ interface IRegularButtonProps {
   onClick?: () => void;
   pending?: boolean;
   disabled?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const RegularButton = ({ 

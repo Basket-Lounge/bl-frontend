@@ -2,8 +2,8 @@ import { Popover, PopoverContent, PopoverHandler } from "@material-tailwind/reac
 
 
 interface IDropdownButtonProps {
-  text: string | React.ReactNode;
   children?: React.ReactNode | string;
+  emptyStyle?: boolean;
   width?: string;
   size?: 'small' | 'medium' | 'large' | 'full';
   bgColor?: 'bg-color1' | 'bg-color2' | 'bg-color3' | 'bg-white';
@@ -15,7 +15,7 @@ interface IDropdownButtonProps {
 }
 
 const DropdownButton : React.FC<IDropdownButtonProps> = (
-  {text, children, size='medium', bgColor, textColor, className, disabled, ...props}
+  {children, emptyStyle, size='medium', bgColor, textColor, className="", disabled, ...props}
 ) => {
   const backgroundColor = bgColor || 'bg-color1';
   const selectedTextColor = textColor || 'text-white';
@@ -31,17 +31,17 @@ const DropdownButton : React.FC<IDropdownButtonProps> = (
         placement="bottom"
       >
         <PopoverHandler>
-          {(text && typeof text === 'string') ? (
+          {(Array.isArray(children)) && (children.length > 0) && (emptyStyle == false) ? (
             <button
               className={`${backgroundColor} ${selectedTextColor} ${textSize} rounded-full justify-center py-[12px] px-[24px] font-medium ${className}`}
               disabled={disabled}
               {...props}
             >
-              {text}
+              {children[0]}
             </button>
           ) : (
-            <button>
-              {text}
+            <button className={className} >
+              {(Array.isArray(children)) && (children.length > 0) && children[0]}
             </button>
           )}
         </PopoverHandler>
@@ -51,7 +51,9 @@ const DropdownButton : React.FC<IDropdownButtonProps> = (
           onPointerLeaveCapture={undefined}
           className="p-0 border-none"
         >
-          {children}
+          {(Array.isArray(children) && (children.length > 1) && children) && (
+            children[1]
+          )}
         </PopoverContent>
       </Popover>
     </div>
