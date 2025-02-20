@@ -6,13 +6,13 @@ import {
   IUser, 
   MyPageComment, 
   UserChat, 
-  UserInquiry,
   UserInquiryWithUserData,
   UserInquiryWithUserDataFavoriteTeam
 } from "@/models/user.models";
 import { httpClient } from "./http";
 import { Team } from "@/models/team.models";
 import { ICursorPaginationResult, IPaginationResult } from "@/models/common.models";
+import { IChatBlacklist } from "@/models/admin.models";
 
 
 export const getAllRoles = async () => {
@@ -417,5 +417,77 @@ export const updatePostComment = async (
 ) => {
   const { status, content } = data;
   const response = await httpClient.patch(`/api/admin/users/${userId}/comments/${commentId}/`, { status, content });
+  return response.data;
+}
+
+export const getGameChatBanList = async (gameId: string) => {
+  const response = await httpClient.get<IChatBlacklist>(`/api/admin/games/${gameId}/chat/blacklist/`);
+  return response.data as IChatBlacklist;
+}
+
+export const banUserFromGameChat = async (
+  gameId: string,
+  userId: number,
+  reason?: string
+) => {
+  const response = await httpClient.patch(`/api/admin/games/${gameId}/chat/bans/${userId}/`, { reason });
+  return response.data;
+}
+
+export const muteUserInGameChat = async (
+  gameId: string,
+  userId: number,
+  muteUntil?: number,
+  reason?: string
+) => {
+  const data : { [key: string]: string | number | null } = {};
+  if (muteUntil) {
+    data['mute_until'] = muteUntil;
+  }
+
+  if (reason) {
+    data['reason'] = reason;
+  }
+
+  const response = await httpClient.patch(
+    `/api/admin/games/${gameId}/chat/mutes/${userId}/`, 
+    data
+  );
+
+  return response.data;
+}
+
+export const setMuteModeGameChat = async (
+  gameId: string,
+  muteMode: boolean,
+  muteUntil?: number,
+  reason?: string
+) => {
+  const data : { [key: string]: string | boolean | number | null } = { 
+    mute_mode: muteMode, 
+  };
+
+  if (muteUntil) {
+    data['mute_until'] = muteUntil;
+  }
+
+  if (reason) {
+    data['reason'] = reason;
+  }
+
+  const response = await httpClient.patch(`/api/admin/games/${gameId}/chat/mutes/`, data);
+  return response.data;
+}
+
+export const setSlowModeGameChat = async (
+  gameId: string,
+  slowMode: boolean,
+  slowModeTime: number
+) => {
+  const response = await httpClient.patch(
+    `/api/admin/games/${gameId}/chat/slowmode/`, 
+    { slow_mode: slowMode, slow_mode_time: slowModeTime }
+  );
+
   return response.data;
 }
