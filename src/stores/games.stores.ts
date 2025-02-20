@@ -1,3 +1,4 @@
+import { TDialogSize } from "@/models/common.models";
 import { createContext } from "react";
 import { createStore } from "zustand";
 
@@ -34,6 +35,10 @@ interface IGameStore {
   setBoxScoreTeamId: (teamName: string | null) => void;
   subscriptionToken: string | null;
   setSubscriptionToken: (token: string | null) => void;
+  managementBoxOpen: boolean;
+  setManagementBoxOpen: (open: boolean) => void;
+  muteUserModalOpen: null | TDialogSize;
+  setMuteUserModalOpen: (open: null | TDialogSize) => void;
 }
 
 export const GameStore = createStore<IGameStore>((set) => ({
@@ -41,6 +46,10 @@ export const GameStore = createStore<IGameStore>((set) => ({
   setBoxScoreTeamId: (teamName) => set({ boxScoreTeamId: teamName }),
   subscriptionToken: null,
   setSubscriptionToken: (token) => set({ subscriptionToken: token }),
+  managementBoxOpen: false,
+  setManagementBoxOpen: (open) => set({ managementBoxOpen: open }),
+  muteUserModalOpen: null,
+  setMuteUserModalOpen: (open) => set({ muteUserModalOpen: open })
 }));
 
 export const GameStoreContext = createContext(GameStore);

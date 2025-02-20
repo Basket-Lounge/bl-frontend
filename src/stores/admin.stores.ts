@@ -1,4 +1,4 @@
-import { Team, TTeamPostsFilter } from "@/models/team.models";
+import { Team } from "@/models/team.models";
 import { createContext } from "react";
 import { createStore } from "zustand";
 

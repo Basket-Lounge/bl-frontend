@@ -48,6 +48,7 @@ export const convertESTtoLocalTime = (date: string | Date, timeInEST: string) =>
     date = new Date(date);
 
   const [time, modifier] = timeInEST.split(' '); // Split the time and "pm"
+  // eslint-disable-next-line prefer-const
   let [hours, minutes] = time.split(':').map(Number); // Split hours and minutes
 
   // Convert to 24-hour format based on AM/PM
@@ -118,13 +119,15 @@ export const filterGamesByMonth = (games: Game[], month: string) => {
 }
 
 export const filterTodayGames = (games: Game[]) => {
-  const today = new Date();
+  const today = new Date(Date.now());
   const filteredGames : Game[] = [];
 
   for (const game of games) {
     const gameDate = convertUTCtoLocalTime(game.game_date_est);
     if (gameDate.getDate() == today.getDate() && gameDate.getMonth() == today.getMonth()) {
       filteredGames.push(game);
+    } else {
+      console.log('Game date:', gameDate);
     }
   }
 
@@ -138,6 +141,7 @@ export const sortGamesByDate = (games: Game[]) => {
     const gameDate = convertUTCtoLocalTime(game.game_date_est);
     const dateKey = `${gameDate.getFullYear()}년 ${gameDate.getMonth() + 1}월 ${gameDate.getDate()}일`;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const gameList = gamesByDate.find(([date, _]) => date === dateKey);
 
     if (gameList) {
