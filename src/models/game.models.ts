@@ -180,7 +180,8 @@ export interface IGameChatMessage {
     user: {
         id: number,
         username: string,
+        favorite_team: string | null,
     },
     game: number,
-    created_at: number,
+    created_at: string;
 }

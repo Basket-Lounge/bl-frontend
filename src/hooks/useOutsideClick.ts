@@ -1,12 +1,6 @@
 import { useEffect } from 'react';
 
 
-interface IUseOutsideClick {
-  ref: React.RefObject<HTMLElement>;
-  isVisible: boolean;
-  onClose: () => void;
-}
-
 const useOutsideClick = (
   ref: React.RefObject<HTMLElement>,
   isVisible: boolean,
