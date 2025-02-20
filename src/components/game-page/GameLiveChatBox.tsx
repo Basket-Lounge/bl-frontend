@@ -10,6 +10,10 @@ import { GameStoreContext } from "@/stores/games.stores";
 import SpinnerLoading from "../common/SpinnerLoading";
 import RegularButton from "../common/RegularButton";
 import { toast } from "react-toastify";
+import ImageButton from "../common/ImageButton";
+import Image from "next/image";
+import GameLiveChatBoxAdminManagementBox from "./GameLiveChatBoxAdminManagementBox";
+import { useAuthStore } from "@/stores/auth.stores";
 
 
 const GameLiveChatBox = () => {
@@ -19,11 +23,17 @@ const GameLiveChatBox = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [connectionAttempt, setConnectionAttempt] = useState<number>(0);
-
   const [messages, setMessages] = useState<IGameChatMessage[]>([]);
+
+  const {
+    isAuthenticated,
+    userRole
+  } = useAuthStore();
 
   const store = useContext(GameStoreContext);
   const setSubscriptionToken = useStore(store, (state) => state.setSubscriptionToken);
+  const managementBoxOpen = useStore(store, (state) => state.managementBoxOpen);
+  const setManagementBoxOpen = useStore(store, (state) => state.setManagementBoxOpen);
 
   const handleRetryClick = () => {
     setConnectionAttempt(attempt => attempt + 1);
@@ -39,12 +49,12 @@ const GameLiveChatBox = () => {
         }
       }
     );
-    client.on('connecting', (ctx) => {
+    client.on('connecting', () => {
       setIsLoading(true);
       setConnected(false);
       setError(null);
     });
-    client.on("error", (ctx) => {
+    client.on("error", () => {
       setIsLoading(false);
       setConnected(false);
       setError("채팅 서버 연결 중 오류가 발생했습니다.");
@@ -58,12 +68,12 @@ const GameLiveChatBox = () => {
         return data.token;
       }
     });
-    subscription.on("subscribed", (ctx) => {
+    subscription.on("subscribed", () => {
       setIsLoading(false);
       setConnected(true);
       setError(null);
     });
-    subscription.on("error", (ctx) => {
+    subscription.on("error", () => {
       setIsLoading(false);
       setConnected(false);
       setError("해당 채널에 접속할 수 없습니다.");
@@ -80,7 +90,7 @@ const GameLiveChatBox = () => {
       subscription.unsubscribe();
       client.disconnect();
     }
-  }, [connectionAttempt]);
+  }, [connectionAttempt, gameId]);
 
   if (isLoading) {
     return <SpinnerLoading />
@@ -103,10 +113,25 @@ const GameLiveChatBox = () => {
 
   return (
     <div className="flex flex-col gap-[16px] items-stretch h-screen">
-      <h3 className="text-white text-[20px] font-bold w-full">실시간 채팅방 🗣️</h3>
-      <div className="rounded-md bg-color3 p-[24px] flex flex-col items-stretch gap-[24px] grow overflow-y-auto">
+      <div className="flex items-center justify-between">
+        <h3 className="text-white text-[20px] font-bold w-full">실시간 채팅방 🗣️</h3>
+        {(isAuthenticated && typeof userRole == "number" && userRole <= 3) && (
+          <ImageButton
+            onClick={() => setManagementBoxOpen(!managementBoxOpen)}
+          >
+            <Image
+              src="/icons/settings_24dp_FFFFFF.svg"
+              alt="close-icon"
+              width={24}
+              height={24}
+            />
+          </ImageButton>
+        )}
+      </div>
+      {managementBoxOpen && <GameLiveChatBoxAdminManagementBox />}
+      <div className="rounded-md border border-white/25 p-[24px] flex flex-col items-stretch gap-[24px] grow overflow-y-auto">
         <div className="grow overflow-auto flex flex-col items-stretch">
-          <div className="flex flex-col items-stretch gap-[16px] justify-end w-full">
+          <div className="flex flex-col items-stretch gap-[24px] justify-end w-full">
             {messages.map((message, index) => (
               <GameLiveChatBoxMessage key={index} message={message} />
             ))}
