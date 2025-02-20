@@ -1,10 +1,11 @@
 import { Game } from "@/models/game.models";
-import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { pageSizeControllerStoreContext } from "../common/PageSizeController";
 import { useStore } from "zustand";
 import { Carousel } from "@material-tailwind/react";
 import TodayGame from "./TodayGame";
 import { filterTodayGames } from "@/utils/game.utils";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 interface ITodayGamesListControllerProps {
@@ -14,13 +15,10 @@ interface ITodayGamesListControllerProps {
 export default function TodayGamesListController(
   { games }: ITodayGamesListControllerProps
 ) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const store = useContext(pageSizeControllerStoreContext);
+  const { pageWidth } = useStore(store);
 
-  useEffect(() => {
-    if (activeIndex >= games.length) {
-      setActiveIndex(0);
-    }
-  }, [activeIndex, games.length]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleNavigation = (
     { setActiveIndex, activeIndex, length }: { setActiveIndex: Dispatch<SetStateAction<number>>, activeIndex: number, length: number }
@@ -46,9 +44,6 @@ export default function TodayGamesListController(
     );
   };
 
-  const store = useContext(pageSizeControllerStoreContext);
-  const { pageWidth } = useStore(store);
-
   // divide the games into lists of 3
   const divideGames = useCallback((games: Game[]) => {
     const gamesLists = [];
@@ -65,11 +60,26 @@ export default function TodayGamesListController(
         gamesLists.push(games.slice(i, i + 3));
       }
     }
-
+    
     return gamesLists;
   }, [pageWidth]);
 
   const className = pageWidth < 768 ? "grid grid-cols-1" : pageWidth < 1024 ? "grid grid-cols-2" : "grid grid-cols-3";
+  const todayGames = useMemo(() => divideGames(filterTodayGames(games)), [games, divideGames]);
+
+  useEffect(() => {
+    if (activeIndex >= games.length) {
+      setActiveIndex(0);
+    }
+  }, [activeIndex, games.length]);
+  
+  if (todayGames.length === 0) {
+    return (
+      <div className="h-[200px] flex flex-col gap-[16px] items-center justify-center">
+        <CuteErrorMessage error="오늘의 경기가 없습니다." />
+      </div>
+    )
+  }
 
   return (
     <Carousel 
@@ -80,7 +90,7 @@ export default function TodayGamesListController(
       navigation={handleNavigation}
       aria-label="today-games-carousel"
     >
-      {divideGames(filterTodayGames(games)).map((gamesList, index) => (
+      {todayGames.map((gamesList, index) => (
         <div key={index} className={"gap-[16px] mx-auto " + className}>
           {gamesList.map((game) => (
             <TodayGame

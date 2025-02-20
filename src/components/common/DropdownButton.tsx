@@ -11,7 +11,7 @@ interface IDropdownButtonProps {
   className?: string;
   onClick?: () => void;
   disabled?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const DropdownButton : React.FC<IDropdownButtonProps> = (

@@ -6,7 +6,7 @@ import { useCallback, useState } from "react";
 
 interface ISearchBoxProps {
   pressEnterCallback?: () => void;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const SearchBox = ({ 
@@ -41,7 +41,9 @@ const SearchBox = ({
 
     if (e.key === "Enter") {
       e.preventDefault();
-      pressEnterCallback && pressEnterCallback();
+      if (pressEnterCallback) {
+        pressEnterCallback();
+      }
       router.push(pathname + "?" + createQueryString())      
     }
   };

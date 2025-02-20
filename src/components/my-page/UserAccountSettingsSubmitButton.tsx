@@ -40,7 +40,7 @@ const UserAccountSettingsSubmitButton = () => {
     }
   });
 
-  const handleSaveClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSaveClick = () => {
     userMutation.mutate({
       introduction, 
       is_profile_visible: isProfileVisible, 

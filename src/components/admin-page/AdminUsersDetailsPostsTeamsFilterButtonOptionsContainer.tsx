@@ -41,9 +41,9 @@ const AdminUsersDetailsPostsTeamsFilterButtonOptionsContainer = () => {
 
   const handleRoleClick = (statusId: string) => {
     if (status.includes(statusId)) {
-      setTeams(oldTeams => status.filter((status) => status !== statusId))
+      setTeams(() => status.filter((status) => status !== statusId))
     } else {
-      setTeams(oldTeams => [...status, statusId])
+      setTeams(() => [...status, statusId])
     }
   }
 

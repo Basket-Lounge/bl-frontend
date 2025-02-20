@@ -1,8 +1,7 @@
-
 interface CuteErrorMessageProps {
   size?: 'small' | 'medium' | 'large';
   error: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const CuteErrorMessage = ({ error, size = 'medium', ...props }: CuteErrorMessageProps) => {
