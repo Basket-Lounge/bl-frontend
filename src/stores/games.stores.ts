@@ -1,3 +1,4 @@
+import { IChatBlacklist } from "@/models/admin.models";
 import { TDialogSize } from "@/models/common.models";
 import { createContext } from "react";
 import { createStore } from "zustand";
@@ -39,6 +40,12 @@ interface IGameStore {
   setManagementBoxOpen: (open: boolean) => void;
   muteUserModalOpen: null | TDialogSize;
   setMuteUserModalOpen: (open: null | TDialogSize) => void;
+  gameChatBlacklist: IChatBlacklist;
+  setGameChatBlacklist: (blacklist: IChatBlacklist) => void;
+  gameChatBlacklistError: boolean;
+  setGameChatBlacklistError: (error: boolean) => void;
+  gameChatBlacklistLoading: boolean;
+  setGameChatBlacklistLoading: (loading: boolean) => void;
 }
 
 export const GameStore = createStore<IGameStore>((set) => ({
@@ -49,7 +56,17 @@ export const GameStore = createStore<IGameStore>((set) => ({
   managementBoxOpen: false,
   setManagementBoxOpen: (open) => set({ managementBoxOpen: open }),
   muteUserModalOpen: null,
-  setMuteUserModalOpen: (open) => set({ muteUserModalOpen: open })
+  setMuteUserModalOpen: (open) => set({ muteUserModalOpen: open }),
+
+  gameChatBlacklist: {
+    mutes: [],
+    bans: []
+  },
+  setGameChatBlacklist: (blacklist) => set({ gameChatBlacklist: blacklist }),
+  gameChatBlacklistError: false,
+  setGameChatBlacklistError: (error) => set({ gameChatBlacklistError: error }),
+  gameChatBlacklistLoading: false,
+  setGameChatBlacklistLoading: (loading) => set({ gameChatBlacklistLoading: loading })
 }));
 
 export const GameStoreContext = createContext(GameStore);
