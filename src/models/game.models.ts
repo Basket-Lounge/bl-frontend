@@ -176,6 +176,7 @@ export interface PlayerStatistics {
 
 
 export interface IGameChatMessage {
+    id: string;
     message: string;
     user: {
         id: number,
