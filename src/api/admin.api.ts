@@ -437,16 +437,25 @@ export const banUserFromGameChat = async (
 export const muteUserInGameChat = async (
   gameId: string,
   userId: number,
-  muteUntil?: number,
-  reason?: string
+  muteMode: boolean,
+  muteUntil?: string,
+  reason?: string,
+  messageId?: string
 ) => {
-  const data : { [key: string]: string | number | null } = {};
+  const data : { [key: string]: string | null | boolean } = {
+    mute_mode: muteMode,
+  };
+
   if (muteUntil) {
     data['mute_until'] = muteUntil;
   }
 
   if (reason) {
     data['reason'] = reason;
+  }
+
+  if (messageId) {
+    data['message_id'] = messageId;
   }
 
   const response = await httpClient.patch(
