@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEventHandler, useContext, useMemo, useRef, useState } from "react";
+import { ChangeEventHandler, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useStore } from "zustand";
 import {
   Dialog,
@@ -9,23 +9,25 @@ import {
   DialogFooter,
   Input,
 } from "@material-tailwind/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TDialogSize } from "@/models/common.models";
 import { GameStoreContext } from "@/stores/games.stores";
 import { muteUserInGameChat } from "@/api/admin.api";
 import ImageButton from "../common/ImageButton";
 import { DayPicker } from "react-day-picker";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { formatDateInUTC } from "@/utils/common.utils";
 
 
 interface IGameLiveChatBoxMessageAdminOptionsMuteModalProps {
   gameId: string;
   userId: number;
   username: string;
+  messageId: string;
 }
 
 const GameLiveChatBoxMessageAdminOptionsMuteModal = (
-  { gameId, userId, username }: IGameLiveChatBoxMessageAdminOptionsMuteModalProps
+  { gameId, userId, username, messageId }: IGameLiveChatBoxMessageAdminOptionsMuteModalProps
 ) => {
   const store = useContext(GameStoreContext);
   const muteUserModalOpen = useStore(store, (state) => state.muteUserModalOpen);
@@ -54,16 +56,23 @@ const GameLiveChatBoxMessageAdminOptionsMuteModal = (
 
 
   const handleOpen = (value: TDialogSize | null) => setMuteUserModalOpen(value);
+
+  const queryClient = useQueryClient();
   const muteUserMutation = useMutation({
-    mutationFn: (data: { reason: string, muteUntil: number }) => {
+    mutationFn: (data: { reason: string | undefined, muteUntil: string | undefined }) => {
       return muteUserInGameChat(
         gameId,
         userId,
+        true,
         data.muteUntil,
-        data.reason
+        data.reason,
+        messageId
       );
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["game", gameId, "chat-blacklist"]
+      });
       handleOpen(null);
     }
   });
@@ -84,6 +93,25 @@ const GameLiveChatBoxMessageAdminOptionsMuteModal = (
     const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
     setTimeValue(`${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`);
   };
+
+  const handleSubmit = useCallback(() => {
+    let newDate: Date | undefined = undefined;
+
+    if (date) {
+      const time = timeValue.split(":");
+      newDate = new Date(date);
+
+      if (time.length === 2) {
+        newDate.setHours(parseInt(time[0], 10));
+        newDate.setMinutes(parseInt(time[1], 10));
+      }
+    }
+
+    muteUserMutation.mutate({
+      reason: reason || undefined,
+      muteUntil: newDate ? formatDateInUTC(newDate) : undefined
+    });
+  }, [date, timeValue, reason]);
 
   return (
     <Dialog 
@@ -169,10 +197,21 @@ const GameLiveChatBoxMessageAdminOptionsMuteModal = (
         className="flex justify-end gap-[16px]"
       >
         <ImageButton
+          className="text-white rounded-md text-[14px] lg:text-[16px] font-semibold bg-green-500 p-[8px]"
+          onClick={handleSubmit}
+          pending={muteUserMutation.isPending}
+          disabled={muteUserMutation.isPending}
+          aria-disabled={muteUserMutation.isPending}
+          aria-label="mute-user"
+        >
+          음소거
+        </ImageButton>
+        <ImageButton
           className="text-white rounded-md text-[14px] lg:text-[16px] font-semibold bg-red-500 p-[8px]"
           onClick={() => handleOpen(null)}
           disabled={muteUserMutation.isPending}
           aria-disabled={muteUserMutation.isPending}
+          aria-label="cancel"
         >
           취소
         </ImageButton>

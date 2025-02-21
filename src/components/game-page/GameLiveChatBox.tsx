@@ -14,10 +14,11 @@ import ImageButton from "../common/ImageButton";
 import Image from "next/image";
 import GameLiveChatBoxAdminManagementBox from "./GameLiveChatBoxAdminManagementBox";
 import { useAuthStore } from "@/stores/auth.stores";
+import useLoadChatBlacklist from "@/hooks/useLoadChatBlacklist";
 
 
 const GameLiveChatBox = () => {
-  const { gameId } = useParams();
+  const { gameId } = useParams<{ gameId: string }>();
 
   const [connected, setConnected] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,10 +31,13 @@ const GameLiveChatBox = () => {
     userRole
   } = useAuthStore();
 
+  useLoadChatBlacklist(gameId);
+
   const store = useContext(GameStoreContext);
   const setSubscriptionToken = useStore(store, (state) => state.setSubscriptionToken);
   const managementBoxOpen = useStore(store, (state) => state.managementBoxOpen);
   const setManagementBoxOpen = useStore(store, (state) => state.setManagementBoxOpen);
+  const setGameChatBlacklist = useStore(store, (state) => state.setGameChatBlacklist);
 
   const handleRetryClick = () => {
     setConnectionAttempt(attempt => attempt + 1);
@@ -91,6 +95,15 @@ const GameLiveChatBox = () => {
       client.disconnect();
     }
   }, [connectionAttempt, gameId]);
+
+  useEffect(() => {
+    return () => {
+      setGameChatBlacklist({
+        mutes: [],
+        bans: []
+      });
+    }
+  }, [gameId]);
 
   if (isLoading) {
     return <SpinnerLoading />

@@ -10,7 +10,6 @@ const GameLiveChatBoxMessage = (
   { message } : { message: IGameChatMessage }
 ) => {
   const {
-    userId,
     userRole
   } = useAuthStore();
 

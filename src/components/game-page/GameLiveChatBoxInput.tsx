@@ -1,8 +1,11 @@
 import { sendGameChatMessage } from "@/api/game.api";
 import { GameStoreContext } from "@/stores/games.stores";
+import { timeUntilKorean } from "@/utils/common.utils";
 import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { useStore } from "zustand";
 
 
@@ -23,6 +26,21 @@ const GameLiveChatBoxInput = () => {
     },
     onSuccess: () => {
       setMessage('');
+    },
+    onError: (error: AxiosError<{ error: string }>) => {
+      const errorMessage = error.response?.data?.error;
+      if (errorMessage === undefined) {
+        toast.error('알 수 없는 오류가 발생했습니다.');
+        return;
+      }
+
+      if (errorMessage.includes('Forever')) {
+        toast.error('채팅에서 영구적으로 음소거되었습니다.');
+        return;
+      }
+
+      const timeUntil = timeUntilKorean(errorMessage);
+      toast.error(`채팅에서 ${timeUntil}에 음소거 해제됩니다.`);
     }
   });
 
