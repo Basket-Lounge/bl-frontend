@@ -34,8 +34,13 @@ const GameLiveChatBoxInput = () => {
         return;
       }
 
-      if (errorMessage.includes('Forever')) {
+      if (errorMessage.includes('Muted')) {
         toast.error('채팅에서 영구적으로 음소거되었습니다.');
+        return;
+      }
+
+      if (errorMessage.includes('Banned')) {
+        toast.error('채팅에서 영구적으로 밴되었습니다.');
         return;
       }
 

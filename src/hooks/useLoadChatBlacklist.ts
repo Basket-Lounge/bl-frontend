@@ -22,7 +22,7 @@ const useLoadChatBlacklist = (gameId: string) => {
       }
     },
     retry: 2,
-    refetchInterval: 60000
+    refetchInterval: 30000
   });
 
   useEffect(() => {
@@ -33,10 +33,7 @@ const useLoadChatBlacklist = (gameId: string) => {
 
   useEffect(() => {
     if (chatBlacklistQuery.isError) {
-      setGameChatBlacklist({
-        bans: [],
-        mutes: []
-      });
+      setGameChatBlacklist(null);
     }
 
     setGameChatBlacklistError(chatBlacklistQuery.isError);
@@ -45,6 +42,10 @@ const useLoadChatBlacklist = (gameId: string) => {
   useEffect(() => {
     setGameChatBlacklistLoading(chatBlacklistQuery.isLoading);
   }, [chatBlacklistQuery.isLoading]);
+
+  useEffect(() => {
+    chatBlacklistQuery.refetch();
+  }, [gameId]);
 }
 
 export default useLoadChatBlacklist;

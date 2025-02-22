@@ -5,6 +5,7 @@ import CuteErrorMessage from "../common/CuteErrorMessage";
 import { useContext } from "react";
 import { GameStoreContext } from "@/stores/games.stores";
 import { useStore } from "zustand";
+import GameLiveChatBoxAdminManagementBoxMuteEveryoneButton from "./GameLiveChatBoxAdminManagementBoxMuteEveryoneButton";
 
 
 const GameLiveChatBoxAdminManagementBox = () => {
@@ -12,7 +13,6 @@ const GameLiveChatBoxAdminManagementBox = () => {
   const gameChatBlacklist = useStore(store, (state) => state.gameChatBlacklist);
   const gameChatBlacklistError = useStore(store, (state) => state.gameChatBlacklistError);
   const gameChatBlacklistLoading = useStore(store, (state) => state.gameChatBlacklistLoading);
-
 
   if (gameChatBlacklistLoading) {
     return <SpinnerLoading />;
@@ -27,10 +27,19 @@ const GameLiveChatBoxAdminManagementBox = () => {
     );
   }
 
+  if (!gameChatBlacklist) {
+    return null;
+  }
+
   return (
-    <div className="gap-[16px] flex flex-col items-stretch lg:grid grid-cols-2">
-      <GameLiveChatBoxAdminManagementBoxBans banList={gameChatBlacklist.bans} />
-      <GameLiveChatBoxAdminManagementBoxMutes muteList={gameChatBlacklist.mutes} />
+    <div className="flex flex-col gap-[16px] items-stretch">
+      <div className="flex justify-end gap-[16px]">
+        <GameLiveChatBoxAdminManagementBoxMuteEveryoneButton />
+      </div>
+      <div className="gap-[16px] flex flex-col items-stretch lg:grid grid-cols-2">
+        <GameLiveChatBoxAdminManagementBoxBans banList={gameChatBlacklist.blacklist.bans} />
+        <GameLiveChatBoxAdminManagementBoxMutes muteList={gameChatBlacklist.blacklist.mutes} />
+      </div>
     </div>
   )
 }

@@ -5,10 +5,10 @@ import { useContext } from "react";
 import { GameStoreContext } from "@/stores/games.stores";
 import { useStore } from "zustand";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { muteUserInGameChat } from "@/api/admin.api";
+import { updateUserBanInGameChat } from "@/api/admin.api";
 
 
-const GameLiveChatBoxMessageAdminOptionsMuteButton = (
+const GameLiveChatBoxMessageAdminOptionsBanButton = (
   { message } : { message: IGameChatMessage }
 ) => {
   const {
@@ -16,14 +16,14 @@ const GameLiveChatBoxMessageAdminOptionsMuteButton = (
   } = useParams<{ gameId: string }>();
 
   const store = useContext(GameStoreContext);
-  const setMuteUserModalOpen = useStore(store, (state) => state.setMuteUserModalOpen);
+  const setBanUserModalOpen = useStore(store, (state) => state.setBanUserModalOpen);
   const gameChatBlacklist = useStore(store, (state) => state.gameChatBlacklist);
-  const isUserMuted = gameChatBlacklist?.blacklist.mutes.some((mute) => mute.user_data.id === message.user.id);
+  const isUserBanned = gameChatBlacklist?.blacklist.bans.some((ban) => ban.user_data.id === message.user.id);
 
   const queryClient = useQueryClient();
-  const unmuteUserMutation = useMutation({
+  const unbanUserMutation = useMutation({
     mutationFn: () => {
-      return muteUserInGameChat(
+      return updateUserBanInGameChat(
         gameId,
         message.user.id,
         false,
@@ -36,17 +36,17 @@ const GameLiveChatBoxMessageAdminOptionsMuteButton = (
     }
   });
 
-  if (isUserMuted) {
+  if (isUserBanned) {
     return (
       <ImageButton
         className="text-black rounded-md text-[14px] lg:text-[16px]"
-        aria-label="unmute"
-        onClick={() => unmuteUserMutation.mutate()}
-        disabled={unmuteUserMutation.isPending}
-        pending={unmuteUserMutation.isPending}
-        aria-disabled={unmuteUserMutation.isPending}
+        aria-label="unban"
+        onClick={() => unbanUserMutation.mutate()}
+        disabled={unbanUserMutation.isPending}
+        pending={unbanUserMutation.isPending}
+        aria-disabled={unbanUserMutation.isPending}
       >
-        음소거 해제
+        밴 해제
       </ImageButton>
     )
   }
@@ -55,11 +55,11 @@ const GameLiveChatBoxMessageAdminOptionsMuteButton = (
     <ImageButton
       className="text-black rounded-md text-[14px] lg:text-[16px]"
       aria-label="mute"
-      onClick={() => setMuteUserModalOpen('md')}
+      onClick={() => setBanUserModalOpen('md')}
     > 
-      음소거 추가
+      밴 추가
     </ImageButton>
   );
 };
 
-export default GameLiveChatBoxMessageAdminOptionsMuteButton;
+export default GameLiveChatBoxMessageAdminOptionsBanButton;

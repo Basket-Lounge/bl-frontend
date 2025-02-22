@@ -84,6 +84,19 @@ const GameLiveChatBox = () => {
       toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
     });
     subscription.on("publication", (ctx) => {
+      if (ctx.data.type === 'delete_user_messages') {
+        if (userRole && userRole > 3) {
+          // If user is not admin, remove messages from the user
+          const messagesCopy = [...messages];
+          const newMessages = messagesCopy.filter((message) => {
+            return message.user.id != ctx.data.user_id
+          });
+          setMessages(() => [...newMessages]);
+        }
+
+        return;
+      }
+      
       setMessages((prevMessages) => [...prevMessages, ctx.data]);
     });
 
@@ -98,10 +111,7 @@ const GameLiveChatBox = () => {
 
   useEffect(() => {
     return () => {
-      setGameChatBlacklist({
-        mutes: [],
-        bans: []
-      });
+      setGameChatBlacklist(null);
     }
   }, [gameId]);
 
