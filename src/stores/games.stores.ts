@@ -36,12 +36,18 @@ interface IGameStore {
   setBoxScoreTeamId: (teamName: string | null) => void;
   subscriptionToken: string | null;
   setSubscriptionToken: (token: string | null) => void;
+
   managementBoxOpen: boolean;
   setManagementBoxOpen: (open: boolean) => void;
+  banUserModalOpen: null | TDialogSize;
+  setBanUserModalOpen: (open: null | TDialogSize) => void;
   muteUserModalOpen: null | TDialogSize;
   setMuteUserModalOpen: (open: null | TDialogSize) => void;
-  gameChatBlacklist: IChatBlacklist;
-  setGameChatBlacklist: (blacklist: IChatBlacklist) => void;
+  muteEveryoneModalOpen: null | TDialogSize;
+  setMuteEveryoneModalOpen: (open: null | TDialogSize) => void;
+
+  gameChatBlacklist: IChatBlacklist | null;
+  setGameChatBlacklist: (blacklist: IChatBlacklist | null) => void;
   gameChatBlacklistError: boolean;
   setGameChatBlacklistError: (error: boolean) => void;
   gameChatBlacklistLoading: boolean;
@@ -53,15 +59,17 @@ export const GameStore = createStore<IGameStore>((set) => ({
   setBoxScoreTeamId: (teamName) => set({ boxScoreTeamId: teamName }),
   subscriptionToken: null,
   setSubscriptionToken: (token) => set({ subscriptionToken: token }),
+
   managementBoxOpen: false,
   setManagementBoxOpen: (open) => set({ managementBoxOpen: open }),
+  banUserModalOpen: null,
+  setBanUserModalOpen: (open) => set({ banUserModalOpen: open }),
   muteUserModalOpen: null,
   setMuteUserModalOpen: (open) => set({ muteUserModalOpen: open }),
+  muteEveryoneModalOpen: null,
+  setMuteEveryoneModalOpen: (open) => set({ muteEveryoneModalOpen: open }),
 
-  gameChatBlacklist: {
-    mutes: [],
-    bans: []
-  },
+  gameChatBlacklist: null,
   setGameChatBlacklist: (blacklist) => set({ gameChatBlacklist: blacklist }),
   gameChatBlacklistError: false,
   setGameChatBlacklistError: (error) => set({ gameChatBlacklistError: error }),
