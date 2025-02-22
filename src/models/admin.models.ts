@@ -6,8 +6,18 @@ export type TReportType = "all" | "unsolved" | "solved";
 export type TAdminUsersSection = 'account-settings' | 'posts' | 'comments' | 'dms';
 
 export interface IChatBlacklist {
-    bans: IChatBanEntry[];
-    mutes: IChatMuteEntry[];
+    id: string;
+    game_data: {
+        game_id: string;
+    };
+    slow_mode: boolean;
+    slow_mode_time: number;
+    mute_mode: boolean;
+    mute_until: string | null;
+    blacklist: {
+        bans: IChatBanEntry[];
+        mutes: IChatMuteEntry[];
+    }
 }
 
 export interface IChatBanEntry {
