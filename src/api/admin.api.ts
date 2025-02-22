@@ -434,6 +434,33 @@ export const banUserFromGameChat = async (
   return response.data;
 }
 
+export const updateUserBanInGameChat = async (
+  gameId: string,
+  userId: number,
+  banMode: boolean,
+  reason?: string,
+  messageId?: string
+) => {
+  const data : { [key: string]: string | null | boolean } = {
+    ban_mode: banMode,
+  };
+
+  if (reason) {
+    data['reason'] = reason;
+  }
+
+  if (messageId) {
+    data['message_id'] = messageId;
+  }
+
+  const response = await httpClient.patch(
+    `/api/admin/games/${gameId}/chat/bans/${userId}/`, 
+    data
+  );
+
+  return response.data;
+}
+
 export const muteUserInGameChat = async (
   gameId: string,
   userId: number,
@@ -469,19 +496,14 @@ export const muteUserInGameChat = async (
 export const setMuteModeGameChat = async (
   gameId: string,
   muteMode: boolean,
-  muteUntil?: number,
-  reason?: string
+  muteUntil?: string,
 ) => {
-  const data : { [key: string]: string | boolean | number | null } = { 
+  const data : { [key: string]: string | boolean } = { 
     mute_mode: muteMode, 
   };
 
   if (muteUntil) {
     data['mute_until'] = muteUntil;
-  }
-
-  if (reason) {
-    data['reason'] = reason;
   }
 
   const response = await httpClient.patch(`/api/admin/games/${gameId}/chat/mutes/`, data);
