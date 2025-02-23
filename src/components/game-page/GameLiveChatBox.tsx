@@ -1,7 +1,7 @@
 import { getConnectionToken, getSubscriptionTokenForLiveGameChat } from "@/api/webSocket.api";
 import { IGameChatMessage } from "@/models/game.models";
-import { Centrifuge } from "centrifuge";
-import { useParams } from "next/navigation";
+import { Centrifuge, SubscriptionErrorContext, UnsubscribedContext } from "centrifuge";
+import { useParams, useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import GameLiveChatBoxMessage from "./GameLiveChatBoxMessage";
 import GameLiveChatBoxInput from "./GameLiveChatBoxInput";
@@ -15,9 +15,11 @@ import Image from "next/image";
 import GameLiveChatBoxAdminManagementBox from "./GameLiveChatBoxAdminManagementBox";
 import { useAuthStore } from "@/stores/auth.stores";
 import useLoadChatBlacklist from "@/hooks/useLoadChatBlacklist";
+import CuteErrorMessage from "../common/CuteErrorMessage";
 
 
 const GameLiveChatBox = () => {
+  const router = useRouter();
   const { gameId } = useParams<{ gameId: string }>();
 
   const [connected, setConnected] = useState<boolean>(false);
@@ -77,21 +79,37 @@ const GameLiveChatBox = () => {
       setConnected(true);
       setError(null);
     });
-    subscription.on("error", () => {
+    subscription.on("unsubscribed", (ctx: UnsubscribedContext) => {
+      setIsLoading(false);
+      setConnected(false);
+
+      if (ctx.reason === "server unsubscribe") {
+        toast.error("밴 처리되어 해당 게임 채널에 접속할 수 없습니다.");
+        router.push(`/games/${gameId}/summary`);
+      } else {
+        setError("알 수 없는 이유로 채팅방 접속이 해제되었습니다. 다시 시도 해주세요.");
+      }
+    });
+    subscription.on("error", (ctx: SubscriptionErrorContext) => {
+      const errorMsg = ctx.error.message;
+      if (errorMsg.includes("400")) {
+        setIsLoading(false);
+        setConnected(false);
+        toast.error("밴 처리되어 해당 게임 채널에 접속할 수 없습니다.");
+        router.push(`/games/${gameId}/summary`);
+        return;
+      }
+
       setIsLoading(false);
       setConnected(false);
       setError("해당 채널에 접속할 수 없습니다.");
-      toast.error("해당 채널에 접속할 수 없습니다. 다시 시도해주세요.");
+      toast.error("해당 채널에 접속할 수 없습니다. 다시 시도 중입니다.");
     });
     subscription.on("publication", (ctx) => {
       if (ctx.data.type === 'delete_user_messages') {
         if (userRole && userRole > 3) {
           // If user is not admin, remove messages from the user
-          const messagesCopy = [...messages];
-          const newMessages = messagesCopy.filter((message) => {
-            return message.user.id != ctx.data.user_id
-          });
-          setMessages(() => [...newMessages]);
+          setMessages((messages) => messages.filter((message) => message.user.id !== ctx.data.user_id));
         }
 
         return;
@@ -111,9 +129,14 @@ const GameLiveChatBox = () => {
 
   useEffect(() => {
     return () => {
+      setSubscriptionToken(null);
       setGameChatBlacklist(null);
     }
   }, [gameId]);
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   if (isLoading) {
     return <SpinnerLoading />
@@ -122,9 +145,9 @@ const GameLiveChatBox = () => {
   if (error || connected === false) {
     return (
       <div className="flex flex-col items-center justify-center gap-[16px]">
-        <p className="font-bold text-[20px]">
-          {error}
-        </p>
+        <CuteErrorMessage
+          error={error || "채팅 서버 연결 중 오류가 발생했습니다."}
+        />  
         <RegularButton
           onClick={handleRetryClick}
         >

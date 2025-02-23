@@ -20,6 +20,8 @@ const useLoadChatBlacklist = (gameId: string) => {
       if (userRole && userRole <= 3) {
         return await getGameChatBanList(gameId);
       }
+
+      return null;
     },
     retry: 2,
     refetchInterval: 30000
