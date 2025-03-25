@@ -45,6 +45,10 @@ interface IGameStore {
   setMuteUserModalOpen: (open: null | TDialogSize) => void;
   muteEveryoneModalOpen: null | TDialogSize;
   setMuteEveryoneModalOpen: (open: null | TDialogSize) => void;
+  slowDownModalOpen: null | TDialogSize;
+  setSlowDownModalOpen: (open: null | TDialogSize) => void;
+  editMessageModalOpen: null | TDialogSize;
+  setEditMessageModalOpen: (open: null | TDialogSize) => void;
 
   gameChatBlacklist: IChatBlacklist | null;
   setGameChatBlacklist: (blacklist: IChatBlacklist | null) => void;
@@ -68,6 +72,10 @@ export const GameStore = createStore<IGameStore>((set) => ({
   setMuteUserModalOpen: (open) => set({ muteUserModalOpen: open }),
   muteEveryoneModalOpen: null,
   setMuteEveryoneModalOpen: (open) => set({ muteEveryoneModalOpen: open }),
+  slowDownModalOpen: null,
+  setSlowDownModalOpen: (open) => set({ slowDownModalOpen: open }),
+  editMessageModalOpen: null,
+  setEditMessageModalOpen: (open) => set({ editMessageModalOpen: open }),
 
   gameChatBlacklist: null,
   setGameChatBlacklist: (blacklist) => set({ gameChatBlacklist: blacklist }),

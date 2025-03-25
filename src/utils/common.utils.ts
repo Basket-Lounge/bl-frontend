@@ -36,7 +36,7 @@ export function timeAgoKorean(isoString: string): string {
   }
 }
 
-export function timeUntilKorean(isoString: string): string {
+export function timeUntilKorean(isoString: string | Date): string {
   const createdTime = new Date(isoString).getTime();
   const currentTime = Date.now();
   const diffInSeconds = Math.floor((createdTime - currentTime) / 1000);
@@ -53,6 +53,24 @@ export function timeUntilKorean(isoString: string): string {
     const days = Math.floor(diffInSeconds / 86400);
     return `${days}일 후`;
   }
+}
+
+export function convertUTCDateStringToLocalDate(dateString: string): Date {
+  // Ensure the date string is a valid string
+  if (typeof dateString !== 'string') {
+    throw new Error("Invalid date string");
+  }
+
+  // Ensure the date string is in the correct format
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/.test(dateString)) {
+    throw new Error("Invalid date string format");
+  }
+
+  // Parse the date string
+  const date = new Date(dateString);
+
+  // Return the local date
+  return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
 }
 
 export function formatDateInUTC(date: Date) : string {

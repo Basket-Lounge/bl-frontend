@@ -126,8 +126,6 @@ export const filterTodayGames = (games: Game[]) => {
     const gameDate = convertUTCtoLocalTime(game.game_date_est);
     if (gameDate.getDate() == today.getDate() && gameDate.getMonth() == today.getMonth()) {
       filteredGames.push(game);
-    } else {
-      console.log('Game date:', gameDate);
     }
   }
 
