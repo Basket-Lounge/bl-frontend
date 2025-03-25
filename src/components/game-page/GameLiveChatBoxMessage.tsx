@@ -4,14 +4,60 @@ import DropdownButton from "../common/DropdownButton";
 import { useAuthStore } from "@/stores/auth.stores";
 import GameLiveChatBoxMessageUserOptions from "./GameLiveChatBoxMessageUserOptions";
 import GameLiveChatBoxMessageAdminOptions from "./GameLiveChatBoxMessageAdminOptions";
+import ImageButton from "../common/ImageButton";
+import { useEffect, useState } from "react";
 
 
 const GameLiveChatBoxMessage = (
   { message } : { message: IGameChatMessage }
 ) => {
   const {
-    userRole
+    userRole,
+    userBlocklist
   } = useAuthStore();
+
+  const [msgHidden, setMsgHidden] = useState<boolean | undefined>();
+
+  const handleUnhideClick = () => {
+    setMsgHidden(false);
+  };
+
+  useEffect(() => {
+    if (!Array.isArray(userBlocklist)) {
+      setMsgHidden(false);
+      return
+    }
+
+    if (!message.user.id) {
+      setMsgHidden(false);
+      return;
+    }
+
+    if (userBlocklist!.length === 0) {
+      setMsgHidden(false);
+      return;
+    }
+
+    const isBlocked = userBlocklist!.some((block) => block.id === message.user.id);
+    setMsgHidden(isBlocked);
+  }, [userBlocklist]);
+
+  if (msgHidden) {
+    return (
+      <div className="flex gap-[16px] lg:gap-[24px] items-stretch w-full" aria-label="message">
+        <div className="w-[40px] h-[40px] lg:w-[48px] lg:h-[48px] rounded-full bg-color3 relative" />
+        <div className="flex flex-col gap-[8px] overflow-hidden w-[calc(100%-56px)] lg:w-[calc(100%-72px)] items-stretch justify-center">
+          <ImageButton
+            className="text-white text-[14px] lg:text-[16px]"
+            aria-label="message-hidden"
+            onClick={handleUnhideClick}
+          >
+            차단된 유저의 메시지를 보시려면 클릭하세요.
+          </ImageButton>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-[16px] lg:gap-[24px] items-start w-full" aria-label="message">
