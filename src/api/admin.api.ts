@@ -513,11 +513,21 @@ export const setMuteModeGameChat = async (
 export const setSlowModeGameChat = async (
   gameId: string,
   slowMode: boolean,
-  slowModeTime: number
+  slowModeTime?: number
 ) => {
+  const data : { [key: string]: boolean | number } = { slow_mode: slowMode };
+
+  if (slowMode) {
+    if (!slowModeTime) {
+      throw new Error('slowModeTime should be greater than 0 when slowMode is true');
+    }
+
+    data['slow_mode_time'] = slowModeTime;
+  };
+
   const response = await httpClient.patch(
     `/api/admin/games/${gameId}/chat/slowmode/`, 
-    { slow_mode: slowMode, slow_mode_time: slowModeTime }
+    data
   );
 
   return response.data;
