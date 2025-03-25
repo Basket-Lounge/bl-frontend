@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { GameStoreContext } from "@/stores/games.stores";
 import { useStore } from "zustand";
 import GameLiveChatBoxAdminManagementBoxMuteEveryoneButton from "./GameLiveChatBoxAdminManagementBoxMuteEveryoneButton";
+import GameLiveChatBoxAdminManagementBoxSlowDownButton from "./GameLiveChatBoxAdminManagementBoxSlowDownButton";
 
 
 const GameLiveChatBoxAdminManagementBox = () => {
@@ -34,6 +35,7 @@ const GameLiveChatBoxAdminManagementBox = () => {
   return (
     <div className="flex flex-col gap-[16px] items-stretch">
       <div className="flex justify-end gap-[16px]">
+        <GameLiveChatBoxAdminManagementBoxSlowDownButton />
         <GameLiveChatBoxAdminManagementBoxMuteEveryoneButton />
       </div>
       <div className="gap-[16px] flex flex-col items-stretch lg:grid grid-cols-2">
