@@ -57,9 +57,34 @@ export const sendGameChatMessage = async (
   message: string, 
   subscriptionToken: string
 ) => {
-  const response = await httpClient.post(
+  const response = await httpClient.post<{ next_message_datetime: string }>(
     `/api/games/${gameId}/chat/`, 
     { message, subscription_token: subscriptionToken }
   );
-  return response.status;
+  return response.data;
+}
+
+export const editGameChatMessage = async (
+  gameId: string,
+  messageId: string,
+  message: string,
+) => {
+  if (typeof message !== 'string') {
+    throw new Error('Message must be a string.');
+  }
+
+  if (!message) {
+    throw new Error('Message cannot be empty.');
+  }
+
+  const response = await httpClient.patch(`/api/games/${gameId}/chat/messages/${messageId}/`, { message });
+  return response.data;
+}
+
+export const deleteGameChatMessage = async (
+  gameId: string,
+  messageId: string,
+) => {
+  const response = await httpClient.delete(`/api/games/${gameId}/chat/messages/${messageId}/`);
+  return response.data;
 }
