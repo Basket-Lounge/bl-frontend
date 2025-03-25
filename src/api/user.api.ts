@@ -7,7 +7,6 @@ import {
   MyPageComment, 
   UserChat, 
   UserChatMessageWithUserData, 
-  UserInquiry, 
   UserInquiryWithUserData, 
   UserInquiryWithUserDataFavoriteTeam, 
   UserLikes 
@@ -192,6 +191,16 @@ export const deleteUserChat = async (userId: number) => {
 
 export const blockUserChat = async (userId: number) => {
   const response = await httpClient.post(`/api/users/me/chats/${userId}/block/`);
+  return response.data;
+}
+
+export const blockUnblockUser = async (userId: number) => {
+  const response = await httpClient.post(`/api/users/me/blocked-users/${userId}/`);
+  return response.status;
+}
+
+export const getBlockedUsers = async () => {
+  const response = await httpClient.get<{id: number, username: string}[]>('/api/users/me/blocked-users/');
   return response.data;
 }
 
