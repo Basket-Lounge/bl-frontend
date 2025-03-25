@@ -183,6 +183,7 @@ export interface IGameChatMessage {
         username: string,
         favorite_team: string | null,
     },
-    game: number,
+    game: string,
     created_at: string;
+    hidden?: boolean;
 }

@@ -7,7 +7,10 @@ import { useStore } from "zustand";
 
 
 const useLoadChatBlacklist = (gameId: string) => {
-  const { userRole } = useAuthStore();
+  const { 
+    userRole,
+    isAuthenticated
+  } = useAuthStore();
 
   const store = useContext(GameStoreContext);
   const setGameChatBlacklist = useStore(store, (state) => state.setGameChatBlacklist);
@@ -17,7 +20,7 @@ const useLoadChatBlacklist = (gameId: string) => {
   const chatBlacklistQuery = useQuery({
     queryKey: ["game", gameId, "chat-blacklist"],
     queryFn: async () => {
-      if (userRole && userRole <= 3) {
+      if (isAuthenticated && userRole && userRole <= 3) {
         return await getGameChatBanList(gameId);
       }
 
