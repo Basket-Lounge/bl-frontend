@@ -30,7 +30,8 @@ const GameLiveChatBox = () => {
 
   const {
     isAuthenticated,
-    userRole
+    userRole,
+    userBlocklist
   } = useAuthStore();
 
   useLoadChatBlacklist(gameId);
@@ -44,6 +45,8 @@ const GameLiveChatBox = () => {
   const handleRetryClick = () => {
     setConnectionAttempt(attempt => attempt + 1);
   };
+
+  const isAdmin = isAuthenticated && userRole && userRole <= 3;
 
   useEffect(() => {
     const client = new Centrifuge(
@@ -107,15 +110,35 @@ const GameLiveChatBox = () => {
     });
     subscription.on("publication", (ctx) => {
       if (ctx.data.type === 'delete_user_messages') {
-        if (userRole && userRole > 3) {
+        if (isAdmin) {
           // If user is not admin, remove messages from the user
-          setMessages((messages) => messages.filter((message) => message.user.id !== ctx.data.user_id));
+          setMessages(
+            (messages) => messages.filter((message) => message.user.id !== ctx.data.user_id)
+          );
+        }
+      } else if (ctx.data.type === 'edit') {
+        setMessages((prevMessages) => {
+          return prevMessages.map((message) => {
+            if (message.id === ctx.data.id) {
+              message.message = ctx.data.message;
+            }
+
+            return message;
+          });
+        });
+      } else if (ctx.data.type === 'delete') {
+        if (isAdmin) {
+          return;
         }
 
-        return;
+        setMessages((prevMessages) => {
+          return prevMessages.filter((message) => message.id !== ctx.data.id);
+        });  
+      } else {
+        setMessages((prevMessages) => {
+          return [...prevMessages, ctx.data];
+        });
       }
-      
-      setMessages((prevMessages) => [...prevMessages, ctx.data]);
     });
 
     subscription.subscribe();
@@ -128,15 +151,30 @@ const GameLiveChatBox = () => {
   }, [connectionAttempt, gameId]);
 
   useEffect(() => {
+    if (!userBlocklist) {
+      return;
+    }
+
+    setMessages((prevMessages) => {
+      return prevMessages.map((message) => {
+        const isBlocked = userBlocklist.some((blockedUser) => blockedUser.id === message.user.id);
+        if (isBlocked) {
+          message.hidden = true;
+        } else {
+          message.hidden = false;
+        }
+
+        return message;
+      });
+    });
+  }, [userBlocklist]);
+
+  useEffect(() => {
     return () => {
       setSubscriptionToken(null);
       setGameChatBlacklist(null);
     }
   }, [gameId]);
-
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
 
   if (isLoading) {
     return <SpinnerLoading />
@@ -161,7 +199,7 @@ const GameLiveChatBox = () => {
     <div className="flex flex-col gap-[16px] items-stretch h-screen">
       <div className="flex items-center justify-between">
         <h3 className="text-white text-[20px] font-bold w-full">실시간 채팅방 🗣️</h3>
-        {(isAuthenticated && typeof userRole == "number" && userRole <= 3) && (
+        {(isAdmin) && (
           <ImageButton
             onClick={() => setManagementBoxOpen(!managementBoxOpen)}
           >
@@ -172,14 +210,14 @@ const GameLiveChatBox = () => {
               height={24}
             />
           </ImageButton>
-        )}
+        )} 
       </div>
-      {managementBoxOpen && <GameLiveChatBoxAdminManagementBox />}
+      {(managementBoxOpen && isAdmin) && <GameLiveChatBoxAdminManagementBox />}
       <div className="rounded-md border border-white/25 p-[24px] flex flex-col items-stretch gap-[24px] grow overflow-y-auto">
         <div className="grow overflow-auto flex flex-col items-stretch">
           <div className="flex flex-col items-stretch gap-[24px] justify-end w-full">
-            {messages.map((message, index) => (
-              <GameLiveChatBoxMessage key={index} message={message} />
+            {messages.map((message) => (
+              <GameLiveChatBoxMessage key={message.id} message={message} />
             ))}
           </div>
         </div>
