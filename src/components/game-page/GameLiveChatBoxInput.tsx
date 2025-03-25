@@ -7,24 +7,32 @@ import { useParams } from "next/navigation";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
+import ImageButton from "../common/ImageButton";
 
 
 const GameLiveChatBoxInput = () => {
   const { gameId } = useParams();
   const [ message, setMessage ] = useState<string>('');
+  const [ nextAllowedMessageDate, setNextAllowedMessageDate ] = useState<Date | null>(null);
 
   const store = useContext(GameStoreContext);
   const subscriptionToken = useStore(store, (state) => state.subscriptionToken);
 
   const sendMessageMutation = useMutation({
     mutationFn: () => {
+      if (nextAllowedMessageDate && nextAllowedMessageDate > new Date()) {
+        toast.error(`다음 메시지 전송 가능 시간은 ${timeUntilKorean(nextAllowedMessageDate)} 입니다.`);
+        return Promise.reject();
+      }
+
       return sendGameChatMessage(
         gameId as string, 
         message,
         subscriptionToken as string
       );
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      setNextAllowedMessageDate(new Date(data.next_message_datetime));
       setMessage('');
     },
     onError: (error: AxiosError<{ error: string }>) => {
@@ -43,14 +51,14 @@ const GameLiveChatBoxInput = () => {
         toast.error('채팅에서 영구적으로 밴되었습니다.');
         return;
       }
-
+      
+      setNextAllowedMessageDate(new Date(errorMessage));
       const timeUntil = timeUntilKorean(errorMessage);
       toast.error(`채팅에서 ${timeUntil}에 음소거 해제됩니다.`);
     }
   });
 
-  const handleSendMessageClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSendMessageClick = () => {
     sendMessageMutation.mutate();
   }
 
@@ -63,13 +71,16 @@ const GameLiveChatBoxInput = () => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <button 
+      <ImageButton
         className="bg-color1 text-white rounded-full px-[16px] py-[8px] ml-[16px]"
         onClick={handleSendMessageClick}
-        disabled={sendMessageMutation.isPending}
+        disabled={sendMessageMutation.isPending || message.length === 0}
+        pending={sendMessageMutation.isPending}
+        aria-label="send-message"
+        aria-disabled={sendMessageMutation.isPending || message.length === 0}
       >
-        {sendMessageMutation.isPending ? '전송중...' : '전송'}
-      </button>
+        전송
+      </ImageButton>
     </div>
   )
 }
