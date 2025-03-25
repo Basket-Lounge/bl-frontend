@@ -1,29 +1,21 @@
 import { IGameChatMessage } from "@/models/game.models";
-import ImageButton from "../common/ImageButton";
 import { useAuthStore } from "@/stores/auth.stores";
+import GameLiveChatBoxMessageOtherUserOptions from "./GameLiveChatBoxMessageOtherUserOptions";
+import GameLiveChatBoxMessageMyOptions from "./GameLiveChatBoxMessageMyOptions";
 
 
 const GameLiveChatBoxMessageUserOptions = (
   { message } : { message: IGameChatMessage }
 ) => {
   const {
-    userId
+    userId,
   } = useAuthStore();
 
   if (userId === message.user.id) {
-    return null
+    return <GameLiveChatBoxMessageMyOptions message={message} />;
   }
 
-  return (
-    <div className="bg-white rounded-full p-[16px] flex flex-col items-start gap-[16px]">
-      <ImageButton
-        className="text-black rounded-md text-[14px] lg:text-[16px] font-semibold"
-        aria-label="block"
-      >
-        차단
-      </ImageButton>
-    </div>
-  );
+  return <GameLiveChatBoxMessageOtherUserOptions message={message} />;
 };
 
 export default GameLiveChatBoxMessageUserOptions;
